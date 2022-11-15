@@ -1,0 +1,44 @@
+buildscript {
+    ext.kotlin_version = '1.7.20'
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {                            
+        classpath 'com.google.gms:google-services:4.3.13'
+        classpath 'com.android.tools.build:gradle:7.2.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.1'
+        // To benefit from the latest Performance Monitoring plugin features,
+        // update your Android Gradle Plugin dependency to at least v3.4.0
+//        classpath 'com.android.tools.build:gradle:3.4.0'
+
+//        classpath 'com.google.gms:google-services:4.3.10'  // Google Services plugin
+
+        // Add the dependency for the Performance Monitoring plugin
+        classpath 'com.google.firebase:perf-plugin:1.4.1'
+
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

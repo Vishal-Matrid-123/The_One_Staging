@@ -1,0 +1,326 @@
+name: untitled2
+description: A new Flutter project.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 2.5.0+22
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_back_gesture: ^0.1.0
+  swipeable_page_route: ^0.2.6
+  cupertino_icons: ^1.0.2
+  foldable_list: ^1.0.0
+  carousel_slider: ^4.0.0
+  fluttertoast: ^8.0.7
+  zoomable_image: ^1.3.1
+  play_kit: ^0.0.2
+  photo_view: ^0.13.0
+  flutter_windowmanager: ^0.2.0
+  material_floating_search_bar: ^0.3.6
+  cached_network_image: ^3.1.0
+  flutter_carousel_slider: ^1.0.8
+  nb_utils: ^4.4.2
+#  dio: ^4.0.6
+  #  connectivity_plus: ^2.3.2
+  http: ^0.13.3
+  flutter_spinkit: ^5.0.0
+  simple_animations: ^4.0.1
+  shared_preferences: ^2.0.6
+  readmore: ^2.1.0
+  auto_size_text: ^3.0.0-nullsafety.0
+  flutter_add_to_cart_button: ^1.0.0+1
+  line_icons: ^2.0.1
+  google_fonts: ^2.1.0
+  font_awesome_flutter: ^10.0.0
+  rolling_nav_bar: ^0.0.5-nullsafety.3
+  sizer: ^2.0.13
+  flutter_sizer: ^1.0.4
+  pull_to_refresh: ^2.0.0
+  expandable: ^5.0.1
+  outline_search_bar: ^2.2.0
+  flutter_staggered_grid_view: ^0.6.1
+  delayed_display: ^2.0.0
+  url_launcher: ^6.0.9
+  lazy_load_scrollview: ^1.3.0
+  flutter_automation: ^2.0.0
+  mobx: ^2.0.0
+  flutter_mobx: ^2.0.0
+  double_back_to_close_app: ^2.0.1
+  flutter_phoenix: ^1.0.0
+  loader_overlay: ^2.0.2+1
+  marquee: ^2.2.0
+  awesome_dropdown: ^0.0.4
+  keyboard_actions: ^3.4.6
+  roundcheckbox: ^2.0.2+1
+  bottom_picker: ^1.0.1
+  webview_flutter: ^3.0.0
+  progress_indicators: ^1.0.0
+  badges: ^2.0.1
+  select_dialog: ^2.0.0
+  intl: ^0.17.0
+  bottom_sheet: ^2.0.0
+  rflutter_alert: ^2.0.4
+  flutter_launcher_icons: ^0.9.2
+  provider: ^6.0.0
+  flutter_overlay: ^1.0.0
+  progress_loading_button: '^1.0.0'
+  get_it: ^7.2.0
+  back_button_interceptor: ^5.0.1
+  facebook_app_events: ^0.18.1
+  flutter_otp_text_field: ^1.0.0
+  firebase_core: ^2.1.1
+  firebase_messaging: ^14.0.3
+  #  firebase_analytics: ^7.0.1
+  notification_permissions: ^0.6.1
+  #  awesome_notifications: ^0.6.21
+  #  flutter_local_notifications: ^9.1.5
+  cloud_firestore: ^4.0.3
+  path_provider: ^2.0.8
+  cupertino_will_pop_scope: ^1.1.0
+  quds_ui_kit: ^0.0.7+5
+  modal_bottom_sheet: ^2.0.0
+  direct_select: ^2.0.0
+  search_choices: ^2.0.14
+  dropdown_plus: ^0.0.9
+  ej_selector: ^1.0.0
+  animated_text_kit: ^4.2.1
+  #  contextmenu: ^2.0.1
+  matrix4_transform: ^2.0.1
+  flutter_native_splash: ^2.1.1
+  another_xlider: ^1.0.0
+  flutter_multi_slider: ^1.1.0
+  flutter_staggered_animations: "^1.0.0"
+  ndialog: ^4.1.0
+  menu_button: ^1.4.2+1
+  awesome_select: ^5.0.3
+  animated_item_picker: ^1.0.4
+  cupertino_range_slider: ^1.0.1
+  workmanager: ^0.5.1
+  multi_select_flutter: ^4.0.0
+  field_suggestion: ^0.2.2
+  refresh_loadmore: ^2.0.5
+  checkbox_grouped: ^1.7.1
+  material_design_icons_flutter: ^5.0.6295
+  implicitly_animated_reorderable_list: ^0.4.2
+  draggable_scrollbar: ^0.1.0
+  vs_scrollbar: ^0.2.1
+  flutter_offline: ^2.0.0
+  flutter_widget_from_html: ^0.8.2
+  animations: ^2.0.2
+  like_button: ^2.0.4
+  firebase_crashlytics: ^3.0.3
+  screenshot: ^1.2.3
+  share: ^2.0.4
+  favorite_button: ^0.0.4
+  device_preview: ^1.0.0
+  pausable_timer: ^1.0.0+3
+  app_tracking_transparency: ^2.0.2+1
+  freerasp: ^2.0.0
+  flutter_jailbreak_detection: ^1.8.0
+  firebase_analytics: ^10.0.3
+  device_info_plus: ^3.2.2
+  logger: ^1.1.0
+  flutter_secure_storage: ^5.0.2
+#  in_app_update: ^3.0.0
+  location: ^4.4.0
+  app_settings: ^4.1.6
+  geocoding: ^2.0.4
+  geolocator: ^8.2.1
+  package_info_plus: ^1.4.2
+  bmprogresshud: ^1.0.1
+#  upgrader: ^4.4.2
+
+
+#  facebook_event: ^0.0.6
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lint: ^1.5.3
+  build_runner: ^2.1.8
+  mobx_codegen: ^2.0.0
+  change_app_package_name: ^1.0.0
+  dart_code_metrics: ^4.4.0
+  integration_test: # new
+    sdk: flutter              # new
+  test: ^1.14.4               # new
+flutter_icons:
+  android: true
+  ios: true
+  image_path: 'appIcon/playstore.png'
+  image_path_ios: "appIcon/playstore.png"
+  remove_alpha_ios: true
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - MyAssets/asset1.jpg
+    - MyAssets/plaincircle.png
+    - MyAssets/catback.png
+    - MyAssets/icon.png
+    - MyAssets/icon1.png
+    - MyAssets/asset2.jpg
+    - MyAssets/asset3.jpg
+    - MyAssets/asset4.jpg
+    - MyAssets/asset5.jpg
+    - MyAssets/livinghall.jpg
+    - MyAssets/dininghall.jpg
+    - MyAssets/bedroom.jpg
+    - MyAssets/logo.png
+    - MyAssets/top-background.png
+    - MyAssets/okay.jpeg
+    - MyAssets/cry_emoji.gif
+    - MyAssets/imagebackground.jpeg
+    - MyAssets/banner.jpg
+    - ServicesImages/delivery_icon.jpg
+    - ServicesImages/designer_card_icon.jpg
+    - ServicesImages/easy_payment_icon.jpg
+    - ServicesImages/hs_icon.jpg
+    - ServicesImages/terms&conditions_icon.jpeg
+    - mapsIcons/
+  #   - images/a_dot_ham.jpeg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: HeartIcon
+      fonts:
+        - asset: MyAssets/icons/HeartIcon.ttf
+
+    - family: MyHeartIcon
+      fonts:
+        - asset: MyAssets/icons/MyHeartIcon.ttf
+    - family: MyFlutterApp
+      fonts:
+        - asset: MyAssets/icons/MyFlutterApp.ttf
+    - family: Facebook
+      fonts:
+        - asset: MyAssets/icons/Facebook.ttf
+    - family: Forward_arrow
+      fonts:
+        - asset: MyAssets/icons/Forward_arrow.ttf
+    - family: Arial
+      fonts:
+        - asset: MyAssets/fonts/arial.ttf
+    - family: Remove
+      fonts:
+        - asset: MyAssets/icons/Remove.ttf
+    - family: Orders
+      fonts:
+        - asset: MyAssets/icons/Orders.ttf
+    - family: ChangePassword
+      fonts:
+        - asset: MyAssets/icons/ChangePassword.ttf
+    - family: Address
+      fonts:
+        - asset: MyAssets/icons/Address.ttf
+    - family: Youtube
+      fonts:
+        - asset: MyAssets/fonts/Youtube.ttf
+    - family: SearchFilter
+      fonts:
+        - asset: MyAssets/icons/searchfilter.ttf
+    - family: SocialMedia
+      fonts:
+        - asset: MyAssets/icons/SocialMedia.ttf
+    - family: InstaGramIcon
+      fonts:
+        - asset: MyAssets/icons/InstagramIcon.ttf
+    - family: InstagramNew
+      fonts:
+        - asset: MyAssets/icons/InstagramNew.ttf
+    - family: PrinterestNew
+      fonts:
+        - asset: MyAssets/icons/PrinterestNew.ttf
+    - family: YoutubeNew
+      fonts:
+        - asset: MyAssets/icons/YoutubeNew.ttf
+    - family: Facebook
+      fonts:
+        - asset: MyAssets/icons/FacebookNew.ttf
+    - family: ContactUs
+      fonts:
+        - asset: MyAssets/icons/ContactUs.ttf
+    - family: PrivacyClass
+      fonts:
+        - asset: MyAssets/icons/PrivacyClass.ttf
+    - family: Share
+      fonts:
+        - asset: MyAssets/icons/Share.ttf
+    - family: Delete
+      fonts:
+        - asset: MyAssets/icons/Delete.ttf
+    - family: ReturnRequest
+      fonts:
+        - asset: MyAssets/icons/ReturnRequest.ttf
+    - family: HeartIcon
+      fonts:
+        - asset: MyAssets/icons/HeartIcon.ttf
+
+  #    - family: Monstserrat
+  #      fonts:
+  #        - asset: MyAssets/fonts/UserFont/MonstserratBold.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratBoldItalic.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratExtraBoldItalic.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratExtraBold.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratExtraLight.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratExtraLightItalic.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratItalic.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratLight.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratLightItalic.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratMedium.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratMediumItalic.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratRegular.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratSemiBold.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratSemiBoldItalic.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratThin.ttf
+  #        - asset: MyAssets/fonts/UserFont/MonstserratThinItalic.ttf
+  #    - family: Monstserrat Light
+  #      fonts:
+  #        - asset: MyAssets/fonts/Monstserrat_Light.ttf
+  #         - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
+
+
