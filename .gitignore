@@ -1,0 +1,11 @@
+/.dart_tool/
+/web/
+/windows/
+/.gradle/
+/.idea/
+/.flutter-plugins
+/.flutter-plugins-dependencies
+/gradle.properties
+/ios.zip
+/privaterepo_master.iml
+/build/

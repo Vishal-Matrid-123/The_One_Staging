@@ -1,0 +1,2126 @@
+[
+  {
+    "Id": 86,
+    "Name": "Afghanistan",
+    "TwoLetterIsoCode": "AF",
+    "ThreeLetterIsoCode": "AFG",
+    "NumericIsoCode": 4,
+    "Phn_Code": 93,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 87,
+    "Name": "Albania",
+    "TwoLetterIsoCode": "AL",
+    "ThreeLetterIsoCode": "ALB",
+    "NumericIsoCode": 8,
+    "Phn_Code": 355,
+    "Phone_Number_Limit": 11
+  },
+  {
+    "Id": 88,
+    "Name": "Algeria",
+    "TwoLetterIsoCode": "DZ",
+    "ThreeLetterIsoCode": "DZA",
+    "NumericIsoCode": 12,
+    "Phn_Code": 213,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 89,
+    "Name": "American Samoa",
+    "TwoLetterIsoCode": "AS",
+    "ThreeLetterIsoCode": "ASM",
+    "NumericIsoCode": 16,
+    "Phn_Code": 1684,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 90,
+    "Name": "Andorra",
+    "TwoLetterIsoCode": "AD",
+    "ThreeLetterIsoCode": "AND",
+    "NumericIsoCode": 20,
+    "Phn_Code": 376,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 91,
+    "Name": "Angola",
+    "TwoLetterIsoCode": "AO",
+    "ThreeLetterIsoCode": "AGO",
+    "NumericIsoCode": 24,
+    "Phn_Code": 244,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 92,
+    "Name": "Anguilla",
+    "TwoLetterIsoCode": "AI",
+    "ThreeLetterIsoCode": "AIA",
+    "NumericIsoCode": 660,
+    "Phn_Code": 1264,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 93,
+    "Name": "Antarctica",
+    "TwoLetterIsoCode": "AQ",
+    "ThreeLetterIsoCode": "ATA",
+    "NumericIsoCode": 10,
+    "Phn_Code": 672,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 93,
+    "Name": "Antarctica",
+    "TwoLetterIsoCode": "AQ",
+    "ThreeLetterIsoCode": "ATA",
+    "NumericIsoCode": 10,
+    "Phn_Code": 64,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 94,
+    "Name": "Antigua and Barbuda",
+    "TwoLetterIsoCode": "AG",
+    "ThreeLetterIsoCode": "ATG",
+    "NumericIsoCode": 28,
+    "Phn_Code": 1268,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 3,
+    "Name": "Argentina",
+    "TwoLetterIsoCode": "AR",
+    "ThreeLetterIsoCode": "ARG",
+    "NumericIsoCode": 32,
+    "Phn_Code": 54,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 4,
+    "Name": "Armenia",
+    "TwoLetterIsoCode": "AM",
+    "ThreeLetterIsoCode": "ARM",
+    "NumericIsoCode": 51,
+    "Phn_Code": 374,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 5,
+    "Name": "Aruba",
+    "TwoLetterIsoCode": "AW",
+    "ThreeLetterIsoCode": "ABW",
+    "NumericIsoCode": 533,
+    "Phn_Code": 297,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 6,
+    "Name": "Australia",
+    "TwoLetterIsoCode": "AU",
+    "ThreeLetterIsoCode": "AUS",
+    "NumericIsoCode": 36,
+    "Phn_Code": 61,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 7,
+    "Name": "Austria",
+    "TwoLetterIsoCode": "AT",
+    "ThreeLetterIsoCode": "AUT",
+    "NumericIsoCode": 40,
+    "Phn_Code": 43,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 8,
+    "Name": "Azerbaijan",
+    "TwoLetterIsoCode": "AZ",
+    "ThreeLetterIsoCode": "AZE",
+    "NumericIsoCode": 31,
+    "Phn_Code": 994,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 9,
+    "Name": "Bahamas",
+    "TwoLetterIsoCode": "BS",
+    "ThreeLetterIsoCode": "BHS",
+    "NumericIsoCode": 44,
+    "Phn_Code": 1242,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 95,
+    "Name": "Bahrain",
+    "TwoLetterIsoCode": "BH",
+    "ThreeLetterIsoCode": "BHR",
+    "NumericIsoCode": 48,
+    "Phn_Code": 973,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 10,
+    "Name": "Bangladesh",
+    "TwoLetterIsoCode": "BD",
+    "ThreeLetterIsoCode": "BGD",
+    "NumericIsoCode": 50,
+    "Phn_Code": 880,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 96,
+    "Name": "Barbados",
+    "TwoLetterIsoCode": "BB",
+    "ThreeLetterIsoCode": "BRB",
+    "NumericIsoCode": 52,
+    "Phn_Code": 1246,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 11,
+    "Name": "Belarus",
+    "TwoLetterIsoCode": "BY",
+    "ThreeLetterIsoCode": "BLR",
+    "NumericIsoCode": 112,
+    "Phn_Code": 375,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 12,
+    "Name": "Belgium",
+    "TwoLetterIsoCode": "BE",
+    "ThreeLetterIsoCode": "BEL",
+    "NumericIsoCode": 56,
+    "Phn_Code": 32,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 13,
+    "Name": "Belize",
+    "TwoLetterIsoCode": "BZ",
+    "ThreeLetterIsoCode": "BLZ",
+    "NumericIsoCode": 84,
+    "Phn_Code": 501,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 97,
+    "Name": "Benin",
+    "TwoLetterIsoCode": "BJ",
+    "ThreeLetterIsoCode": "BEN",
+    "NumericIsoCode": 204,
+    "Phn_Code": 229,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 14,
+    "Name": "Bermuda",
+    "TwoLetterIsoCode": "BM",
+    "ThreeLetterIsoCode": "BMU",
+    "NumericIsoCode": 60,
+    "Phn_Code": 1441,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 98,
+    "Name": "Bhutan",
+    "TwoLetterIsoCode": "BT",
+    "ThreeLetterIsoCode": "BTN",
+    "NumericIsoCode": 64,
+    "Phn_Code": 975,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 15,
+    "Name": "Bolivia",
+    "TwoLetterIsoCode": "BO",
+    "ThreeLetterIsoCode": "BOL",
+    "NumericIsoCode": 68,
+    "Phn_Code": 591,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 16,
+    "Name": "Bosnia and Herzegowina",
+    "TwoLetterIsoCode": "BA",
+    "ThreeLetterIsoCode": "BIH",
+    "NumericIsoCode": 70,
+    "Phn_Code": 387,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 99,
+    "Name": "Botswana",
+    "TwoLetterIsoCode": "BW",
+    "ThreeLetterIsoCode": "BWA",
+    "NumericIsoCode": 72,
+    "Phn_Code": 267,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 17,
+    "Name": "Brazil",
+    "TwoLetterIsoCode": "BR",
+    "ThreeLetterIsoCode": "BRA",
+    "NumericIsoCode": 76,
+    "Phn_Code": 55,
+    "Phone_Number_Limit": 11
+  },
+  {
+    "Id": 231,
+    "Name": "British Virgin Islands",
+    "TwoLetterIsoCode": "VG",
+    "ThreeLetterIsoCode": "VGB",
+    "NumericIsoCode": 92,
+    "Phn_Code": 1284,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 102,
+    "Name": "Brunei Darussalam",
+    "TwoLetterIsoCode": "BN",
+    "ThreeLetterIsoCode": "BRN",
+    "NumericIsoCode": 96,
+    "Phn_Code": 673,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 18,
+    "Name": "Bulgaria",
+    "TwoLetterIsoCode": "BG",
+    "ThreeLetterIsoCode": "BGR",
+    "NumericIsoCode": 100,
+    "Phn_Code": 359,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 103,
+    "Name": "Burkina Faso",
+    "TwoLetterIsoCode": "BF",
+    "ThreeLetterIsoCode": "BFA",
+    "NumericIsoCode": 854,
+    "Phn_Code": 226,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 104,
+    "Name": "Burundi",
+    "TwoLetterIsoCode": "BI",
+    "ThreeLetterIsoCode": "BDI",
+    "NumericIsoCode": 108,
+    "Phn_Code": 257,
+    "Phone_Number_Limit": 11
+  },
+  {
+    "Id": 105,
+    "Name": "Cambodia",
+    "TwoLetterIsoCode": "KH",
+    "ThreeLetterIsoCode": "KHM",
+    "NumericIsoCode": 116,
+    "Phn_Code": 855,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 106,
+    "Name": "Cameroon",
+    "TwoLetterIsoCode": "CM",
+    "ThreeLetterIsoCode": "CMR",
+    "NumericIsoCode": 120,
+    "Phn_Code": 237,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 2,
+    "Name": "Canada",
+    "TwoLetterIsoCode": "CA",
+    "ThreeLetterIsoCode": "CAN",
+    "NumericIsoCode": 124,
+    "Phn_Code": 1,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 107,
+    "Name": "Cape Verde",
+    "TwoLetterIsoCode": "CV",
+    "ThreeLetterIsoCode": "CPV",
+    "NumericIsoCode": 132,
+    "Phn_Code": 238,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 19,
+    "Name": "Cayman Islands",
+    "TwoLetterIsoCode": "KY",
+    "ThreeLetterIsoCode": "CYM",
+    "NumericIsoCode": 136,
+    "Phn_Code": 1345,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 108,
+    "Name": "Central African Republic",
+    "TwoLetterIsoCode": "CF",
+    "ThreeLetterIsoCode": "CAF",
+    "NumericIsoCode": 140,
+    "Phn_Code": 236,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 109,
+    "Name": "Chad",
+    "TwoLetterIsoCode": "TD",
+    "ThreeLetterIsoCode": "TCD",
+    "NumericIsoCode": 148,
+    "Phn_Code": 235,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 20,
+    "Name": "Chile",
+    "TwoLetterIsoCode": "CL",
+    "ThreeLetterIsoCode": "CHL",
+    "NumericIsoCode": 152,
+    "Phn_Code": 56,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 21,
+    "Name": "China",
+    "TwoLetterIsoCode": "CN",
+    "ThreeLetterIsoCode": "CHN",
+    "NumericIsoCode": 156,
+    "Phn_Code": 86,
+    "Phone_Number_Limit": 11
+  },
+  {
+    "Id": 110,
+    "Name": "Christmas Island",
+    "TwoLetterIsoCode": "CX",
+    "ThreeLetterIsoCode": "CXR",
+    "NumericIsoCode": 162,
+    "Phn_Code": 61,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 111,
+    "Name": "Cocos (Keeling) Islands",
+    "TwoLetterIsoCode": "CC",
+    "ThreeLetterIsoCode": "CCK",
+    "NumericIsoCode": 166,
+    "Phn_Code": 61,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 22,
+    "Name": "Colombia",
+    "TwoLetterIsoCode": "CO",
+    "ThreeLetterIsoCode": "COL",
+    "NumericIsoCode": 170,
+    "Phn_Code": 57,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 112,
+    "Name": "Comoros",
+    "TwoLetterIsoCode": "KM",
+    "ThreeLetterIsoCode": "COM",
+    "NumericIsoCode": 174,
+    "Phn_Code": 269,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 113,
+    "Name": "Congo",
+    "TwoLetterIsoCode": "CG",
+    "ThreeLetterIsoCode": "COG",
+    "NumericIsoCode": 178,
+    "Phn_Code": 242,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 114,
+    "Name": "Cook Islands",
+    "TwoLetterIsoCode": "CK",
+    "ThreeLetterIsoCode": "COK",
+    "NumericIsoCode": 184,
+    "Phn_Code": 682,
+    "Phone_Number_Limit": 5
+  },
+  {
+    "Id": 23,
+    "Name": "Costa Rica",
+    "TwoLetterIsoCode": "CR",
+    "ThreeLetterIsoCode": "CRI",
+    "NumericIsoCode": 188,
+    "Phn_Code": 506,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 115,
+    "Name": "Cote D'Ivoire",
+    "TwoLetterIsoCode": "CI",
+    "ThreeLetterIsoCode": "CIV",
+    "NumericIsoCode": 384,
+    "Phn_Code": 225,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 24,
+    "Name": "Croatia",
+    "TwoLetterIsoCode": "HR",
+    "ThreeLetterIsoCode": "HRV",
+    "NumericIsoCode": 191,
+    "Phn_Code": 385,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 25,
+    "Name": "Cuba",
+    "TwoLetterIsoCode": "CU",
+    "ThreeLetterIsoCode": "CUB",
+    "NumericIsoCode": 192,
+    "Phn_Code": 53,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 26,
+    "Name": "Cyprus",
+    "TwoLetterIsoCode": "CY",
+    "ThreeLetterIsoCode": "CYP",
+    "NumericIsoCode": 196,
+    "Phn_Code": 357,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 27,
+    "Name": "Czech Republic",
+    "TwoLetterIsoCode": "CZ",
+    "ThreeLetterIsoCode": "CZE",
+    "NumericIsoCode": 203,
+    "Phn_Code": 420,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 28,
+    "Name": "Denmark",
+    "TwoLetterIsoCode": "DK",
+    "ThreeLetterIsoCode": "DNK",
+    "NumericIsoCode": 208,
+    "Phn_Code": 45,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 116,
+    "Name": "Djibouti",
+    "TwoLetterIsoCode": "DJ",
+    "ThreeLetterIsoCode": "DJI",
+    "NumericIsoCode": 262,
+    "Phn_Code": 253,
+    "Phone_Number_Limit": 11
+  },
+  {
+    "Id": 117,
+    "Name": "Dominica",
+    "TwoLetterIsoCode": "DM",
+    "ThreeLetterIsoCode": "DMA",
+    "NumericIsoCode": 212,
+    "Phn_Code": 1767,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 29,
+    "Name": "Dominican Republic",
+    "TwoLetterIsoCode": "DO",
+    "ThreeLetterIsoCode": "DOM",
+    "NumericIsoCode": 214,
+    "Phn_Code": 1809,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 29,
+    "Name": "Dominican Republic",
+    "TwoLetterIsoCode": "DO",
+    "ThreeLetterIsoCode": "DOM",
+    "NumericIsoCode": 214,
+    "Phn_Code": 1829,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 29,
+    "Name": "Dominican Republic",
+    "TwoLetterIsoCode": "DO",
+    "ThreeLetterIsoCode": "DOM",
+    "NumericIsoCode": 214,
+    "Phn_Code": 1849,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 30,
+    "Name": "Ecuador",
+    "TwoLetterIsoCode": "EC",
+    "ThreeLetterIsoCode": "ECU",
+    "NumericIsoCode": 218,
+    "Phn_Code": 593,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 31,
+    "Name": "Egypt",
+    "TwoLetterIsoCode": "EG",
+    "ThreeLetterIsoCode": "EGY",
+    "NumericIsoCode": 818,
+    "Phn_Code": 20,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 118,
+    "Name": "El Salvador",
+    "TwoLetterIsoCode": "SV",
+    "ThreeLetterIsoCode": "SLV",
+    "NumericIsoCode": 222,
+    "Phn_Code": 503,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 119,
+    "Name": "Equatorial Guinea",
+    "TwoLetterIsoCode": "GQ",
+    "ThreeLetterIsoCode": "GNQ",
+    "NumericIsoCode": 226,
+    "Phn_Code": 240,
+    "Phone_Number_Limit": 12
+  },
+  {
+    "Id": 120,
+    "Name": "Eritrea",
+    "TwoLetterIsoCode": "ER",
+    "ThreeLetterIsoCode": "ERI",
+    "NumericIsoCode": 232,
+    "Phn_Code": 291,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 121,
+    "Name": "Estonia",
+    "TwoLetterIsoCode": "EE",
+    "ThreeLetterIsoCode": "EST",
+    "NumericIsoCode": 233,
+    "Phn_Code": 372,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 122,
+    "Name": "Ethiopia",
+    "TwoLetterIsoCode": "ET",
+    "ThreeLetterIsoCode": "ETH",
+    "NumericIsoCode": 231,
+    "Phn_Code": 251,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 123,
+    "Name": "Falkland Islands",
+    "TwoLetterIsoCode": "FK",
+    "ThreeLetterIsoCode": "FLK",
+    "NumericIsoCode": 238,
+    "Phn_Code": 500,
+    "Phone_Number_Limit": 5
+  },
+  {
+    "Id": 124,
+    "Name": "Faroe Islands",
+    "TwoLetterIsoCode": "FO",
+    "ThreeLetterIsoCode": "FRO",
+    "NumericIsoCode": 234,
+    "Phn_Code": 298,
+    "Phone_Number_Limit": 5
+  },
+  {
+    "Id": 125,
+    "Name": "Fiji",
+    "TwoLetterIsoCode": "FJ",
+    "ThreeLetterIsoCode": "FJI",
+    "NumericIsoCode": 242,
+    "Phn_Code": 679,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 32,
+    "Name": "Finland",
+    "TwoLetterIsoCode": "FI",
+    "ThreeLetterIsoCode": "FIN",
+    "NumericIsoCode": 246,
+    "Phn_Code": 358,
+    "Phone_Number_Limit": 12
+  },
+  {
+    "Id": 33,
+    "Name": "France",
+    "TwoLetterIsoCode": "FR",
+    "ThreeLetterIsoCode": "FRA",
+    "NumericIsoCode": 250,
+    "Phn_Code": 33,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 126,
+    "Name": "French Guiana",
+    "TwoLetterIsoCode": "GF",
+    "ThreeLetterIsoCode": "GUF",
+    "NumericIsoCode": 254,
+    "Phn_Code": 594,
+    "Phone_Number_Limit": 12
+  },
+  {
+    "Id": 127,
+    "Name": "French Polynesia",
+    "TwoLetterIsoCode": "PF",
+    "ThreeLetterIsoCode": "PYF",
+    "NumericIsoCode": 258,
+    "Phn_Code": 689,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 129,
+    "Name": "Gabon",
+    "TwoLetterIsoCode": "GA",
+    "ThreeLetterIsoCode": "GAB",
+    "NumericIsoCode": 266,
+    "Phn_Code": 241,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 130,
+    "Name": "Gambia",
+    "TwoLetterIsoCode": "GM",
+    "ThreeLetterIsoCode": "GMB",
+    "NumericIsoCode": 270,
+    "Phn_Code": 220,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 34,
+    "Name": "Georgia",
+    "TwoLetterIsoCode": "GE",
+    "ThreeLetterIsoCode": "GEO",
+    "NumericIsoCode": 268,
+    "Phn_Code": 995,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 35,
+    "Name": "Germany",
+    "TwoLetterIsoCode": "DE",
+    "ThreeLetterIsoCode": "DEU",
+    "NumericIsoCode": 276,
+    "Phn_Code": 49,
+    "Phone_Number_Limit": 13
+  },
+  {
+    "Id": 131,
+    "Name": "Ghana",
+    "TwoLetterIsoCode": "GH",
+    "ThreeLetterIsoCode": "GHA",
+    "NumericIsoCode": 288,
+    "Phn_Code": 233,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 36,
+    "Name": "Gibraltar",
+    "TwoLetterIsoCode": "GI",
+    "ThreeLetterIsoCode": "GIB",
+    "NumericIsoCode": 292,
+    "Phn_Code": 350,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 37,
+    "Name": "Greece",
+    "TwoLetterIsoCode": "GR",
+    "ThreeLetterIsoCode": "GRC",
+    "NumericIsoCode": 300,
+    "Phn_Code": 30,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 132,
+    "Name": "Greenland",
+    "TwoLetterIsoCode": "GL",
+    "ThreeLetterIsoCode": "GRL",
+    "NumericIsoCode": 304,
+    "Phn_Code": 299,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 133,
+    "Name": "Grenada",
+    "TwoLetterIsoCode": "GD",
+    "ThreeLetterIsoCode": "GRD",
+    "NumericIsoCode": 308,
+    "Phn_Code": 1473,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 134,
+    "Name": "Guadeloupe",
+    "TwoLetterIsoCode": "GP",
+    "ThreeLetterIsoCode": "GLP",
+    "NumericIsoCode": 312,
+    "Phn_Code": 590,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 135,
+    "Name": "Guam",
+    "TwoLetterIsoCode": "GU",
+    "ThreeLetterIsoCode": "GUM",
+    "NumericIsoCode": 316,
+    "Phn_Code": 1671,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 38,
+    "Name": "Guatemala",
+    "TwoLetterIsoCode": "GT",
+    "ThreeLetterIsoCode": "GTM",
+    "NumericIsoCode": 320,
+    "Phn_Code": 502,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 136,
+    "Name": "Guinea",
+    "TwoLetterIsoCode": "GN",
+    "ThreeLetterIsoCode": "GIN",
+    "NumericIsoCode": 324,
+    "Phn_Code": 224,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 137,
+    "Name": "Guinea-bissau",
+    "TwoLetterIsoCode": "GW",
+    "ThreeLetterIsoCode": "GNB",
+    "NumericIsoCode": 624,
+    "Phn_Code": 245,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 138,
+    "Name": "Guyana",
+    "TwoLetterIsoCode": "GY",
+    "ThreeLetterIsoCode": "GUY",
+    "NumericIsoCode": 328,
+    "Phn_Code": 592,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 139,
+    "Name": "Haiti",
+    "TwoLetterIsoCode": "HT",
+    "ThreeLetterIsoCode": "HTI",
+    "NumericIsoCode": 332,
+    "Phn_Code": 509,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 229,
+    "Name": "Holy See",
+    "TwoLetterIsoCode": "VA",
+    "ThreeLetterIsoCode": "VAT",
+    "NumericIsoCode": 336,
+    "Phn_Code": 39,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 141,
+    "Name": "Honduras",
+    "TwoLetterIsoCode": "HN",
+    "ThreeLetterIsoCode": "HND",
+    "NumericIsoCode": 340,
+    "Phn_Code": 504,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 39,
+    "Name": "Hong Kong",
+    "TwoLetterIsoCode": "HK",
+    "ThreeLetterIsoCode": "HKG",
+    "NumericIsoCode": 344,
+    "Phn_Code": 852,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 40,
+    "Name": "Hungary",
+    "TwoLetterIsoCode": "HU",
+    "ThreeLetterIsoCode": "HUN",
+    "NumericIsoCode": 348,
+    "Phn_Code": 36,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 142,
+    "Name": "Iceland",
+    "TwoLetterIsoCode": "IS",
+    "ThreeLetterIsoCode": "ISL",
+    "NumericIsoCode": 352,
+    "Phn_Code": 354,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 41,
+    "Name": "India",
+    "TwoLetterIsoCode": "IN",
+    "ThreeLetterIsoCode": "IND",
+    "NumericIsoCode": 356,
+    "Phn_Code": 91,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 42,
+    "Name": "Indonesia",
+    "TwoLetterIsoCode": "ID",
+    "ThreeLetterIsoCode": "IDN",
+    "NumericIsoCode": 360,
+    "Phn_Code": 62,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 143,
+    "Name": "Iran",
+    "TwoLetterIsoCode": "IR",
+    "ThreeLetterIsoCode": "IRN",
+    "NumericIsoCode": 364,
+    "Phn_Code": 98,
+    "Phone_Number_Limit": 11
+  },
+  {
+    "Id": 144,
+    "Name": "Iraq",
+    "TwoLetterIsoCode": "IQ",
+    "ThreeLetterIsoCode": "IRQ",
+    "NumericIsoCode": 368,
+    "Phn_Code": 964,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 43,
+    "Name": "Ireland",
+    "TwoLetterIsoCode": "IE",
+    "ThreeLetterIsoCode": "IRL",
+    "NumericIsoCode": 372,
+    "Phn_Code": 353,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 44,
+    "Name": "Israel",
+    "TwoLetterIsoCode": "IL",
+    "ThreeLetterIsoCode": "ISR",
+    "NumericIsoCode": 376,
+    "Phn_Code": 972,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 45,
+    "Name": "Italy",
+    "TwoLetterIsoCode": "IT",
+    "ThreeLetterIsoCode": "ITA",
+    "NumericIsoCode": 380,
+    "Phn_Code": 39,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 46,
+    "Name": "Jamaica",
+    "TwoLetterIsoCode": "JM",
+    "ThreeLetterIsoCode": "JAM",
+    "NumericIsoCode": 388,
+    "Phn_Code": 1876,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 47,
+    "Name": "Japan",
+    "TwoLetterIsoCode": "JP",
+    "ThreeLetterIsoCode": "JPN",
+    "NumericIsoCode": 392,
+    "Phn_Code": 81,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 48,
+    "Name": "Jordan",
+    "TwoLetterIsoCode": "JO",
+    "ThreeLetterIsoCode": "JOR",
+    "NumericIsoCode": 400,
+    "Phn_Code": 962,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 49,
+    "Name": "Kazakhstan",
+    "TwoLetterIsoCode": "KZ",
+    "ThreeLetterIsoCode": "KAZ",
+    "NumericIsoCode": 398,
+    "Phn_Code": 7,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 145,
+    "Name": "Kenya",
+    "TwoLetterIsoCode": "KE",
+    "ThreeLetterIsoCode": "KEN",
+    "NumericIsoCode": 404,
+    "Phn_Code": 254,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 146,
+    "Name": "Kiribati",
+    "TwoLetterIsoCode": "KI",
+    "ThreeLetterIsoCode": "KIR",
+    "NumericIsoCode": 296,
+    "Phn_Code": 686,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 147,
+    "Name": "Korea (Seoul)",
+    "TwoLetterIsoCode": "KR",
+    "ThreeLetterIsoCode": "KOR",
+    "NumericIsoCode": 410,
+    "Phn_Code": 2,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 147,
+    "Name": "Korea (Busan)",
+    "TwoLetterIsoCode": "KR",
+    "ThreeLetterIsoCode": "KOR",
+    "NumericIsoCode": 410,
+    "Phn_Code": 51,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 50,
+    "Name": "North Korea",
+    "TwoLetterIsoCode": "KP",
+    "ThreeLetterIsoCode": "PRK",
+    "NumericIsoCode": 408,
+    "Phn_Code": 850,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 51,
+    "Name": "Kuwait",
+    "TwoLetterIsoCode": "KW",
+    "ThreeLetterIsoCode": "KWT",
+    "NumericIsoCode": 414,
+    "Phn_Code": 965,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 148,
+    "Name": "Kyrgyzstan",
+    "TwoLetterIsoCode": "KG",
+    "ThreeLetterIsoCode": "KGZ",
+    "NumericIsoCode": 417,
+    "Phn_Code": 996,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 149,
+    "Name": "Laos",
+    "TwoLetterIsoCode": "LA",
+    "ThreeLetterIsoCode": "LAO",
+    "NumericIsoCode": 418,
+    "Phn_Code": 856,
+    "Phone_Number_Limit": 11
+  },
+  {
+    "Id": 150,
+    "Name": "Latvia",
+    "TwoLetterIsoCode": "LV",
+    "ThreeLetterIsoCode": "LVA",
+    "NumericIsoCode": 428,
+    "Phn_Code": 371,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 151,
+    "Name": "Lebanon",
+    "TwoLetterIsoCode": "LB",
+    "ThreeLetterIsoCode": "LBN",
+    "NumericIsoCode": 422,
+    "Phn_Code": 961,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 152,
+    "Name": "Lesotho",
+    "TwoLetterIsoCode": "LS",
+    "ThreeLetterIsoCode": "LSO",
+    "NumericIsoCode": 426,
+    "Phn_Code": 266,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 153,
+    "Name": "Liberia",
+    "TwoLetterIsoCode": "LR",
+    "ThreeLetterIsoCode": "LBR",
+    "NumericIsoCode": 430,
+    "Phn_Code": 231,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 154,
+    "Name": "Libya",
+    "TwoLetterIsoCode": "LY",
+    "ThreeLetterIsoCode": "LBY",
+    "NumericIsoCode": 434,
+    "Phn_Code": 218,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 155,
+    "Name": "Liechtenstein",
+    "TwoLetterIsoCode": "LI",
+    "ThreeLetterIsoCode": "LIE",
+    "NumericIsoCode": 438,
+    "Phn_Code": 423,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 156,
+    "Name": "Lithuania",
+    "TwoLetterIsoCode": "LT",
+    "ThreeLetterIsoCode": "LTU",
+    "NumericIsoCode": 440,
+    "Phn_Code": 370,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 157,
+    "Name": "Luxembourg",
+    "TwoLetterIsoCode": "LU",
+    "ThreeLetterIsoCode": "LUX",
+    "NumericIsoCode": 442,
+    "Phn_Code": 352,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 158,
+    "Name": "Macau",
+    "TwoLetterIsoCode": "MO",
+    "ThreeLetterIsoCode": "MAC",
+    "NumericIsoCode": 446,
+    "Phn_Code": 853,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 159,
+    "Name": "Macedonia",
+    "TwoLetterIsoCode": "MK",
+    "ThreeLetterIsoCode": "MKD",
+    "NumericIsoCode": 807,
+    "Phn_Code": 389,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 160,
+    "Name": "Madagascar",
+    "TwoLetterIsoCode": "MG",
+    "ThreeLetterIsoCode": "MDG",
+    "NumericIsoCode": 450,
+    "Phn_Code": 261,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 161,
+    "Name": "Malawi",
+    "TwoLetterIsoCode": "MW",
+    "ThreeLetterIsoCode": "MWI",
+    "NumericIsoCode": 454,
+    "Phn_Code": 265,
+    "Phone_Number_Limit": 12
+  },
+  {
+    "Id": 52,
+    "Name": "Malaysia",
+    "TwoLetterIsoCode": "MY",
+    "ThreeLetterIsoCode": "MYS",
+    "NumericIsoCode": 458,
+    "Phn_Code": 60,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 162,
+    "Name": "Maldives",
+    "TwoLetterIsoCode": "MV",
+    "ThreeLetterIsoCode": "MDV",
+    "NumericIsoCode": 462,
+    "Phn_Code": 960,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 163,
+    "Name": "Mali",
+    "TwoLetterIsoCode": "ML",
+    "ThreeLetterIsoCode": "MLI",
+    "NumericIsoCode": 466,
+    "Phn_Code": 223,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 164,
+    "Name": "Malta",
+    "TwoLetterIsoCode": "MT",
+    "ThreeLetterIsoCode": "MLT",
+    "NumericIsoCode": 470,
+    "Phn_Code": 356,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 165,
+    "Name": "Marshall Islands",
+    "TwoLetterIsoCode": "MH",
+    "ThreeLetterIsoCode": "MHL",
+    "NumericIsoCode": 584,
+    "Phn_Code": 692,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 166,
+    "Name": "Martinique",
+    "TwoLetterIsoCode": "MQ",
+    "ThreeLetterIsoCode": "MTQ",
+    "NumericIsoCode": 474,
+    "Phn_Code": 596,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 167,
+    "Name": "Mauritania",
+    "TwoLetterIsoCode": "MR",
+    "ThreeLetterIsoCode": "MRT",
+    "NumericIsoCode": 478,
+    "Phn_Code": 222,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 168,
+    "Name": "Mauritius",
+    "TwoLetterIsoCode": "MU",
+    "ThreeLetterIsoCode": "MUS",
+    "NumericIsoCode": 480,
+    "Phn_Code": 230,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 169,
+    "Name": "Mayotte",
+    "TwoLetterIsoCode": "YT",
+    "ThreeLetterIsoCode": "MYT",
+    "NumericIsoCode": 175,
+    "Phn_Code": 262,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 53,
+    "Name": "Mexico",
+    "TwoLetterIsoCode": "MX",
+    "ThreeLetterIsoCode": "MEX",
+    "NumericIsoCode": 484,
+    "Phn_Code": 52,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 170,
+    "Name": "Micronesia",
+    "TwoLetterIsoCode": "FM",
+    "ThreeLetterIsoCode": "FSM",
+    "NumericIsoCode": 583,
+    "Phn_Code": 691,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 171,
+    "Name": "Moldova",
+    "TwoLetterIsoCode": "MD",
+    "ThreeLetterIsoCode": "MDA",
+    "NumericIsoCode": 498,
+    "Phn_Code": 373,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 172,
+    "Name": "Monaco",
+    "TwoLetterIsoCode": "MC",
+    "ThreeLetterIsoCode": "MCO",
+    "NumericIsoCode": 492,
+    "Phn_Code": 377,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 173,
+    "Name": "Mongolia",
+    "TwoLetterIsoCode": "MN",
+    "ThreeLetterIsoCode": "MNG",
+    "NumericIsoCode": 496,
+    "Phn_Code": 976,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 174,
+    "Name": "Montenegro",
+    "TwoLetterIsoCode": "ME",
+    "ThreeLetterIsoCode": "MNE",
+    "NumericIsoCode": 499,
+    "Phn_Code": 382,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 175,
+    "Name": "Montserrat",
+    "TwoLetterIsoCode": "MS",
+    "ThreeLetterIsoCode": "MSR",
+    "NumericIsoCode": 500,
+    "Phn_Code": 1664,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 176,
+    "Name": "Morocco",
+    "TwoLetterIsoCode": "MA",
+    "ThreeLetterIsoCode": "MAR",
+    "NumericIsoCode": 504,
+    "Phn_Code": 212,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 177,
+    "Name": "Mozambique",
+    "TwoLetterIsoCode": "MZ",
+    "ThreeLetterIsoCode": "MOZ",
+    "NumericIsoCode": 508,
+    "Phn_Code": 258,
+    "Phone_Number_Limit": 12
+  },
+  {
+    "Id": 178,
+    "Name": "Myanmar",
+    "TwoLetterIsoCode": "MM",
+    "ThreeLetterIsoCode": "MMR",
+    "NumericIsoCode": 104,
+    "Phn_Code": 95,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 179,
+    "Name": "Namibia",
+    "TwoLetterIsoCode": "NA",
+    "ThreeLetterIsoCode": "NAM",
+    "NumericIsoCode": 516,
+    "Phn_Code": 264,
+    "Phone_Number_Limit": 11
+  },
+  {
+    "Id": 180,
+    "Name": "Nauru",
+    "TwoLetterIsoCode": "NR",
+    "ThreeLetterIsoCode": "NRU",
+    "NumericIsoCode": 520,
+    "Phn_Code": 674,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 181,
+    "Name": "Nepal",
+    "TwoLetterIsoCode": "NP",
+    "ThreeLetterIsoCode": "NPL",
+    "NumericIsoCode": 524,
+    "Phn_Code": 977,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 54,
+    "Name": "Netherlands",
+    "TwoLetterIsoCode": "NL",
+    "ThreeLetterIsoCode": "NLD",
+    "NumericIsoCode": 528,
+    "Phn_Code": 31,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 182,
+    "Name": "Netherlands Antilles",
+    "TwoLetterIsoCode": "AN",
+    "ThreeLetterIsoCode": "ANT",
+    "NumericIsoCode": 530,
+    "Phn_Code": 599,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 183,
+    "Name": "New Caledonia",
+    "TwoLetterIsoCode": "NC",
+    "ThreeLetterIsoCode": "NCL",
+    "NumericIsoCode": 540,
+    "Phn_Code": 687,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 55,
+    "Name": "New Zealand",
+    "TwoLetterIsoCode": "NZ",
+    "ThreeLetterIsoCode": "NZL",
+    "NumericIsoCode": 554,
+    "Phn_Code": 64,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 184,
+    "Name": "Nicaragua",
+    "TwoLetterIsoCode": "NI",
+    "ThreeLetterIsoCode": "NIC",
+    "NumericIsoCode": 558,
+    "Phn_Code": 505,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 185,
+    "Name": "Niger",
+    "TwoLetterIsoCode": "NE",
+    "ThreeLetterIsoCode": "NER",
+    "NumericIsoCode": 562,
+    "Phn_Code": 227,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 186,
+    "Name": "Nigeria",
+    "TwoLetterIsoCode": "NG",
+    "ThreeLetterIsoCode": "NGA",
+    "NumericIsoCode": 566,
+    "Phn_Code": 234,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 187,
+    "Name": "Niue",
+    "TwoLetterIsoCode": "NU",
+    "ThreeLetterIsoCode": "NIU",
+    "NumericIsoCode": 570,
+    "Phn_Code": 683,
+    "Phone_Number_Limit": 4
+  },
+  {
+    "Id": 188,
+    "Name": "Norfolk Island",
+    "TwoLetterIsoCode": "NF",
+    "ThreeLetterIsoCode": "NFK",
+    "NumericIsoCode": 574,
+    "Phn_Code": 672,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 189,
+    "Name": "Northern Mariana Islands",
+    "TwoLetterIsoCode": "MP",
+    "ThreeLetterIsoCode": "MNP",
+    "NumericIsoCode": 580,
+    "Phn_Code": 1670,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 56,
+    "Name": "Norway",
+    "TwoLetterIsoCode": "NO",
+    "ThreeLetterIsoCode": "NOR",
+    "NumericIsoCode": 578,
+    "Phn_Code": 47,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 190,
+    "Name": "Oman",
+    "TwoLetterIsoCode": "OM",
+    "ThreeLetterIsoCode": "OMN",
+    "NumericIsoCode": 512,
+    "Phn_Code": 968,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 57,
+    "Name": "Pakistan",
+    "TwoLetterIsoCode": "PK",
+    "ThreeLetterIsoCode": "PAK",
+    "NumericIsoCode": 586,
+    "Phn_Code": 92,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 191,
+    "Name": "Palau",
+    "TwoLetterIsoCode": "PW",
+    "ThreeLetterIsoCode": "PLW",
+    "NumericIsoCode": 585,
+    "Phn_Code": 680,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 192,
+    "Name": "Panama",
+    "TwoLetterIsoCode": "PA",
+    "ThreeLetterIsoCode": "PAN",
+    "NumericIsoCode": 591,
+    "Phn_Code": 507,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 193,
+    "Name": "Papua New Guinea",
+    "TwoLetterIsoCode": "PG",
+    "ThreeLetterIsoCode": "PNG",
+    "NumericIsoCode": 598,
+    "Phn_Code": 675,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 58,
+    "Name": "Paraguay",
+    "TwoLetterIsoCode": "PY",
+    "ThreeLetterIsoCode": "PRY",
+    "NumericIsoCode": 600,
+    "Phn_Code": 595,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 59,
+    "Name": "Peru",
+    "TwoLetterIsoCode": "PE",
+    "ThreeLetterIsoCode": "PER",
+    "NumericIsoCode": 604,
+    "Phn_Code": 51,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 60,
+    "Name": "Philippines",
+    "TwoLetterIsoCode": "PH",
+    "ThreeLetterIsoCode": "PHL",
+    "NumericIsoCode": 608,
+    "Phn_Code": 63,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 194,
+    "Name": "Pitcairn Islands",
+    "TwoLetterIsoCode": "PN",
+    "ThreeLetterIsoCode": "PCN",
+    "NumericIsoCode": 612,
+    "Phn_Code": 870,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 61,
+    "Name": "Poland",
+    "TwoLetterIsoCode": "PL",
+    "ThreeLetterIsoCode": "POL",
+    "NumericIsoCode": 616,
+    "Phn_Code": 48,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 62,
+    "Name": "Portugal",
+    "TwoLetterIsoCode": "PT",
+    "ThreeLetterIsoCode": "PRT",
+    "NumericIsoCode": 620,
+    "Phn_Code": 351,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 63,
+    "Name": "Puerto Rico",
+    "TwoLetterIsoCode": "PR",
+    "ThreeLetterIsoCode": "PRI",
+    "NumericIsoCode": 630,
+    "Phn_Code": 1787,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 63,
+    "Name": "Puerto Rico",
+    "TwoLetterIsoCode": "PR",
+    "ThreeLetterIsoCode": "PRI",
+    "NumericIsoCode": 630,
+    "Phn_Code": 1939,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 64,
+    "Name": "Qatar",
+    "TwoLetterIsoCode": "QA",
+    "ThreeLetterIsoCode": "QAT",
+    "NumericIsoCode": 634,
+    "Phn_Code": 974,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 195,
+    "Name": "Reunion Island",
+    "TwoLetterIsoCode": "RE",
+    "ThreeLetterIsoCode": "REU",
+    "NumericIsoCode": 638,
+    "Phn_Code": 262,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 65,
+    "Name": "Romania",
+    "TwoLetterIsoCode": "RO",
+    "ThreeLetterIsoCode": "ROM",
+    "NumericIsoCode": 642,
+    "Phn_Code": 40,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 66,
+    "Name": "Russia",
+    "TwoLetterIsoCode": "RU",
+    "ThreeLetterIsoCode": "RUS",
+    "NumericIsoCode": 643,
+    "Phn_Code": 7,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 196,
+    "Name": "Rwanda",
+    "TwoLetterIsoCode": "RW",
+    "ThreeLetterIsoCode": "RWA",
+    "NumericIsoCode": 646,
+    "Phn_Code": 250,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 210,
+    "Name": "Saint Helena",
+    "TwoLetterIsoCode": "SH",
+    "ThreeLetterIsoCode": "SHN",
+    "NumericIsoCode": 654,
+    "Phn_Code": 290,
+    "Phone_Number_Limit": 5
+  },
+  {
+    "Id": 197,
+    "Name": "Saint Kitts and Nevis",
+    "TwoLetterIsoCode": "KN",
+    "ThreeLetterIsoCode": "KNA",
+    "NumericIsoCode": 659,
+    "Phn_Code": 1869,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 198,
+    "Name": "Saint Lucia",
+    "TwoLetterIsoCode": "LC",
+    "ThreeLetterIsoCode": "LCA",
+    "NumericIsoCode": 662,
+    "Phn_Code": 1758,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 211,
+    "Name": "Saint Pierre and Miquelon",
+    "TwoLetterIsoCode": "PM",
+    "ThreeLetterIsoCode": "SPM",
+    "NumericIsoCode": 666,
+    "Phn_Code": 508,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 199,
+    "Name": "Saint Vincent and the Grenadines",
+    "TwoLetterIsoCode": "VC",
+    "ThreeLetterIsoCode": "VCT",
+    "NumericIsoCode": 670,
+    "Phn_Code": 1784,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 200,
+    "Name": "Samoa",
+    "TwoLetterIsoCode": "WS",
+    "ThreeLetterIsoCode": "WSM",
+    "NumericIsoCode": 882,
+    "Phn_Code": 685,
+    "Phone_Number_Limit": 5
+  },
+  {
+    "Id": 201,
+    "Name": "San Marino",
+    "TwoLetterIsoCode": "SM",
+    "ThreeLetterIsoCode": "SMR",
+    "NumericIsoCode": 674,
+    "Phn_Code": 378,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 202,
+    "Name": "Sao Tome and Principe",
+    "TwoLetterIsoCode": "ST",
+    "ThreeLetterIsoCode": "STP",
+    "NumericIsoCode": 678,
+    "Phn_Code": 239,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 67,
+    "Name": "Saudi Arabia",
+    "TwoLetterIsoCode": "SA",
+    "ThreeLetterIsoCode": "SAU",
+    "NumericIsoCode": 682,
+    "Phn_Code": 966,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 203,
+    "Name": "Senegal",
+    "TwoLetterIsoCode": "SN",
+    "ThreeLetterIsoCode": "SEN",
+    "NumericIsoCode": 686,
+    "Phn_Code": 221,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 85,
+    "Name": "Serbia",
+    "TwoLetterIsoCode": "RS",
+    "ThreeLetterIsoCode": "SRB",
+    "NumericIsoCode": 688,
+    "Phn_Code": 381,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 204,
+    "Name": "Seychelles",
+    "TwoLetterIsoCode": "SC",
+    "ThreeLetterIsoCode": "SYC",
+    "NumericIsoCode": 690,
+    "Phn_Code": 248,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 205,
+    "Name": "Sierra Leone",
+    "TwoLetterIsoCode": "SL",
+    "ThreeLetterIsoCode": "SLE",
+    "NumericIsoCode": 694,
+    "Phn_Code": 232,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 68,
+    "Name": "Singapore",
+    "TwoLetterIsoCode": "SG",
+    "ThreeLetterIsoCode": "SGP",
+    "NumericIsoCode": 702,
+    "Phn_Code": 65,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 69,
+    "Name": "Slovakia",
+    "TwoLetterIsoCode": "SK",
+    "ThreeLetterIsoCode": "SVK",
+    "NumericIsoCode": 703,
+    "Phn_Code": 421,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 70,
+    "Name": "Slovenia",
+    "TwoLetterIsoCode": "SI",
+    "ThreeLetterIsoCode": "SVN",
+    "NumericIsoCode": 705,
+    "Phn_Code": 386,
+    "Phone_Number_Limit": 5
+  },
+  {
+    "Id": 206,
+    "Name": "Solomon Islands",
+    "TwoLetterIsoCode": "SB",
+    "ThreeLetterIsoCode": "SLB",
+    "NumericIsoCode": 90,
+    "Phn_Code": 677,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 207,
+    "Name": "Somalia",
+    "TwoLetterIsoCode": "SO",
+    "ThreeLetterIsoCode": "SOM",
+    "NumericIsoCode": 706,
+    "Phn_Code": 252,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 207,
+    "Name": "Somalia",
+    "TwoLetterIsoCode": "SO",
+    "ThreeLetterIsoCode": "SOM",
+    "NumericIsoCode": 706,
+    "Phn_Code": 252,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 71,
+    "Name": "South Africa",
+    "TwoLetterIsoCode": "ZA",
+    "ThreeLetterIsoCode": "ZAF",
+    "NumericIsoCode": 710,
+    "Phn_Code": 27,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 72,
+    "Name": "Spain",
+    "TwoLetterIsoCode": "ES",
+    "ThreeLetterIsoCode": "ESP",
+    "NumericIsoCode": 724,
+    "Phn_Code": 34,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 209,
+    "Name": "Sri Lanka",
+    "TwoLetterIsoCode": "LK",
+    "ThreeLetterIsoCode": "LKA",
+    "NumericIsoCode": 144,
+    "Phn_Code": 94,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 212,
+    "Name": "Sudan",
+    "TwoLetterIsoCode": "SD",
+    "ThreeLetterIsoCode": "SDN",
+    "NumericIsoCode": 736,
+    "Phn_Code": 249,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 213,
+    "Name": "Suriname",
+    "TwoLetterIsoCode": "SR",
+    "ThreeLetterIsoCode": "SUR",
+    "NumericIsoCode": 740,
+    "Phn_Code": 597,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 215,
+    "Name": "Swaziland",
+    "TwoLetterIsoCode": "SZ",
+    "ThreeLetterIsoCode": "SWZ",
+    "NumericIsoCode": 748,
+    "Phn_Code": 41,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 73,
+    "Name": "Sweden",
+    "TwoLetterIsoCode": "SE",
+    "ThreeLetterIsoCode": "SWE",
+    "NumericIsoCode": 752,
+    "Phn_Code": 46,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 74,
+    "Name": "Switzerland",
+    "TwoLetterIsoCode": "CH",
+    "ThreeLetterIsoCode": "CHE",
+    "NumericIsoCode": 756,
+    "Phn_Code": 41,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 216,
+    "Name": "Syria",
+    "TwoLetterIsoCode": "SY",
+    "ThreeLetterIsoCode": "SYR",
+    "NumericIsoCode": 760,
+    "Phn_Code": 963,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 75,
+    "Name": "Taiwan",
+    "TwoLetterIsoCode": "TW",
+    "ThreeLetterIsoCode": "TWN",
+    "NumericIsoCode": 158,
+    "Phn_Code": 886,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 217,
+    "Name": "Tajikistan",
+    "TwoLetterIsoCode": "TJ",
+    "ThreeLetterIsoCode": "TJK",
+    "NumericIsoCode": 762,
+    "Phn_Code": 992,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 218,
+    "Name": "Tanzania",
+    "TwoLetterIsoCode": "TZ",
+    "ThreeLetterIsoCode": "TZA",
+    "NumericIsoCode": 834,
+    "Phn_Code": 255,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 76,
+    "Name": "Thailand",
+    "TwoLetterIsoCode": "TH",
+    "ThreeLetterIsoCode": "THA",
+    "NumericIsoCode": 764,
+    "Phn_Code": 66,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 219,
+    "Name": "Togo",
+    "TwoLetterIsoCode": "TG",
+    "ThreeLetterIsoCode": "TGO",
+    "NumericIsoCode": 768,
+    "Phn_Code": 228,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 220,
+    "Name": "Tokelau",
+    "TwoLetterIsoCode": "TK",
+    "ThreeLetterIsoCode": "TKL",
+    "NumericIsoCode": 772,
+    "Phn_Code": 690,
+    "Phone_Number_Limit": 5
+  },
+  {
+    "Id": 221,
+    "Name": "Tonga Islands",
+    "TwoLetterIsoCode": "TO",
+    "ThreeLetterIsoCode": "TON",
+    "NumericIsoCode": 776,
+    "Phn_Code": 676,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 222,
+    "Name": "Trinidad and Tobago",
+    "TwoLetterIsoCode": "TT",
+    "ThreeLetterIsoCode": "TTO",
+    "NumericIsoCode": 780,
+    "Phn_Code": 1868,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 223,
+    "Name": "Tunisia",
+    "TwoLetterIsoCode": "TN",
+    "ThreeLetterIsoCode": "TUN",
+    "NumericIsoCode": 788,
+    "Phn_Code": 216,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 77,
+    "Name": "Turkey",
+    "TwoLetterIsoCode": "TR",
+    "ThreeLetterIsoCode": "TUR",
+    "NumericIsoCode": 792,
+    "Phn_Code": 90,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 224,
+    "Name": "Turkmenistan",
+    "TwoLetterIsoCode": "TM",
+    "ThreeLetterIsoCode": "TKM",
+    "NumericIsoCode": 795,
+    "Phn_Code": 993,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 225,
+    "Name": "Turks and Caicos Islands",
+    "TwoLetterIsoCode": "TC",
+    "ThreeLetterIsoCode": "TCA",
+    "NumericIsoCode": 796,
+    "Phn_Code": 1649,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 226,
+    "Name": "Tuvalu",
+    "TwoLetterIsoCode": "TV",
+    "ThreeLetterIsoCode": "TUV",
+    "NumericIsoCode": 798,
+    "Phn_Code": 688,
+    "Phone_Number_Limit": 5
+  },
+  {
+    "Id": 227,
+    "Name": "Uganda",
+    "TwoLetterIsoCode": "UG",
+    "ThreeLetterIsoCode": "UGA",
+    "NumericIsoCode": 800,
+    "Phn_Code": 256,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 78,
+    "Name": "Ukraine",
+    "TwoLetterIsoCode": "UA",
+    "ThreeLetterIsoCode": "UKR",
+    "NumericIsoCode": 804,
+    "Phn_Code": 380,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 79,
+    "Name": "United Arab Emirates",
+    "TwoLetterIsoCode": "AE",
+    "ThreeLetterIsoCode": "ARE",
+    "NumericIsoCode": 784,
+    "Phn_Code": 971,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 80,
+    "Name": "United Kingdom",
+    "TwoLetterIsoCode": "GB",
+    "ThreeLetterIsoCode": "GBR",
+    "NumericIsoCode": 826,
+    "Phn_Code": 44,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 1,
+    "Name": "United States",
+    "TwoLetterIsoCode": "US",
+    "ThreeLetterIsoCode": "USA",
+    "NumericIsoCode": 840,
+    "Phn_Code": 1,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 82,
+    "Name": "Uruguay",
+    "TwoLetterIsoCode": "UY",
+    "ThreeLetterIsoCode": "URY",
+    "NumericIsoCode": 858,
+    "Phn_Code": 598,
+    "Phone_Number_Limit": 8
+  },
+  {
+    "Id": 232,
+    "Name": "US Virgin Islands",
+    "TwoLetterIsoCode": "VI",
+    "ThreeLetterIsoCode": "VIR",
+    "NumericIsoCode": 850,
+    "Phn_Code": 1340,
+    "Phone_Number_Limit": 10
+  },
+  {
+    "Id": 83,
+    "Name": "Uzbekistan",
+    "TwoLetterIsoCode": "UZ",
+    "ThreeLetterIsoCode": "UZB",
+    "NumericIsoCode": 860,
+    "Phn_Code": 998,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 228,
+    "Name": "Vanuatu",
+    "TwoLetterIsoCode": "VU",
+    "ThreeLetterIsoCode": "VUT",
+    "NumericIsoCode": 548,
+    "Phn_Code": 678,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 84,
+    "Name": "Venezuela",
+    "TwoLetterIsoCode": "VE",
+    "ThreeLetterIsoCode": "VEN",
+    "NumericIsoCode": 862,
+    "Phn_Code": 58,
+    "Phone_Number_Limit": 7
+  },
+  {
+    "Id": 230,
+    "Name": "Vietnam",
+    "TwoLetterIsoCode": "VN",
+    "ThreeLetterIsoCode": "VNM",
+    "NumericIsoCode": 704,
+    "Phn_Code": 84,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 233,
+    "Name": "Wallis and Futuna",
+    "TwoLetterIsoCode": "WF",
+    "ThreeLetterIsoCode": "WLF",
+    "NumericIsoCode": 876,
+    "Phn_Code": 681,
+    "Phone_Number_Limit": 6
+  },
+  {
+    "Id": 234,
+    "Name": "Western Sahara",
+    "TwoLetterIsoCode": "EH",
+    "ThreeLetterIsoCode": "ESH",
+    "NumericIsoCode": 732,
+    "Phn_Code": 212,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 235,
+    "Name": "Yemen",
+    "TwoLetterIsoCode": "YE",
+    "ThreeLetterIsoCode": "YEM",
+    "NumericIsoCode": 887,
+    "Phn_Code": 967,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 236,
+    "Name": "Zambia",
+    "TwoLetterIsoCode": "ZM",
+    "ThreeLetterIsoCode": "ZMB",
+    "NumericIsoCode": 894,
+    "Phn_Code": 260,
+    "Phone_Number_Limit": 9
+  },
+  {
+    "Id": 237,
+    "Name": "Zimbabwe",
+    "TwoLetterIsoCode": "ZW",
+    "ThreeLetterIsoCode": "ZWE",
+    "NumericIsoCode": 716,
+    "Phn_Code": 263,
+    "Phone_Number_Limit": 9
+  }
+]

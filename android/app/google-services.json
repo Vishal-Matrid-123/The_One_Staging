@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "150803512425",
+    "project_id": "theone-cce7f",
+    "storage_bucket": "theone-cce7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150803512425:android:40a3d7372d12e1757476f8",
+        "android_client_info": {
+          "package_name": "com.theone.androidtheone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150803512425-cg5bfo84o9fbatq7nhvrngq3s4h1qrca.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoMLFhJ8ir_pT57X1qFtmYSS-CQQzoXuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150803512425-cg5bfo84o9fbatq7nhvrngq3s4h1qrca.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "150803512425-g0etic53qmce8979qc7rtst65j7k4b85.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dev.theone"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
