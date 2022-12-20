@@ -435,7 +435,7 @@ class _VerificationScreen2State extends State<VerificationScreen2>
     // await SmsAutoFill().listenForCode;
     // final uri = Uri.parse(
     //    PhoneNumber=${BuildConfig.countryCode}${widget.phoneNumber}');
-    var _phnNumber = phnCode + widget.phoneNumber;
+    var _phnNumber =  widget.phoneNumber;
     String _baseUrl = await ApiCalls.getSelectedStore();
     final uri = Uri.parse(_baseUrl.replaceAll('/apisSecondVer', '') +
         'AppCustomerSecondVer/SendOTP');

@@ -1475,16 +1475,16 @@ class NewApisProvider extends ChangeNotifier {
   }
 
   Future<void> readJson() async {
-    // final String response =
-    //     await rootBundle.loadString('json/nop_country.json');
-    // // final data = await json.decode(response);
-    //
-    // _countriesInfo = List<CountriesDataResponse>.from(
-    //     json.decode(response).map((x) => CountriesDataResponse.fromJson(x)));
-    //
-    // log('Country List>>>>>>>' + _countriesInfo.length.toString());
-    //
-    // notifyListeners();
+    final String response =
+        await rootBundle.loadString('json/nop_country.json');
+    // final data = await json.decode(response);
+
+    _countriesInfo = List<CountriesDataResponse>.from(
+        json.decode(response).map((x) => CountriesDataResponse.fromJson(x)));
+
+    log('Country List>>>>>>>' + _countriesInfo.length.toString());
+
+    notifyListeners();
 
 // ...
   }

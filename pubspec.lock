@@ -463,6 +463,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.4"
+  debounce_textfield:
+    dependency: "direct main"
+    description:
+      name: debounce_textfield
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   delayed_display:
     dependency: "direct main"
     description:
@@ -547,6 +554,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0"
+  drop_down_list:
+    dependency: "direct main"
+    description:
+      name: drop_down_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
+  dropdown_button2:
+    dependency: "direct main"
+    description:
+      name: dropdown_button2
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.9.2"
   dropdown_plus:
     dependency: "direct main"
     description:
@@ -617,6 +638,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
+  find_dropdown:
+    dependency: "direct main"
+    description:
+      name: find_dropdown
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   firebase_analytics:
     dependency: "direct main"
     description:
@@ -1137,6 +1165,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1"
+  get:
+    dependency: "direct main"
+    description:
+      name: get
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.6.5"
   get_it:
     dependency: "direct main"
     description:
@@ -1226,6 +1261,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.17.0"
+  intl_phone_field:
+    dependency: "direct main"
+    description:
+      name: intl_phone_field
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.0"
   io:
     dependency: transitive
     description:

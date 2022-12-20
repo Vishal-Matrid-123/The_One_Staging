@@ -155,6 +155,12 @@ dependencies:
 #  awesome_notifications_fcm: ^0.7.4+1
   webview_cookie_manager: ^2.0.6
   flutter_local_notifications: ^12.0.4
+  intl_phone_field: ^3.1.0
+  drop_down_list: ^0.0.4
+  dropdown_button2: ^1.9.2
+  get: ^4.6.5
+  find_dropdown: ^1.0.0
+  debounce_textfield: ^0.0.2
 #  upgrader: ^4.4.2
 
 
@@ -214,6 +220,7 @@ flutter:
     - ServicesImages/terms&conditions_icon.jpeg
     - mapsIcons/
     - MyAssets/bogo_logo.jpeg
+    - json/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
