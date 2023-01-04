@@ -45,7 +45,7 @@ class _TopicPageState extends State<TopicPage> {
 
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
-  var progressCount;
+  var progressCount = 0;
   bool isLoading = true;
   bool _willGo = true;
   var isUserLoggedIn;
@@ -69,11 +69,13 @@ class _TopicPageState extends State<TopicPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    final provider = Provider.of<NewApisProvider>(context, listen: false);
-    provider.getBookingStatus();
+
     getUserLoginDetails();
     _webViewControllerFuture = _controller.future;
     // _controller.
+    final provider = Provider.of<NewApisProvider>(context, listen: false);
+    isUserLoggedIn!=null?provider.getBookingStatus():null;
+
     // _webViewControllerFuture.
     if (Platform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();
@@ -112,7 +114,6 @@ class _TopicPageState extends State<TopicPage> {
         child: Consumer<NewApisProvider>(
           builder: (ctx, val, _) => Scaffold(
             resizeToAvoidBottomInset: true,
-
             appBar: new AppBar(
               backgroundColor: ConstantsVar.appColor,
               toolbarHeight: 18.w,
@@ -182,7 +183,7 @@ class _TopicPageState extends State<TopicPage> {
                         child: Stack(
                           children: [
                             FutureBuilder<WebViewController>(
-                              future: _webViewControllerFuture,
+                              future: _controller.future,
                               builder: (BuildContext context,
                                   AsyncSnapshot<WebViewController> snapshot) {
                                 final bool webViewReady =
@@ -227,15 +228,314 @@ class _TopicPageState extends State<TopicPage> {
                                               value: cookieValue,
                                               domain: domain)
                                         ],
-                                        // initialUrl:
-                                        //     Uri.encodeFull(widget.paymentUrl),
+                                        initialUrl:
+                                            Uri.encodeFull(widget.paymentUrl),
                                         // userAgent:
                                         //     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:61.0) Gecko/20100101 Firefox/61.0",
                                         javascriptMode:
                                             JavascriptMode.unrestricted,
                                         onWebViewCreated: (WebViewController
                                             webViewController) async {
-                                          cookieManager.clearCookies();
+                                          _webController = webViewController;
+
+                                          _controller
+                                              .complete(webViewController);
+                                        },
+                                        onProgress: (int progress) {
+                                          setState(() {
+                                            isLoading = true;
+                                            progressCount = progress;
+                                          });
+                                          if(progress ==100){
+                                            setState((){
+                                              isLoading = false;
+                                            });
+                                          }
+                                        },
+                                        javascriptChannels: <JavascriptChannel>{
+                                          _toasterJavascriptChannel(context),
+                                        },
+                                        navigationDelegate:
+                                            (NavigationRequest request) {
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                          if (request.url.contains(
+                                              'customercare@theone.com')) {
+                                            ApiCalls.launchUrl(request.url)
+                                                .then((value) => setState(() {
+                                                      isLoading = false;
+                                                      controller!.reload();
+                                                    }));
+                                            return NavigationDecision.prevent;
+                                          }
+                                          if (request.url.startsWith(
+                                              'https://www.youtube.com/')) {
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            controller!.reload();
+
+                                            print(
+                                                'blocking navigation to $request}');
+                                            return NavigationDecision.prevent;
+                                          }
+
+                                          if (request.url.contains(
+                                              'GetProductModelById')) {
+                                            var url = request.url;
+                                            Navigator.push(context,
+                                                CupertinoPageRoute(
+                                                    builder: (context) {
+                                              return NewProductDetails(
+                                                  productId:
+                                                      url.split('id=')[0],
+                                                  screenName: 'Topic Screen');
+                                            })).then((value) => setState(() {
+                                                  isLoading = false;
+                                                  controller!.reload();
+                                                }));
+                                            return NavigationDecision.prevent;
+                                          }
+
+                                          if (request.url
+                                              .contains('GetCategoryPage')) {
+                                            Navigator.pushAndRemoveUntil(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                      builder: (context) =>
+                                                          MyHomePage(
+                                                              pageIndex: 1),
+                                                    ),
+                                                    (route) => false)
+                                                .then((value) => setState(() {
+                                                      controller!.reload();
+
+                                                      isLoading = false;
+                                                    }));
+                                            return NavigationDecision.prevent;
+                                          }
+
+                                          if (request.url.contains(
+                                              'http://theone.createsend.com/')) {
+                                            setState(() {
+                                              isLoading = false;
+                                              controller!.reload();
+                                            });
+                                            return NavigationDecision.navigate;
+                                          }
+                                          if (request.url
+                                              .toLowerCase()
+                                              .contains("\.com\/login")) {
+                                            Navigator.pushReplacement(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    const LoginScreen(
+                                                        screenKey:
+                                                            'Topic Screen'),
+                                              ),
+                                            ).then((value) => setState(() {
+                                                  controller!.reload();
+
+                                                  isLoading = false;
+                                                }));
+                                            return NavigationDecision.prevent;
+                                          }
+                                          if (request.url
+                                              .toLowerCase()
+                                              .contains("\.com\/register")) {
+                                            Navigator.pushReplacement(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    const RegstrationPage(),
+                                              ),
+                                            ).then((value) => setState(() {
+                                                  controller!.reload();
+
+                                                  isLoading = false;
+                                                }));
+                                            return NavigationDecision.prevent;
+                                          }
+
+                                          print(
+                                              'allowing navigation to $request');
+                                          return NavigationDecision.navigate;
+                                        },
+                                        onPageStarted: (String url) async {
+                                          setState(() {
+                                            _willGo = false;
+                                            isLoading = true;
+                                          });
+
+                                          print('Page started loading: $url');
+                                        },
+                                        onPageFinished: (String url) async {
+                                          print('Page finished loading: $url');
+                                          // cookieManager.clearCookies();
+                                          // await cookieManager.setCookies([
+                                          //   Cookie(cookieName, cookieValue)
+                                          //     ..domain = domain
+                                          //     ..expires = DateTime.now()
+                                          //         .add(Duration(days: 365))
+                                          //     ..httpOnly = true
+                                          // ]);
+                                          setState(() {
+                                            context.loaderOverlay.hide();
+                                            _willGo = true;
+                                            isLoading = false;
+                                            _controller.future
+                                                .then((value) async {
+                                              String urlPart =
+                                                  await value.currentUrl() ??
+                                                      '';
+
+                                              String javaScriptString1 =
+                                                  '''\$('.express.app .popup').attr('style', 'z-index: 99999;position: absolute;opacity: 0.8;display:block;color: black;background: black;padding: 17%;font-weight: 700;color: white;height:-webkit-fill-available;float: left;left:0;right:0;text-align:center;');''';
+                                              String javaScriptString2 =
+                                                  '''\$('.popup').html('<h1><b style="color:#ffff">You already having a booking with us.</b></h1>')''';
+                                              String javaScript3 =
+                                                  'document.getElementById("ui-datepicker-div").style.top=\'1410px\';';
+
+                                              //
+                                              if (isUserLoggedIn != null &&
+                                                  urlPart
+                                                      .toLowerCase()
+                                                      .contains(
+                                                          'theoneexpress') &&
+                                                  val.isBookingAvailable ==
+                                                      true) {
+                                                value
+                                                    .runJavascriptReturningResult(
+                                                        'document.getElementsByClassName("popup")[0].remove();')
+                                                    .then((value) => print(
+                                                        value.toString()));
+                                                await _webController
+                                                    .runJavascript(
+                                                        javaScriptString1);
+                                                await _webController
+                                                    .runJavascript(
+                                                        javaScriptString2);
+                                                value.runJavascript(
+                                                    'document.getElementById("Date").readOnly=true;');
+                                                value
+                                                    .runJavascript(javaScript3);
+                                              } else if (isUserLoggedIn !=
+                                                      null &&
+                                                  urlPart
+                                                      .toLowerCase()
+                                                      .contains(
+                                                          'theoneexpress') &&
+                                                  val.isBookingAvailable ==
+                                                      false) {
+                                                value.runJavascript(
+                                                    'document.getElementsByClassName("popup")[0].remove();');
+                                                value.runJavascript(
+                                                    'document.getElementById("Date").readOnly=true;');
+                                                value
+                                                    .runJavascript(javaScript3);
+                                              } else if (isUserLoggedIn !=
+                                                      null &&
+                                                  urlPart
+                                                      .toLowerCase()
+                                                      .contains('theoneway')) {
+                                                value.runJavascript(
+                                                    'document.getElementsByClassName("popup")[0].remove();');
+                                              }
+                                            });
+                                          });
+                                        },
+                                        gestureNavigationEnabled: true,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            isLoading
+                                ? Visibility(
+                                    visible: isLoading,
+                                    child: Center(
+                                      child: Column(
+                                        children: [
+                                          SpinKitRipple(
+                                            color: Colors.red,
+                                            size: 90,
+                                          ),
+                                          Text('Loading Please Wait!.........' +
+                                              progressCount.toString() +
+                                              '%'),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : Stack(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(
+                    width: 100.w,
+                    height: 100.h,
+                    child: Stack(
+                      children: [
+                        FutureBuilder<WebViewController>(
+                          future: _webViewControllerFuture,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<WebViewController> snapshot) {
+                            final bool webViewReady =
+                                snapshot.connectionState ==
+                                    ConnectionState.done;
+                            final WebViewController? controller = snapshot.data;
+
+                            return WillPopScope(
+                              onWillPop: !webViewReady
+                                  ? null
+                                  : () async {
+                                      if (await controller!.canGoBack()) {
+                                        controller.goBack();
+                                        return false;
+                                      } else {
+                                        Navigator.pop(context);
+                                        // Scaffold.of(context).showSnackBar(
+                                        //   const SnackBar(
+                                        //       content: Text("No back history item")),
+                                        // );
+                                        return true;
+                                      }
+                                    },
+                              child: Container(
+                                width: 100.w,
+                                height: 100.h,
+                                child: Scaffold(
+                                  resizeToAvoidBottomInset: false,
+                                  body: Stack(
+                                    children: [
+                                      WebView(
+                                        gestureRecognizers: Set()
+                                          ..add(
+                                            Factory<
+                                                VerticalDragGestureRecognizer>(
+                                              () =>
+                                                  VerticalDragGestureRecognizer(),
+                                            ), // or null
+                                          ),
+                                        initialCookies: [
+                                          WebViewCookie(
+                                              name: cookieName,
+                                              value: cookieValue,
+                                              domain: domain)
+                                        ],
+                                        initialUrl:
+                                            Uri.encodeFull(widget.paymentUrl),
+                                        // userAgent:
+                                        //     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:61.0) Gecko/20100101 Firefox/61.0",
+                                        javascriptMode:
+                                            JavascriptMode.unrestricted,
+                                        onWebViewCreated: (WebViewController
+                                            webViewController) async {
                                           _webController = webViewController;
 
                                           _webController.loadUrl(
@@ -247,6 +547,12 @@ class _TopicPageState extends State<TopicPage> {
 
                                           await cookieManager.setCookies([
                                             Cookie(cookieName, cookieValue)
+                                              ..domain = domain
+                                              ..expires = DateTime.now()
+                                                  .add(Duration(days: 365))
+                                              ..httpOnly = false,
+                                            Cookie('.Nop.Authentication',
+                                                'CfDJ8Nb9OIENgiZJj0IssP6Z09JNlHypwKEbfg_z4xuok8Wi9C2pZbknMlp3Ig_5M-yZYmoq2Uv-f3qUbi0k_Jli0RyCyrwygQ1yk8r3oKyQ8wruvo4yg84UkJkSOVuFgWweKx0xukYZ-UORP1smXRUl7jOS14p1aMgXMr7G_0i_4mCKXoK-6w7QiFwMQ6CAfgkeGH4ApnAlpRuo3UsrSKm5fWwLVNdUqB-YIepG6ezmB8kjUXwHY60KKtSIIVkGDJEFpYxiqID1E-rzCOza-gaUQyiM98bygIUxPb66jjzXUPZ0PYn30dgMU-9NyEk0VUXrjCdGuxE9KkIMEK1rHAIQQz029BJJ0lbUYqqn18l8kyca5UczBKMhe_koHbexnpG3EbkPHT3oKFTl1Dk-feoCDcyhruncnZ5InhKYFApJhdDDtmvzbG5r526r3RRWUs6cGxnJV-RzqybBBkOLvOX6xSIYZ_LVWILFE0oeLuFmcLUHTBGvwUWU7J79yDNtM2mO42ipVpeDp3fYVpx8b6XwPyAam6V-imMxDJqgqkoSe0RRYJpVDGPqZF8KQ0kK1MHjzk8C8X7_qGiUJQJKjOmnuS8')
                                               ..domain = domain
                                               ..expires = DateTime.now()
                                                   .add(Duration(days: 365))
@@ -266,6 +572,7 @@ class _TopicPageState extends State<TopicPage> {
                                               String urlPart =
                                                   await value.currentUrl() ??
                                                       '';
+
                                               if (isUserLoggedIn != null &&
                                                   (urlPart
                                                           .toLowerCase()
@@ -277,10 +584,15 @@ class _TopicPageState extends State<TopicPage> {
                                                               'theoneexpress'))) {
                                                 value
                                                     .runJavascriptReturningResult(
-                                                        'document.getElementsByClassName("popup")[0].remove();')
+                                                        'document.getElementsByClassName("popup")[0].style.display=\'none\';')
                                                     .then((value) => print(
                                                         value.toString()));
                                               }
+                                            });
+                                          }
+                                          if(progress ==100){
+                                            setState((){
+                                              isLoading = false;
                                             });
                                           }
                                         },
@@ -412,327 +724,6 @@ class _TopicPageState extends State<TopicPage> {
                                           print('Page started loading: $url');
                                         },
                                         onPageFinished: (String url) async {
-                                          print('Page finished loading: $url');
-                                          // cookieManager.clearCookies();
-                                          // await cookieManager.setCookies([
-                                          //   Cookie(cookieName, cookieValue)
-                                          //     ..domain = domain
-                                          //     ..expires = DateTime.now()
-                                          //         .add(Duration(days: 365))
-                                          //     ..httpOnly = true
-                                          // ]);
-                                          setState(() {
-                                            context.loaderOverlay.hide();
-                                            _willGo = true;
-                                            isLoading = false;
-                                            _controller.future
-                                                .then((value) async {
-                                              String urlPart =
-                                                  await value.currentUrl() ??
-                                                      '';
-                                              value.runJavascriptReturningResult(
-                                                  'document.cookie = ".Nop.Customer=; max-age=-1; path=/;";');
-                                              value.runJavascriptReturningResult(
-                                                  'document.cookie = ".Nop.Customer=$cookieValue; max-age=31536000; path=/;";');
-                                              //
-                                              if (isUserLoggedIn != null &&
-                                                  urlPart
-                                                      .toLowerCase()
-                                                      .contains(
-                                                          'theoneexpress') &&
-                                                  val.isBookingAvailable ==
-                                                      true) {
-                                                value
-                                                    .runJavascriptReturningResult(
-                                                        'document.getElementsByClassName("popup")[0].remove();')
-                                                    .then((value) => print(
-                                                        value.toString()));
-
-                                                String javaScriptString1 =
-                                                    '''\$('.express.app .popup').attr('style', 'z-index: 99999;position: absolute;opacity: 0.8;display:block;color: black;background: black;padding: 17%;font-weight: 700;color: white;height:-webkit-fill-available;float: left;left:0;right:0;text-align:center;');''';
-                                                String javaScriptString2 =
-                                                    '''\$('.popup').html('<h1><b style="color:#ffff">You already having a booking with us.</b></h1>')''';
-
-                                                await _webController
-                                                    .runJavascriptReturningResult(
-                                                        javaScriptString1);
-                                                await _webController
-                                                    .runJavascriptReturningResult(
-                                                        javaScriptString2);
-                                              } else
-                                                if (isUserLoggedIn !=
-                                                      null &&
-                                                  urlPart
-                                                      .toLowerCase()
-                                                      .contains(
-                                                          'theoneexpress') &&
-                                                  val.isBookingAvailable ==
-                                                      false) {
-                                                value
-                                                    .runJavascriptReturningResult(
-                                                        'document.getElementsByClassName("popup")[0].remove();')
-                                                    .then((value) => print(
-                                                        value.toString()));
-                                              } else
-                                                if (isUserLoggedIn !=
-                                                      null &&
-                                                  urlPart
-                                                      .toLowerCase()
-                                                      .contains('theoneway')) {
-                                                value
-                                                    .runJavascriptReturningResult(
-                                                        'document.getElementsByClassName("popup")[0].remove();')
-                                                    .then((value) => print(
-                                                        value.toString()));
-                                              }
-                                            });
-                                          });
-
-                                          var getCookies = await cookieManager
-                                              .getCookies(url);
-
-                                          print('Cookies>>>>>>>' +
-                                              jsonEncode(getCookies));
-                                        },
-                                        gestureNavigationEnabled: true,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            isLoading
-                                ? Visibility(
-                                    visible: isLoading,
-                                    child: Center(
-                                      child: Column(
-                                        children: [
-                                          SpinKitRipple(
-                                            color: Colors.red,
-                                            size: 90,
-                                          ),
-                                          Text('Loading Please Wait!.........' +
-                                              progressCount.toString() +
-                                              '%'),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                : Stack(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                : Container(
-                    width: 100.w,
-                    height: 100.h,
-                    child: Stack(
-                      children: [
-                        FutureBuilder<WebViewController>(
-                          future: _webViewControllerFuture,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<WebViewController> snapshot) {
-                            final bool webViewReady =
-                                snapshot.connectionState ==
-                                    ConnectionState.done;
-                            final WebViewController? controller = snapshot.data;
-
-                            return WillPopScope(
-                              onWillPop: !webViewReady
-                                  ? null
-                                  : () async {
-                                      if (await controller!.canGoBack()) {
-                                        controller.goBack();
-                                        return false;
-                                      } else {
-                                        Navigator.pop(context);
-                                        // Scaffold.of(context).showSnackBar(
-                                        //   const SnackBar(
-                                        //       content: Text("No back history item")),
-                                        // );
-                                        return true;
-                                      }
-                                    },
-                              child: Container(
-                                width: 100.w,
-                                height: 100.h,
-                                child: Scaffold(
-                                  resizeToAvoidBottomInset: false,
-                                  body: Stack(
-                                    children: [
-                                      WebView(
-                                        gestureRecognizers: Set()
-                                          ..add(
-                                            Factory<
-                                                VerticalDragGestureRecognizer>(
-                                              () =>
-                                                  VerticalDragGestureRecognizer(),
-                                            ), // or null
-                                          ),
-                                        initialCookies: [
-                                          WebViewCookie(
-                                              name: cookieName,
-                                              value: cookieValue,
-                                              domain: domain)
-                                        ],
-                                        // initialUrl:
-                                        //     Uri.encodeFull(widget.paymentUrl),
-                                        // userAgent:
-                                        //     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:61.0) Gecko/20100101 Firefox/61.0",
-                                        javascriptMode:
-                                            JavascriptMode.unrestricted,
-                                        onWebViewCreated: (WebViewController
-                                            webViewController) async {
-                                          _webController = webViewController;
-
-                                          _webController.loadUrl(
-                                              widget.paymentUrl,
-                                              headers: {
-                                                'Cookie':
-                                                    '.Nop.Customer=$_customerValue'
-                                              });
-
-                                          await cookieManager.setCookies([
-                                            Cookie(cookieName, cookieValue)
-                                              ..domain = domain
-                                              ..expires = DateTime.now()
-                                                  .add(Duration(days: 365))
-                                              ..httpOnly = false,
-                                            Cookie('.Nop.Authentication',
-                                                'CfDJ8Nb9OIENgiZJj0IssP6Z09JNlHypwKEbfg_z4xuok8Wi9C2pZbknMlp3Ig_5M-yZYmoq2Uv-f3qUbi0k_Jli0RyCyrwygQ1yk8r3oKyQ8wruvo4yg84UkJkSOVuFgWweKx0xukYZ-UORP1smXRUl7jOS14p1aMgXMr7G_0i_4mCKXoK-6w7QiFwMQ6CAfgkeGH4ApnAlpRuo3UsrSKm5fWwLVNdUqB-YIepG6ezmB8kjUXwHY60KKtSIIVkGDJEFpYxiqID1E-rzCOza-gaUQyiM98bygIUxPb66jjzXUPZ0PYn30dgMU-9NyEk0VUXrjCdGuxE9KkIMEK1rHAIQQz029BJJ0lbUYqqn18l8kyca5UczBKMhe_koHbexnpG3EbkPHT3oKFTl1Dk-feoCDcyhruncnZ5InhKYFApJhdDDtmvzbG5r526r3RRWUs6cGxnJV-RzqybBBkOLvOX6xSIYZ_LVWILFE0oeLuFmcLUHTBGvwUWU7J79yDNtM2mO42ipVpeDp3fYVpx8b6XwPyAam6V-imMxDJqgqkoSe0RRYJpVDGPqZF8KQ0kK1MHjzk8C8X7_qGiUJQJKjOmnuS8')
-                                              ..domain = domain
-                                              ..expires = DateTime.now()
-                                                  .add(Duration(days: 365))
-                                              ..httpOnly = false
-                                          ]);
-                                          _controller
-                                              .complete(webViewController);
-                                        },
-                                        onProgress: (int progress) {
-                                          setState(() {
-                                            isLoading = true;
-                                            progressCount = progress;
-                                          });
-                                          if (progress > 50) {
-                                            _controller.future
-                                                .then((value) async {
-                                              String urlPart =
-                                                  await value.currentUrl() ??
-                                                      '';
-
-                                              if (isUserLoggedIn != null &&
-                                                  (urlPart
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              'theoneway') ||
-                                                      urlPart
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              'theoneexpress'))) {
-                                                value
-                                                    .runJavascriptReturningResult(
-                                                        'document.getElementsByClassName("popup")[0].style.display=\'none\';')
-                                                    .then((value) => print(
-                                                        value.toString()));
-                                              }
-                                            });
-                                          }
-                                        },
-                                        javascriptChannels: <JavascriptChannel>{
-                                          _toasterJavascriptChannel(context),
-                                        },
-                                        navigationDelegate:
-                                            (NavigationRequest request) {
-                                          setState(() {
-                                            isLoading = false;
-                                          });
-                                          if (request.url.contains(
-                                              'customercare@theone.com')) {
-                                            ApiCalls.launchUrl(request.url)
-                                                .then((value) => setState(() {
-                                                      isLoading = false;
-                                                      controller!.reload();
-                                                    }));
-                                            return NavigationDecision.prevent;
-                                          }
-                                          if (request.url.startsWith(
-                                              'https://www.youtube.com/')) {
-                                            setState(() {
-                                              isLoading = false;
-                                            });
-                                            controller!.reload();
-
-                                            print(
-                                                'blocking navigation to $request}');
-                                            return NavigationDecision.prevent;
-                                          }
-
-                                          if (request.url.contains(
-                                              'GetProductModelById')) {
-                                            var url = request.url;
-                                            Navigator.push(context,
-                                                CupertinoPageRoute(
-                                                    builder: (context) {
-                                              return NewProductDetails(
-                                                  productId:
-                                                      url.split('id=')[0],
-                                                  screenName: 'Topic Screen');
-                                            })).then((value) => setState(() {
-                                                  isLoading = false;
-                                                  controller!.reload();
-                                                }));
-                                            return NavigationDecision.prevent;
-                                          }
-
-                                          if (request.url
-                                              .contains('GetCategoryPage')) {
-                                            Navigator.pushAndRemoveUntil(
-                                                    context,
-                                                    CupertinoPageRoute(
-                                                      builder: (context) =>
-                                                          MyHomePage(
-                                                              pageIndex: 1),
-                                                    ),
-                                                    (route) => false)
-                                                .then((value) => setState(() {
-                                                      controller!.reload();
-
-                                                      isLoading = false;
-                                                    }));
-                                            return NavigationDecision.prevent;
-                                          }
-
-                                          if (request.url.contains(
-                                              'http://theone.createsend.com/')) {
-                                            setState(() {
-                                              isLoading = false;
-                                              controller!.reload();
-                                            });
-                                            return NavigationDecision.navigate;
-                                          }
-
-                                          print(
-                                              'allowing navigation to $request');
-                                          return NavigationDecision.navigate;
-                                        },
-                                        onPageStarted: (String url) async {
-                                          cookieManager.clearCookies();
-                                          await cookieManager.setCookies([
-                                            Cookie(cookieName, cookieValue)
-                                              ..domain = domain
-                                              ..expires = DateTime.now()
-                                                  .add(Duration(days: 365))
-                                              ..httpOnly = false,
-                                          ]);
-                                          setState(() {
-                                            _willGo = false;
-                                            isLoading = true;
-                                          });
-
-                                          print('Page started loading: $url');
-                                        },
-                                        onPageFinished: (String url) async {
                                           // cookieManager.clearCookies();
                                           // await cookieManager.setCookies([
                                           //   Cookie(cookieName, cookieValue)
@@ -756,7 +747,7 @@ class _TopicPageState extends State<TopicPage> {
                                                   urlPart
                                                       .toLowerCase()
                                                       .contains(
-                                                      'theoneexpress') &&
+                                                          'theoneexpress') &&
                                                   val.isBookingAvailable ==
                                                       true) {
                                                 // value
@@ -766,41 +757,38 @@ class _TopicPageState extends State<TopicPage> {
                                                 //     value.toString()));
 
                                                 String javaScriptString1 =
-                                                '''\$('.express.app .popup').attr('style', 'z-index: 99999;position: absolute;opacity: 0.8;display:block;color: black;background: black;padding: 17%;font-weight: 700;color: white;height:-webkit-fill-available;float: left;left:0;right:0;text-align:center;');''';
+                                                    '''\$('.express.app .popup').attr('style', 'z-index: 99999;position: absolute;opacity: 0.8;display:block;color: black;background: black;padding: 17%;font-weight: 700;color: white;height:-webkit-fill-available;float: left;left:0;right:0;text-align:center;');''';
                                                 String javaScriptString2 =
-                                                '''\$('.popup').html('<h1><b style="color:#ffff">You already having a booking with us.</b></h1>')''';
+                                                    '''\$('.popup').html('<h1><b style="color:#ffff">You already having a booking with us.</b></h1>')''';
 
                                                 await _webController
-                                                    .runJavascriptReturningResult(
-                                                    javaScriptString1);
+                                                    .runJavascript(
+                                                        javaScriptString1);
                                                 await _webController
-                                                    .runJavascriptReturningResult(
-                                                    javaScriptString2);
-                                              } else
-                                              if (isUserLoggedIn !=
-                                                  null &&
+                                                    .runJavascript(
+                                                        javaScriptString2);
+                                              } else if (isUserLoggedIn !=
+                                                      null &&
                                                   urlPart
                                                       .toLowerCase()
                                                       .contains(
-                                                      'theoneexpress') &&
+                                                          'theoneexpress') &&
                                                   val.isBookingAvailable ==
                                                       false) {
-                                                value
-                                                    .runJavascriptReturningResult(
-                                                    'document.getElementsByClassName("popup")[0].remove();')
-                                                    .then((value) => print(
-                                                    value.toString()));
-                                              } else
-                                              if (isUserLoggedIn !=
-                                                  null &&
+                                                value.runJavascript(
+                                                    'document.getElementsByClassName("popup")[0].remove();');
+                                                value.runJavascript(
+                                                    'document.getElementById("Date").type="date"');
+                                              } else if (isUserLoggedIn !=
+                                                      null &&
                                                   urlPart
                                                       .toLowerCase()
                                                       .contains('theoneway')) {
                                                 value
                                                     .runJavascriptReturningResult(
-                                                    'document.getElementsByClassName("popup")[0].remove();')
+                                                        'document.getElementsByClassName("popup")[0].remove();')
                                                     .then((value) => print(
-                                                    value.toString()));
+                                                        value.toString()));
                                               }
                                             });
                                           });

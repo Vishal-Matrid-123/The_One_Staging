@@ -176,6 +176,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
 
     _provider.setBogoCategoryValue();
     _provider.readJson();
+    _provider.returnInitialPrefix();
     // _globalKey.currentState?.show(ProgressHudType.loading, "loading...");
     _showLoadingHud(context);
     if (mounted) {
@@ -540,6 +541,8 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                                           value,
                                                                       enableCategory:
                                                                           false,
+                                                                      cartIconVisible:
+                                                                          true,
                                                                     ),
                                                                   ),
                                                                 )
@@ -579,9 +582,8 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                         contentPadding:
                                                             const EdgeInsets
                                                                     .symmetric(
-                                                                vertical: 13,
-                                                                horizontal: 10),
-                                                        hintText: 'Search here',
+                                                                vertical: 13, ),
+                                                                                                                                                         hintText: 'Search here',
                                                         labelStyle: TextStyle(
                                                             fontSize: 7.w,
                                                             color: Colors.grey),
@@ -612,6 +614,8 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                                           _value,
                                                                       enableCategory:
                                                                           false,
+                                                                      cartIconVisible:
+                                                                          true,
                                                                     ),
                                                                   ),
                                                                 );
@@ -673,7 +677,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                                             Alignment.bottomCenter,
                                                                         child:
                                                                             TextButton(
-                                                                          child:
+                                                                                    child:
                                                                               const Text(
                                                                             'Clear',
                                                                             style:
@@ -711,6 +715,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                                                 keyword: option,
                                                                                 isScreen: true,
                                                                                 enableCategory: false,
+                                                                                cartIconVisible: true,
                                                                               ),
                                                                             ),
                                                                           ).then((value) =>
@@ -1111,7 +1116,8 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                                         5.0),
                                                                 child:
                                                                     GestureDetector(
-                                                                  onTap: () async {
+                                                                  onTap:
+                                                                      () async {
                                                                     await Navigator.push(
                                                                         context,
                                                                         CupertinoPageRoute(builder:
@@ -1119,7 +1125,9 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                                       return TopicPage(
                                                                         paymentUrl:
                                                                             e.url,
-                                                                        customerGUID:  ConstantsVar.prefs.getString('guestGUID')??'',
+                                                                        customerGUID:
+                                                                            ConstantsVar.prefs.getString('guestGUID') ??
+                                                                                '',
                                                                       );
                                                                     }));
                                                                   },
@@ -1464,6 +1472,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
       return OpenContainer(
         closedElevation: 0,
         clipBehavior: Clip.hardEdge,
+        openColor:Colors.transparent,
         closedBuilder: (BuildContext context, void Function() action) {
           return Stack(
             children: [
@@ -1524,7 +1533,8 @@ class _HomeScreenMainState extends State<HomeScreenMain>
               ),
               Consumer<NewApisProvider>(
                 builder: (ctx, val, _) => !list.parentCategoryId
-                        .contains(val.bogoValue)  || val.bogoValue.isEmpty
+                            .contains(val.bogoValue) ||
+                        val.bogoValue.isEmpty
                     ? Visibility(
                         visible: list.discountPercentage != '' ? true : false,
                         child: Padding(
@@ -1593,6 +1603,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
       {required Product list, required ThemeData theme}) {
     return OpenContainer(
       closedElevation: 0,
+      openColor:Colors.transparent,
       openBuilder:
           (BuildContext context, void Function({Object? returnValue}) action) {
         return NewProductDetails(
@@ -1662,7 +1673,8 @@ class _HomeScreenMainState extends State<HomeScreenMain>
             ),
             Consumer<NewApisProvider>(
               builder: (ctx, val, _) =>
-                  !list.parentCAtegoryId.contains(val.bogoValue) || val.bogoValue.isEmpty
+                  !list.parentCAtegoryId.contains(val.bogoValue) ||
+                          val.bogoValue.isEmpty
                       ? Visibility(
                           visible: list.discountPercent != '' ? true : false,
                           child: Padding(
@@ -1730,7 +1742,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
     var customerGuid = ConstantsVar.prefs.getString(kguidKey);
     final String cookie = '.Nop.Customer=' + customerGuid!;
 
-    log('Recent Url'+url.toString());
+    log('Recent Url' + url.toString());
 
     try {
       var jsonResponse = await http.get(
@@ -1796,7 +1808,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
         Uri.parse(url),
         headers: {'Cookie': cookie},
       ).timeout(
-        const Duration(seconds: 12),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           if (mounted) {
@@ -1929,6 +1941,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
               tappable: true,
               closedElevation: 0,
               openElevation: 0,
+              openColor:Colors.transparent ,
               transitionType: _transitionType,
               closedBuilder: (BuildContext context, void Function() action) {
                 return SizedBox(
@@ -1972,6 +1985,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
               closedElevation: 0,
               openElevation: 0,
               transitionType: _transitionType,
+              openColor:Colors.transparent,
               openBuilder: (BuildContext context,
                   void Function({Object? returnValue}) action) {
                 if (type == true) {
@@ -2073,6 +2087,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
               tappable: true,
               closedElevation: 0,
               openElevation: 0,
+              openColor:Colors.transparent,
               transitionType: _transitionType,
               openBuilder: (BuildContext context,
                   void Function({Object? returnValue}) action) {
@@ -2160,6 +2175,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
               tappable: true,
               closedElevation: 0,
               openElevation: 0,
+              openColor:Colors.transparent,
               transitionType: _transitionType,
               closedBuilder: (BuildContext context, void Function() action) {
                 return SizedBox(

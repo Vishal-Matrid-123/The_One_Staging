@@ -205,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage>
         return SearchPage(
           keyword: '',
           isScreen: false,
-          enableCategory: true,
+          enableCategory: true, cartIconVisible: false,
         );
       case 3:
         return const CartScreen2(

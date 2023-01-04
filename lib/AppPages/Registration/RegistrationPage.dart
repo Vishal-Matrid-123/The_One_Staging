@@ -1,9 +1,15 @@
+import 'dart:async';
+import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl_phone_field/countries.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:provider/provider.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled2/AppPages/CustomLoader/CustomDialog/CustomDialog.dart';
@@ -13,6 +19,8 @@ import 'package:untitled2/AppPages/WebxxViewxx/TopicPagexx.dart';
 import 'package:untitled2/Constants/ConstantVariables.dart';
 import 'package:untitled2/Widgets/widgets/AppBar.dart';
 import 'package:untitled2/new_apis_func/data_layer/constant_data/constant_data.dart';
+import 'package:untitled2/new_apis_func/data_layer/new_model/countries_info_model/countries_info_model.dart';
+import 'package:untitled2/new_apis_func/presentation_layer/provider_class/provider_contracter.dart';
 import 'package:untitled2/utils/ApiCalls/ApiCalls.dart';
 import 'package:untitled2/utils/utils/colors.dart';
 import 'package:untitled2/utils/utils/general_functions.dart';
@@ -62,7 +70,19 @@ class _RegstrationPageState extends State<RegstrationPage>
   int phnMaxLength = 10;
 
   var cityController = TextEditingController();
-  var countryController = TextEditingController();
+
+  var _countryId = '';
+
+  var textEditingController = TextEditingController();
+
+  var selectedValue;
+  List<Country> _searchList = [];
+
+  var editingController = TextEditingController();
+
+  String phnDialCode = '';
+
+  String _initialPrefix = '';
 
   void showErrorDialog() {
     showDialog(
@@ -89,6 +109,7 @@ class _RegstrationPageState extends State<RegstrationPage>
           );
         });
   }
+
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     onPrimary: Colors.black87,
     primary: ConstantsVar.appColor,
@@ -99,6 +120,7 @@ class _RegstrationPageState extends State<RegstrationPage>
     ),
   );
   double _opacity = 1.0;
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
@@ -120,10 +142,23 @@ class _RegstrationPageState extends State<RegstrationPage>
     }
   }
 
+  Country? _initialVal;
+  NewApisProvider provider = NewApisProvider();
+
   @override
   void initState() {
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
+    _debounce = Timer(Duration.zero, () {});
+    editingController.addListener(() {
+      filterSearchResults(editingController.text);
+    });
+    provider = Provider.of<NewApisProvider>(context, listen: false);
+
+    provider.readJson();
+    provider.returnInitialPrefix();
+
     initSharedPrefs();
+
     super.initState();
   }
 
@@ -301,45 +336,72 @@ class _RegstrationPageState extends State<RegstrationPage>
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10, vertical: 3),
-                                      child: TextFormField(
-                                        maxLength: phnMaxLength,
-                                        textInputAction: TextInputAction.next,
-                                        onTap: () async {
-                                          phnCode = checkCountryCode(
-                                              await secureStorage.read(
-                                                      key:
-                                                          kselectedStoreIdKey) ??
-                                                  '1');
-                                          phnMaxLength = checkMaxLength(
-                                              await secureStorage.read(
-                                                      key:
-                                                          kselectedStoreIdKey) ??
-                                                  '1');
-                                          setState(() {});
-                                        },
-                                        validator: (mobInput) {
-                                          if (isPhoneNumber(
-                                              mobInput!, phnMaxLength)) {
-                                            return 'Please Enter $phnMaxLength Digit Number';
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                        keyboardType: TextInputType.phone,
-                                        controller: mController,
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
-                                        cursorColor: Colors.black,
-                                        style: const TextStyle(
-                                            color: Colors.black, fontSize: 14),
-                                        decoration: editBoxDecoration(
-                                            'Phone number'.toUpperCase(),
-                                            const Icon(
-                                              Icons.phone_android_outlined,
-                                              color:
-                                                  AppColor.PrimaryAccentColor,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 7.w),
+                                            child: Text(
+                                              'Phone Number'.toUpperCase(),
+                                              style: TextStyle(
+                                                  fontSize: 3.w,
+                                                  color: myFocusNode.hasFocus
+                                                      ? AppColor
+                                                          .PrimaryAccentColor
+                                                      : Colors.grey),
                                             ),
-                                            phnCode),
+                                          ),
+                                          Consumer<NewApisProvider>(
+                                            builder: (context,value,child) {
+                                              return IntlPhoneField(
+                                                controller: mController,
+                                                decoration: InputDecoration(
+                                                    labelText: ''.toUpperCase(),
+                                                    labelStyle: TextStyle(
+                                                        fontSize: 1.w,
+                                                        color: myFocusNode.hasFocus
+                                                            ? AppColor
+                                                                .PrimaryAccentColor
+                                                            : Colors.grey),
+                                                    border: InputBorder.none,
+                                                    counterText: ''),
+                                                initialCountryCode: value.initialPrefix,
+                                                onChanged: (phone) {
+                                                  print(phone.completeNumber);
+
+                                                  setState(() {
+
+
+                                                    phnDialCode = phone.countryCode
+                                                        .replaceAll('+', '');
+                                                  });
+                                                },
+                                                onCountryChanged: (country) {
+                                                  print('Country changed to: ' +
+                                                      country.name);
+
+                                                  setState(() {
+                                                    for (Country val in countries) {
+                                                      if (val.code.toLowerCase() == country.code.toLowerCase()) {
+                                                        _initialVal = val;
+                                                        print(country.code);
+                                                        break;
+                                                      }
+                                                    }
+                                                    phnDialCode = country.dialCode;
+                                                  });
+                                                },
+                                                autovalidateMode: AutovalidateMode
+                                                    .onUserInteraction,
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14),
+                                              );
+                                            }
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -427,44 +489,196 @@ class _RegstrationPageState extends State<RegstrationPage>
                                     ),
                                   ),
                                   addVerticalSpace(14),
-                                  Card(
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    color: Colors.white,
-                                    elevation: 4,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        textInputAction: TextInputAction.next,
-                                        onChanged: (_) => setState(() {}),
-                                        controller: countryController,
-                                        obscureText: false,
-                                        decoration: InputDecoration(
-                                          prefixIcon: const Icon(
-                                            Icons.location_city_outlined,
-                                            color: AppColor.PrimaryAccentColor,
+                                  GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          elevation: 10,
+                                          isScrollControlled: true,
+                                          isDismissible: false,
+                                          backgroundColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(25.0),
+                                            ),
                                           ),
-                                          labelText: 'Country'.toUpperCase(),
-                                          labelStyle: TextStyle(
-                                              fontSize: 5.w,
-                                              color: Colors.grey),
-                                          enabledBorder: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                        ),
-                                        style: const TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 14,
-                                        ),
-                                        maxLines: 1,
-                                        validator: (val) {
-                                          if (val!.isEmpty) {
-                                            return 'Please Provide Your City';
-                                          }
+                                          context: context,
+                                          builder: (context) {
+                                            return StatefulBuilder(
+                                              builder: (BuildContext ctx,
+                                                      StateSetter setStatee) =>
+                                                  Padding(
+                                                padding: EdgeInsets.all(3.w),
+                                                child: SizedBox(
+                                                  // padding:
+                                                  //     new EdgeInsets.fromLTRB(
+                                                  //         10.0,
+                                                  //         0.0,
+                                                  //         10.0,
+                                                  //         10.0),
+                                                  height: 50.h,
 
-                                          return null;
-                                        },
+                                                  child: Stack(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 3.w),
+                                                        child: Container(
+                                                          decoration: new BoxDecoration(
+                                                              color: Colors
+                                                                  .white,
+                                                              borderRadius: new BorderRadius
+                                                                      .only(
+                                                                  topLeft:
+                                                                      const Radius
+                                                                              .circular(
+                                                                          30.0),
+                                                                  topRight:
+                                                                      const Radius
+                                                                              .circular(
+                                                                          30.0),
+                                                                  bottomLeft:
+                                                                      const Radius
+                                                                              .circular(
+                                                                          30.0),
+                                                                  bottomRight:
+                                                                      const Radius
+                                                                              .circular(
+                                                                          30.0))),
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  3.w),
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 20,
+                                                              ),
+                                                              TextField(
+                                                                onChanged:
+                                                                    (value) {
+                                                                  setStatee(() {
+                                                                    _searchList =
+                                                                        filterSearchResults(
+                                                                            value);
+                                                                  });
+                                                                },
+                                                                controller:
+                                                                    editingController,
+                                                                decoration: InputDecoration(
+                                                                    labelText:
+                                                                        "Search Your Country",
+                                                                    hintText:
+                                                                        "Search Your Country",
+                                                                    prefixIcon:
+                                                                        Icon(Icons
+                                                                            .search),
+                                                                    border: OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(5.0)))),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 20,
+                                                              ),
+                                                              Expanded(
+                                                                child: ListView(
+                                                                  children: List.generate(
+                                                                      _searchList.length == 0
+                                                                          ? countries
+                                                                              .length
+                                                                          : _searchList
+                                                                              .length,
+                                                                      (index) => _searchItems(_searchList.length ==
+                                                                              0
+                                                                          ? countries[
+                                                                              index]
+                                                                          : _searchList[
+                                                                              index])),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        top: 1,
+                                                        right: 1.w,
+                                                        child: ClipOval(
+                                                          child: Container(
+                                                            color: Colors.black,
+                                                            child: InkWell(
+                                                              child: Icon(
+                                                                Icons.close,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          });
+                                    },
+                                    child: Card(
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      color: Colors.white,
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 5.w,
+                                                vertical: 5.5.w),
+                                            child: SizedBox(
+                                              width: 90.w,
+                                              child: AutoSizeText(
+                                                _initialVal == null
+                                                    ? '🏳️' +
+                                                        ' Select your country'
+                                                            .toUpperCase()
+                                                    : _initialVal!.flag +
+                                                        ' ' +
+                                                        _initialVal!.name,
+                                                style: TextStyle(
+                                                  fontSize: 5.w,
+                                                  color: _initialVal == null
+                                                      ? Colors.grey
+                                                      : Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Visibility(
+                                            visible: _initialVal == null
+                                                ? true
+                                                : false,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 5.w,
+                                                  vertical: 1.w),
+                                              child: Text(
+                                                _initialVal == null
+                                                    ? 'Please Select your country'
+                                                    : '',
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -638,7 +852,7 @@ class _RegstrationPageState extends State<RegstrationPage>
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                        style: raisedButtonStyle,
+                              style: raisedButtonStyle,
                               child: SizedBox(
                                 height: 50,
                                 width: MediaQuery.of(context).size.width / 2,
@@ -658,9 +872,15 @@ class _RegstrationPageState extends State<RegstrationPage>
                         ),
                         Expanded(
                           child: ElevatedButton(
-                            style: raisedButtonStyle,
+                              style: raisedButtonStyle,
                               onPressed: () async {
-                                if (formGlobalKey.currentState!.validate()) {
+                                if (_initialVal == null) {
+                                  Fluttertoast.showToast(
+                                      msg: 'Please select your country');
+                                }
+
+                                if (formGlobalKey.currentState!.validate() &&
+                                    _initialVal != null) {
                                   // use the information provided
                                   formGlobalKey.currentState!.save();
 
@@ -669,8 +889,24 @@ class _RegstrationPageState extends State<RegstrationPage>
                                   setState(() {
                                     phnNumber = phnNumbe;
                                   });
-                                  final _baseUrl =
-                                      await ApiCalls.getSelectedStore();
+                                  log('initial code' + _initialVal!.code);
+                                  for (CountriesDataResponse val
+                                      in provider.countriesInfo) {
+                                    if (val.twoLetterIsoCode.toLowerCase() ==
+                                        _initialVal!.code.toLowerCase()) {
+                                      setState(() {
+                                        _countryId = val.id.toString();
+                                      });
+                                      break;
+                                    } else {
+                                      _countryId = '';
+                                    }
+                                  }
+
+                                  // List<>
+
+                                  log('Country Id' + _countryId);
+                                  log('Country Id' + mController.text);
                                   Map<String, dynamic> regBody = {
                                     'Email': eController.text,
                                     'Username': '',
@@ -685,35 +921,41 @@ class _RegstrationPageState extends State<RegstrationPage>
                                     'StreetAddress': addressController.text,
                                     'StreetAddress2': 'xzx',
                                     'City': cityController.text,
-                                    'CountryId': ApiCalls.getCountryId(
-                                        baseUrl: _baseUrl),
+                                    'CountryId': _countryId,
                                     'AvailableCountries': null,
                                     'StateProvinceId': '0',
                                     'AvailableStates': null,
-                                    'Phone': phnCode + phnNumber,
+                                    'Phone':
+                                        phnDialCode + ' ' + mController.text,
                                     'Newsletter': false,
                                   };
 
-                                  Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                      builder: (context) => VerificationScreen2(
-                                        phoneNumber: phnNumbe,
-                                        email: eController.text,
-                                        password: cpController.text,
-                                        registerBody: regBody,
-                                      )
-                                      // OTP_Screen(
-                                      // title: 'OTP SCREEN',
-                                      // mainBtnTitle:
-                                      //     'Verify otp'.toUpperCase(),
-                                      // phoneNumber: phnNumbe,
-                                      // email:
-                                      //     eController.text.toString(),
-                                      // password: cpController.text)
-                                      ,
-                                    ),
-                                  );
+                                  _countryId != ''
+                                      ? Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (context) =>
+                                                VerificationScreen2(
+                                              phoneNumber: phnDialCode +
+                                                  mController.text,
+                                              email: eController.text,
+                                              password: cpController.text,
+                                              registerBody: regBody,
+                                            )
+                                            // OTP_Screen(
+                                            // title: 'OTP SCREEN',
+                                            // mainBtnTitle:
+                                            //     'Verify otp'.toUpperCase(),
+                                            // phoneNumber: phnNumbe,
+                                            // email:
+                                            //     eController.text.toString(),
+                                            // password: cpController.text)
+                                            ,
+                                          ),
+                                        )
+                                      : Fluttertoast.showToast(
+                                          msg:
+                                              'Cannot use this country. Please change your country');
                                 }
                               },
                               // color: ConstantsVar.appColor,
@@ -745,6 +987,104 @@ class _RegstrationPageState extends State<RegstrationPage>
         ),
       ),
     );
+  }
+
+  // setInitialPrefix() async {
+  //    returnInitialPrefix()
+  //       .then((value) => setState(() => _initialPrefix = value));
+  //   print(_initialPrefix);
+  // }
+
+
+
+  bool returnVisibility({required String countryCode}) {
+    bool _isAvailable = true;
+    for (CountriesDataResponse val in provider.countriesInfo) {
+      if (val.twoLetterIsoCode.toLowerCase() == countryCode.toLowerCase()) {
+        _isAvailable = true;
+
+        break;
+      } else {
+        _isAvailable = false;
+      }
+    }
+
+    return _isAvailable;
+  }
+
+  Widget _searchItems(Country item) {
+    print("Visibility>>>" +
+        returnVisibility(countryCode: item.code).toString() +
+        "  " +
+        item.name);
+    return Visibility(
+      visible: returnVisibility(countryCode: item.code),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GestureDetector(
+          onTap: () {
+            setState(() {
+              _initialVal = item;
+            });
+            Navigator.maybePop(context);
+          },
+          child: Card(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            color: Colors.white,
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 70.w,
+                alignment: Alignment.centerLeft,
+                color: _initialVal!=null&&_initialVal ==item?ConstantsVar.appColor:Colors.white,
+                padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 6.0),
+                child: Row(children: [
+                  SizedBox(
+                    width: 3.w,
+                  ),
+                  Text(
+                    item.flag,
+                    style: TextStyle(
+                      fontSize: 5.w,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 3.w,
+                  ),
+                  Flexible(
+                    child: AutoSizeText(
+                      item.name,
+                      maxLines: 2,
+                      style: TextStyle(
+                          fontSize: 5.w, overflow: TextOverflow.ellipsis),
+                    ),
+                  )
+                ]),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  late Timer _debounce;
+  int _debouncetime = 500;
+
+  List<Country> filterSearchResults(String query) {
+    List<Country> _searchedList = [];
+
+    for (int i = 0; i < countries.length; i++) {
+      Country name = countries[i];
+      if (name.name.toLowerCase().contains(query.toLowerCase())) {
+        _searchedList.add(countries[i]);
+      }
+    }
+    return _searchedList;
   }
 
   int checkMaxLength(String storeId) {
@@ -814,19 +1154,21 @@ class _RegstrationPageState extends State<RegstrationPage>
         children: <TextSpan>[
           const TextSpan(text: 'By clicking Register, you agree to our '),
           TextSpan(
-              text: 'Terms of Service',
-              style: linkStyle,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) => TopicPage(
-                                paymentUrl:
-                                    'https://www.theone.com/terms-conditions-3',
-                              customerGUID:  ConstantsVar.prefs.getString('guestGUID')??''
-                              )));
-                }),
+            text: 'Terms of Service',
+            style: linkStyle,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => TopicPage(
+                      paymentUrl: 'https://www.theone.com/terms-conditions-3',
+                      customerGUID: '',
+                    ),
+                  ),
+                );
+              },
+          ),
           const TextSpan(text: ' and that you have read our '),
           TextSpan(
               text: 'Privacy Policy',

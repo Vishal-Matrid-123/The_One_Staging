@@ -1,5 +1,6 @@
 // import 'dart:html';
 
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -112,7 +113,7 @@ class _ProdListWidgetState extends State<ProdListWidget> {
     // TODO: implement initState
     pageIndex1 = widget.pageIndex;
     initSharedPrefs();
-
+                                          print(jsonEncode(widget.products));
     final provider = Provider.of<NewApisProvider>(context, listen: false);
     provider.setBogoCategoryValue();
 
@@ -187,6 +188,7 @@ class _ProdListWidgetState extends State<ProdListWidget> {
                                         isScreen: true,
                                         keyword: value,
                                         enableCategory: false,
+                                        cartIconVisible: true,
                                       ),
                                     ),
                                   )
@@ -231,6 +233,7 @@ class _ProdListWidgetState extends State<ProdListWidget> {
                                             isScreen: true,
                                             keyword: value,
                                             enableCategory: false,
+                                            cartIconVisible: true,
                                           ),
                                         ),
                                       )
@@ -302,6 +305,7 @@ class _ProdListWidgetState extends State<ProdListWidget> {
                                                           keyword: option,
                                                           isScreen: true,
                                                           enableCategory: false,
+                                                          cartIconVisible: true,
                                                         ))).then(
                                               (value) => setState(
                                                 () {
@@ -442,6 +446,7 @@ class _ProdListWidgetState extends State<ProdListWidget> {
                                 // elevation: 2,
                                 child: OpenContainer(
                                   closedElevation: 2,
+                                  openColor:Colors.transparent,
                                   openBuilder: (BuildContext context,
                                       void Function({Object? returnValue})
                                           action) {
@@ -585,6 +590,7 @@ class _ProdListWidgetState extends State<ProdListWidget> {
                                                 widget.products[index].name,
                                             productPrice: widget
                                                 .products[index].priceValue,
+                                              minQuantity: widget.products[index].minimumQuantity.toString(),
                                             // fontSize: 12,
                                           ),
                                         )

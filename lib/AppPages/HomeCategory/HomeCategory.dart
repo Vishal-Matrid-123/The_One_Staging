@@ -142,7 +142,7 @@ class _HomeCategoryState extends State<HomeCategory> {
                                         builder: (context) => SearchPage(
                                           isScreen: true,
                                           keyword: value,
-                                          enableCategory: false,
+                                          enableCategory: false, cartIconVisible: true,
                                         ),
                                       ),
                                     )
@@ -187,6 +187,7 @@ class _HomeCategoryState extends State<HomeCategory> {
                                               isScreen: true,
                                               keyword: value,
                                               enableCategory: false,
+                                              cartIconVisible: true,
                                             ),
                                           ),
                                         )
@@ -256,6 +257,7 @@ class _HomeCategoryState extends State<HomeCategory> {
                                                     keyword: option,
                                                     isScreen: true,
                                                     enableCategory: false,
+                                                        cartIconVisible: true,
                                                   ),
                                                 ),
                                               ).then((value) => setState(() {

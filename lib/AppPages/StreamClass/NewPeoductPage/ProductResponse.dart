@@ -11,29 +11,31 @@ String productResponseToJson(ProductResponse data) =>
     json.encode(data.toJson());
 
 class ProductResponse {
-  ProductResponse(
-      {required this.pictureModels,
-      required this.name,
-      required this.shortDescription,
-      required this.fullDescription,
-      required this.sku,
-      required this.giftCard,
-      required this.stockAvailability,
-      required this.emailAFriendEnabled,
-      required this.compareProductsEnabled,
-      required this.productPrice,
-      required this.productTags,
-      required this.productAttributes,
-      required this.productSpecifications,
-      required this.productReviewOverview,
-      required this.associatedProducts,
-      required this.id,
-      required this.discountPercentage,
-      required this.subscribedToBackInStockSubscription,
-      required this.displayBackInStockSubscription,
-      required this.productUrl,
-      required this.parentCategoryId,
-      required this.isWishlisted});
+  ProductResponse({
+    required this.pictureModels,
+    required this.name,
+    required this.shortDescription,
+    required this.fullDescription,
+    required this.sku,
+    required this.giftCard,
+    required this.stockAvailability,
+    required this.emailAFriendEnabled,
+    required this.compareProductsEnabled,
+    required this.productPrice,
+    required this.productTags,
+    required this.productAttributes,
+    required this.productSpecifications,
+    required this.productReviewOverview,
+    required this.associatedProducts,
+    required this.id,
+    required this.discountPercentage,
+    required this.subscribedToBackInStockSubscription,
+    required this.displayBackInStockSubscription,
+    required this.productUrl,
+    required this.parentCategoryId,
+    required this.minimumQuantity,
+    required this.isWishlisted,
+  });
 
   // PictureModel defaultPictureModel;
   List<String> pictureModels;
@@ -58,6 +60,7 @@ class ProductResponse {
   bool displayBackInStockSubscription;
   bool isWishlisted;
   String parentCategoryId;
+  int minimumQuantity;
 
   factory ProductResponse.fromJson(Map<String, dynamic> json) =>
       ProductResponse(
@@ -68,6 +71,7 @@ class ProductResponse {
         parentCategoryId: json['categoryIds'] ?? '',
         fullDescription: json["FullDescription"],
         sku: json["Sku"],
+    minimumQuantity: json['OrderMinimumQuantity'],
         giftCard: GiftCard.fromJson(json["GiftCard"]),
         stockAvailability: json["StockAvailability"],
         emailAFriendEnabled: json["EmailAFriendEnabled"],

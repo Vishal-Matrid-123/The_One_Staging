@@ -27,7 +27,7 @@ const kpageSizeVar = 'pageSize=';
 const String show_order_summary_url = 'GetOrderSummaryCart?';
 const String update_cart_url = 'apis/UpdateCart';
 
-const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+const FlutterSecureStorage secureStorage = FlutterSecureStorage(iOptions: IOSOptions());
 const String kbillingAddress = 'GetBillingAddresses?';
 const String kget_shipping_address_url = 'GetShippingAddresses?';
 const String kcountryNameKey = "_countryName";

@@ -334,7 +334,7 @@ class _BillingDetailsState extends State<BillingDetails>
                                             BorderRadius.circular(6.0)),
                                     child: Center(
                                       child: AutoSizeText(
-                                        'Add New Address',
+                                        'Add & Select Address',
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 4.w),
                                       ),

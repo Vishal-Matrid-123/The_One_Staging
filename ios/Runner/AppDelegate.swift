@@ -4,6 +4,7 @@ import Flutter
 import Firebase
 import FBSDKCoreKit
 import FBSDKCoreKit.FBSDKSettings
+
 import FBAudienceNetwork
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -12,6 +13,18 @@ import FBAudienceNetwork
 //     didRegisterForRemoteNotificationWithDeviceToken deviceToken : Data
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+
+//   if (![[NSUserDefaults standardUserDefaults] objectForKey:@"FirstRun"]) {
+//          // Delete values from keychain here
+//
+//          [[NSUserDefaults standardUserDefaults] setValue:@"1strun" forKey:@"FirstRun"];
+//          [[NSUserDefaults standardUserDefaults] synchronize];
+//      }
+
+      
+//      UserDefaults default = UserDefaults()
+
+      
 //       Messaging.messaging().apnsToken=deviceToken
     GeneratedPluginRegistrant.register(with: self)
       FirebaseApp.initialize()
@@ -25,6 +38,8 @@ import FBAudienceNetwork
       
 //      FBSDKCoreKit.Se
       FBAdSettings.setAdvertiserTrackingEnabled(true)
+     
+
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
@@ -43,7 +58,12 @@ import FBAudienceNetwork
 
          }
   }
-
+              private func setExcludeFromiCloudBackup(isExcluded: Bool) throws {
+                  var fileOrDirectoryURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+                  var values = URLResourceValues()
+                  values.isExcludedFromBackup = isExcluded
+                  try fileOrDirectoryURL.setResourceValues(values)
+              }
 
 // two files of same name
 

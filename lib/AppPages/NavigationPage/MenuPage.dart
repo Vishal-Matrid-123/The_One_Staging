@@ -161,7 +161,7 @@ class _MenuPageState extends State<MenuPage> {
                                       width: 100.w,
                                       child: Center(
                                         child: AutoSizeText(
-                                          'Welcome to $_countryName',
+                                          'Welcome to THE One',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               shadows: <Shadow>[

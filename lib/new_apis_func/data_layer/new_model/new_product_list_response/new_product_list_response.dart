@@ -45,22 +45,23 @@ class NewProductListResponse {
 }
 
 class ProductListResponse {
-  ProductListResponse({
-    required this.id,
-    required this.name,
-    required this.stockQuantity,
-    required this.productPicture,
-    required this.price,
-    required this.discountedPrice,
-    required this.discountPercent,
-    required this.priceValue,
-    required this.isDisable,
-    required this.isAvailable,
-    required this.isGiftCard,
-    required this.havingattributes,
-    required this.parentCategoryId
-  });
+  ProductListResponse(
+      {required this.id,
+      required this.name,
+      required this.stockQuantity,
+      required this.productPicture,
+      required this.price,
+      required this.discountedPrice,
+      required this.discountPercent,
+      required this.priceValue,
+      required this.isDisable,
+      required this.isAvailable,
+      required this.isGiftCard,
+      required this.havingattributes,
+      required this.parentCategoryId,
+      required this.minimumQuantity});
 
+  final int minimumQuantity;
   final int id;
   final String name;
   final String stockQuantity;
@@ -77,7 +78,8 @@ class ProductListResponse {
 
   factory ProductListResponse.fromJson(Map<String, dynamic> json) =>
       ProductListResponse(
-  parentCategoryId: json['categoryIds'],
+        parentCategoryId: json['categoryIds'],
+        minimumQuantity: json['OrderMinimumQuantity'],
         id: json["Id"],
         name: json["Name"],
         stockQuantity: json["StockQuantity"] ?? '',

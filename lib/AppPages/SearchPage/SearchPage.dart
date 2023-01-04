@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,6 +34,8 @@ import 'package:vs_scrollbar/vs_scrollbar.dart';
 
 import '../../new_apis_func/data_layer/constant_data/constant_data.dart';
 import '../../new_apis_func/presentation_layer/provider_class/provider_contracter.dart';
+import '../CartxxScreen/CartScreen2.dart';
+import 'package:untitled2/utils/CartBadgeCounter/CartBadgetLogic.dart';
 
 enum AniProps { color }
 
@@ -42,9 +45,10 @@ class SearchPage extends StatefulWidget {
     required this.keyword,
     required this.isScreen,
     required this.enableCategory,
+    required this.cartIconVisible
   }) : super(key: key);
   final String keyword;
-  bool isScreen, enableCategory;
+  bool isScreen, enableCategory,cartIconVisible;
   double? _maxPrice, _minPrice;
 
   @override
@@ -208,876 +212,912 @@ class _SearchPageState extends State<SearchPage>
     ).animate(_animationController)
       ..addListener(() => setState(() {}));
     _animationController.forward();
-    return GestureDetector(
-      onTap: () {
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Scaffold(
-        floatingActionButton: Visibility(
-          visible: searchedProducts.isEmpty || searchedProducts.length < 10
-              ? false
-              : true,
-          child: FloatingActionButton.small(
-            backgroundColor: ConstantsVar.appColor,
-            onPressed: _moveDown,
-            child: const Icon(Icons.arrow_downward),
-          ),
-        ),
-        key: _scaffoldKey,
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          backgroundColor: ConstantsVar.appColor,
-          title: InkWell(
-            onTap: () => Navigator.pushAndRemoveUntil(
-                context,
-                CupertinoPageRoute(
-                    builder: (context) => MyHomePage(
-                          pageIndex: 0,
-                        )),
-                (route) => false),
-            child: Image.asset(
-              'MyAssets/logo.png',
-              width: 15.w,
-              height: 15.w,
+    return SafeArea(
+      top:true,
+      bottom:true,
+      child: GestureDetector(
+        onTap: () {
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: Scaffold(
+          floatingActionButton: Visibility(
+            visible: searchedProducts.isEmpty || searchedProducts.length < 10
+                ? false
+                : true,
+            child: FloatingActionButton.small(
+              backgroundColor: ConstantsVar.appColor,
+              onPressed: _moveDown,
+              child: const Icon(Icons.arrow_downward),
             ),
           ),
-          centerTitle: true,
-          toolbarHeight: 18.w,
-        ),
-        body: SafeArea(
-          top: true,
-          bottom: true,
-          maintainBottomViewPadding: true,
-          child: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: begin, end: end, colors: [bottomColor, topColor])),
-            height: MediaQuery.of(context).size.height,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                      child: SizedBox(
-                        width: 100.w,
-                        child: Stack(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
-                                    elevation: 8.0,
-                                    child: Consumer<NewApisProvider>(
-                                      builder: (_, value, c) =>
-                                          RawAutocomplete<String>(
-                                        initialValue: TextEditingValue(
-                                            text: widget.keyword),
-                                        optionsBuilder: (TextEditingValue
-                                            textEditingValue) {
-                                          if (textEditingValue.text == '' ||
-                                              textEditingValue.text.length <
-                                                  3) {
-                                            return const Iterable<
-                                                String>.empty();
-                                          }
-                                          return value.searchSuggestions
-                                              .where((String option) {
-                                            return option
-                                                .toLowerCase()
-                                                .contains(textEditingValue.text
-                                                    .toLowerCase());
-                                          });
-                                        },
-                                        onSelected: (String selection) {
-                                          log('$selection selected');
-                                        },
-                                        fieldViewBuilder: (BuildContext context,
-                                            TextEditingController
-                                                textEditingController,
-                                            FocusNode focusNode,
-                                            VoidCallback onFieldSubmitted) {
-                                          _searchController =
-                                              textEditingController;
-                                          _focusNode = focusNode;
-                                          return TextFormField(
-                                            autocorrect: true,
-                                            enableSuggestions: true,
-                                            onFieldSubmitted: (val) {
-                                              focusNode.unfocus();
-                                              if (!currentFocus
-                                                  .hasPrimaryFocus) {
-                                                currentFocus.unfocus();
-                                              }
-                                              setState(() {
-                                                _selectedColorsId = '';
-                                                _selectedSeatsId = '';
-                                                _selectedFaimlyId = '';
-                                                _colorList = [];
-                                                _numberOfSeatList = [];
-                                                _familyList = [];
-                                                _height = 0.h;
-                                                isVisible = false;
-                                                noMore = false;
-                                                pageIndex = 0;
-                                                isAlreadySet = false;
+          key: _scaffoldKey,
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            backgroundColor: ConstantsVar.appColor,
+            actions:widget.cartIconVisible==true?[
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                child: InkWell(
+                  radius: 48,
+                  child: Consumer<CartCounter>(
+                    builder: (context, value, child) {
+                      return Badge(
+                        position: BadgePosition.topEnd(),
+                        badgeColor: Colors.white,
+                        badgeContent:
+                        AutoSizeText(value.badgeNumber.toString()),
+                        child: const Icon(
+                          Icons.shopping_cart_outlined,
+                          color: Colors.white,
+                        ),
+                      );
+                    },
+                  ),
+                  onTap: () => Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => const CartScreen2(
+                        isOtherScren: true,
+                        otherScreenName: 'Product Screen',
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ]:[],
+            title: InkWell(
+              onTap: () => Navigator.pushAndRemoveUntil(
+                  context,
+                  CupertinoPageRoute(
+                      builder: (context) => MyHomePage(
+                            pageIndex: 0,
+                          )),
+                  (route) => false),
+              child: Image.asset(
+                'MyAssets/logo.png',
+                width: 15.w,
+                height: 15.w,
+              ),
+            ),
+            centerTitle: true,
+            toolbarHeight: 18.w,
+          ),
+          body: SafeArea(
+            top: true,
+            bottom: true,
+            maintainBottomViewPadding: true,
+            child: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: begin, end: end, colors: [bottomColor, topColor])),
+              height: MediaQuery.of(context).size.height,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: SizedBox(
+                          width: 100.w,
+                          child: Stack(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)),
+                                      elevation: 8.0,
+                                      child: Consumer<NewApisProvider>(
+                                        builder: (_, value, c) =>
+                                            RawAutocomplete<String>(
+                                          initialValue: TextEditingValue(
+                                              text: widget.keyword),
+                                          optionsBuilder: (TextEditingValue
+                                              textEditingValue) {
+                                            if (textEditingValue.text == '' ||
+                                                textEditingValue.text.length <
+                                                    3) {
+                                              return const Iterable<
+                                                  String>.empty();
+                                            }
+                                            return value.searchSuggestions
+                                                .where((String option) {
+                                              return option
+                                                  .toLowerCase()
+                                                  .contains(textEditingValue.text
+                                                      .toLowerCase());
+                                            });
+                                          },
+                                          onSelected: (String selection) {
+                                            log('$selection selected');
+                                          },
+                                          fieldViewBuilder: (BuildContext context,
+                                              TextEditingController
+                                                  textEditingController,
+                                              FocusNode focusNode,
+                                              VoidCallback onFieldSubmitted) {
+                                            _searchController =
+                                                textEditingController;
+                                            _focusNode = focusNode;
+                                            return TextFormField(
+                                              autocorrect: true,
+                                              enableSuggestions: true,
+                                              onFieldSubmitted: (val) {
+                                                focusNode.unfocus();
+                                                if (!currentFocus
+                                                    .hasPrimaryFocus) {
+                                                  currentFocus.unfocus();
+                                                }
+                                                setState(() {
+                                                  _selectedColorsId = '';
+                                                  _selectedSeatsId = '';
+                                                  _selectedFaimlyId = '';
+                                                  _colorList = [];
+                                                  _numberOfSeatList = [];
+                                                  _familyList = [];
+                                                  _height = 0.h;
+                                                  isVisible = false;
+                                                  noMore = false;
+                                                  pageIndex = 0;
+                                                  isAlreadySet = false;
 
-                                                _maxPRICE = null;
-                                                _minPRICE = null;
-                                              });
-                                              if (val
-                                                      .toLowerCase()
-                                                      .contains('return') ||
-                                                  val
-                                                      .toLowerCase()
-                                                      .contains('policy') ||
-                                                  val
-                                                      .toString()
-                                                      .toLowerCase()
-                                                      .contains('refund')) {
-                                                _returnBool = true;
-                                                widget.enableCategory = false;
-                                                searchedProducts = [];
-                                                isFilterVisible = false;
+                                                  _maxPRICE = null;
+                                                  _minPRICE = null;
+                                                });
+                                                if (val
+                                                        .toLowerCase()
+                                                        .contains('return') ||
+                                                    val
+                                                        .toLowerCase()
+                                                        .contains('policy') ||
+                                                    val
+                                                        .toString()
+                                                        .toLowerCase()
+                                                        .contains('refund')) {
+                                                  _returnBool = true;
+                                                  widget.enableCategory = false;
+                                                  searchedProducts = [];
+                                                  isFilterVisible = false;
 
-                                                setState(() {});
-                                              } else {
-                                                searchProducts(val, 0, '', '')
-                                                    .then(
-                                                        (value) => log(value));
-                                              }
+                                                  setState(() {});
+                                                } else {
+                                                  searchProducts(val, 0, '', '')
+                                                      .then(
+                                                          (value) => log(value));
+                                                }
 
-                                              log('Pressed via keypad');
-                                            },
-                                            textInputAction: isVisible
-                                                ? TextInputAction.done
-                                                : TextInputAction.search,
-                                            keyboardAppearance:
-                                                Brightness.light,
-                                            onChanged: (_) => setState(() {
-                                              btnColor = ConstantsVar.appColor;
-                                              _hintText = 'Search Here';
-                                            }),
-                                            controller: _searchController,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 5.w),
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 13,
-                                                      horizontal: 10),
-                                              hintText: _hintText,
-                                              labelStyle: TextStyle(
-                                                  fontSize: 7.w,
-                                                  color: Colors.grey),
-                                              suffixIcon: InkWell(
-                                                onTap: () async {
-                                                  focusNode.unfocus();
+                                                log('Pressed via keypad');
+                                              },
+                                              textInputAction: isVisible
+                                                  ? TextInputAction.done
+                                                  : TextInputAction.search,
+                                              keyboardAppearance:
+                                                  Brightness.light,
+                                              onChanged: (_) => setState(() {
+                                                btnColor = ConstantsVar.appColor;
+                                                _hintText = 'Search Here';
+                                              }),
+                                              controller: _searchController,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 5.w),
+                                              decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 13,
+                                                        horizontal: 10),
+                                                hintText: _hintText,
+                                                labelStyle: TextStyle(
+                                                    fontSize: 7.w,
+                                                    color: Colors.grey),
+                                                suffixIcon: InkWell(
+                                                  onTap: () async {
+                                                    focusNode.unfocus();
 
-                                                  if (!currentFocus
-                                                      .hasPrimaryFocus) {
-                                                    currentFocus.unfocus();
-                                                  }
-                                                  setState(() {
-                                                    if (isFilterVisible ==
-                                                        true) {
-                                                      isFilterVisible = false;
+                                                    if (!currentFocus
+                                                        .hasPrimaryFocus) {
+                                                      currentFocus.unfocus();
                                                     }
-                                                    _selectedSeats = '';
-                                                    _selectedColors = '';
-                                                    _selectedFaimly = '';
-                                                    _selectedColorsId = '';
-                                                    _selectedSeatsId = '';
-                                                    _selectedFaimlyId = '';
-                                                    _colorList = [];
-                                                    _numberOfSeatList = [];
-                                                    _familyList = [];
-                                                    _height = 0.h;
-                                                    noMore = false;
-                                                    isAlreadySet = false;
-                                                    _maxPRICE = null;
-                                                    _minPRICE = null;
-                                                    pageIndex = 0;
-                                                  });
-                                                  if (_searchController.text
-                                                          .toString()
-                                                          .toLowerCase()
-                                                          .contains('return') ||
-                                                      _searchController.text
-                                                          .toString()
-                                                          .toLowerCase()
-                                                          .contains('policy') ||
-                                                      _searchController.text
-                                                          .toString()
-                                                          .toLowerCase()
-                                                          .contains('refund')) {
-                                                    _returnBool = true;
-                                                    widget.enableCategory =
-                                                        false;
-                                                    searchedProducts = [];
-                                                    isFilterVisible = false;
+                                                    setState(() {
+                                                      if (isFilterVisible ==
+                                                          true) {
+                                                        isFilterVisible = false;
+                                                      }
+                                                      _selectedSeats = '';
+                                                      _selectedColors = '';
+                                                      _selectedFaimly = '';
+                                                      _selectedColorsId = '';
+                                                      _selectedSeatsId = '';
+                                                      _selectedFaimlyId = '';
+                                                      _colorList = [];
+                                                      _numberOfSeatList = [];
+                                                      _familyList = [];
+                                                      _height = 0.h;
+                                                      noMore = false;
+                                                      isAlreadySet = false;
+                                                      _maxPRICE = null;
+                                                      _minPRICE = null;
+                                                      pageIndex = 0;
+                                                    });
+                                                    if (_searchController.text
+                                                            .toString()
+                                                            .toLowerCase()
+                                                            .contains('return') ||
+                                                        _searchController.text
+                                                            .toString()
+                                                            .toLowerCase()
+                                                            .contains('policy') ||
+                                                        _searchController.text
+                                                            .toString()
+                                                            .toLowerCase()
+                                                            .contains('refund')) {
+                                                      _returnBool = true;
+                                                      widget.enableCategory =
+                                                          false;
+                                                      searchedProducts = [];
+                                                      isFilterVisible = false;
 
-                                                    setState(() {});
-                                                  } else {
-                                                    searchProducts(
-                                                      _searchController.text
-                                                          .toString(),
-                                                      pageIndex,
-                                                    ).then((value) => null);
-                                                  }
-                                                },
-                                                child: const Icon(
-                                                    Icons.search_sharp),
+                                                      setState(() {});
+                                                    } else {
+                                                      searchProducts(
+                                                        _searchController.text
+                                                            .toString(),
+                                                        pageIndex,
+                                                      ).then((value) => null);
+                                                    }
+                                                  },
+                                                  child: const Icon(
+                                                      Icons.search_sharp),
+                                                ),
                                               ),
-                                            ),
-                                            focusNode: _focusNode,
-                                          );
-                                        },
-                                        optionsViewBuilder:
-                                            (BuildContext context,
-                                                AutocompleteOnSelected<String>
-                                                    onSelected,
-                                                Iterable<String> options) {
-                                          return Padding(
-                                            padding: const EdgeInsets.only(
-                                              top: 8.0,
-                                              right: 10,
-                                            ),
-                                            child: Align(
-                                              alignment: Alignment.topCenter,
-                                              child: Material(
-                                                child: Card(
-                                                  child: SizedBox(
-                                                    height: 178,
-                                                    child: Scrollbar(
-                                                      controller:
-                                                          _suggestController,
-                                                      thickness: 5,
-                                                      isAlwaysShown: true,
-                                                      child: ListView.builder(
-                                                        itemCount:
-                                                            options.length + 1,
-                                                        itemBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                int index) {
-                                                          if (index >=
-                                                              options.length) {
-                                                            return Align(
-                                                              alignment: Alignment
-                                                                  .bottomCenter,
-                                                              child: TextButton(
-                                                                child:
-                                                                    const Text(
-                                                                  'Clear',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: ConstantsVar
-                                                                        .appColor,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        16,
+                                              focusNode: _focusNode,
+                                            );
+                                          },
+                                          optionsViewBuilder:
+                                              (BuildContext context,
+                                                  AutocompleteOnSelected<String>
+                                                      onSelected,
+                                                  Iterable<String> options) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                top: 8.0,
+                                                right: 10,
+                                              ),
+                                              child: Align(
+                                                alignment: Alignment.topCenter,
+                                                child: Material(
+                                                  child: Card(
+                                                    child: SizedBox(
+                                                      height: 178,
+                                                      child: Scrollbar(
+                                                        controller:
+                                                            _suggestController,
+                                                        thickness: 5,
+                                                        isAlwaysShown: true,
+                                                        child: ListView.builder(
+                                                          itemCount:
+                                                              options.length + 1,
+                                                          itemBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  int index) {
+                                                            if (index >=
+                                                                options.length) {
+                                                              return Align(
+                                                                alignment: Alignment
+                                                                    .bottomCenter,
+                                                                child: TextButton(
+                                                                  child:
+                                                                      const Text(
+                                                                    'Clear',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: ConstantsVar
+                                                                          .appColor,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          16,
+                                                                    ),
                                                                   ),
+                                                                  onPressed: () {
+                                                                    _searchController
+                                                                        .clear();
+                                                                  },
                                                                 ),
-                                                                onPressed: () {
-                                                                  _searchController
-                                                                      .clear();
-                                                                },
-                                                              ),
-                                                            );
-                                                          }
-                                                          final String option =
-                                                              options.elementAt(
-                                                                  index);
-                                                          return GestureDetector(
-                                                              onTap: () {
-                                                                onSelected(
-                                                                    option);
-                                                                if (!currentFocus
-                                                                    .hasPrimaryFocus) {
-                                                                  currentFocus
-                                                                      .unfocus();
-                                                                }
-                                                                setState(() {
-                                                                  if (isFilterVisible ==
-                                                                      true) {
+                                                              );
+                                                            }
+                                                            final String option =
+                                                                options.elementAt(
+                                                                    index);
+                                                            return GestureDetector(
+                                                                onTap: () {
+                                                                  onSelected(
+                                                                      option);
+                                                                  if (!currentFocus
+                                                                      .hasPrimaryFocus) {
+                                                                    currentFocus
+                                                                        .unfocus();
+                                                                  }
+                                                                  setState(() {
+                                                                    if (isFilterVisible ==
+                                                                        true) {
+                                                                      isFilterVisible =
+                                                                          false;
+                                                                    }
+                                                                    _selectedSeats =
+                                                                        '';
+                                                                    _selectedColors =
+                                                                        '';
+                                                                    _selectedFaimly =
+                                                                        '';
+                                                                    _selectedColorsId =
+                                                                        '';
+                                                                    _selectedSeatsId =
+                                                                        '';
+                                                                    _selectedFaimlyId =
+                                                                        '';
+                                                                    _colorList =
+                                                                        [];
+                                                                    _numberOfSeatList =
+                                                                        [];
+                                                                    _familyList =
+                                                                        [];
+                                                                    _height = 0.h;
+                                                                    noMore =
+                                                                        false;
+                                                                    searchedProducts =
+                                                                        [];
                                                                     isFilterVisible =
                                                                         false;
-                                                                  }
-                                                                  _selectedSeats =
-                                                                      '';
-                                                                  _selectedColors =
-                                                                      '';
-                                                                  _selectedFaimly =
-                                                                      '';
-                                                                  _selectedColorsId =
-                                                                      '';
-                                                                  _selectedSeatsId =
-                                                                      '';
-                                                                  _selectedFaimlyId =
-                                                                      '';
-                                                                  _colorList =
-                                                                      [];
-                                                                  _numberOfSeatList =
-                                                                      [];
-                                                                  _familyList =
-                                                                      [];
-                                                                  _height = 0.h;
-                                                                  noMore =
-                                                                      false;
-                                                                  searchedProducts =
-                                                                      [];
-                                                                  isFilterVisible =
-                                                                      false;
-                                                                  pageIndex = 0;
-                                                                });
+                                                                    pageIndex = 0;
+                                                                  });
 
-                                                                searchProducts(
-                                                                  option
-                                                                      .toString(),
-                                                                  pageIndex,
-                                                                ).then(
-                                                                    (value) =>
-                                                                        null);
-                                                              },
-                                                              child: SizedBox(
-                                                                height: 5.2.h,
-                                                                width: 95.w,
-                                                                child: Column(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    SizedBox(
-                                                                      width:
-                                                                          100.w,
-                                                                      child:
-                                                                          AutoSizeText(
-                                                                        '  ' +
-                                                                            option,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              16,
-                                                                          wordSpacing:
-                                                                              2,
-                                                                          letterSpacing:
-                                                                              1,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
+                                                                  searchProducts(
+                                                                    option
+                                                                        .toString(),
+                                                                    pageIndex,
+                                                                  ).then(
+                                                                      (value) =>
+                                                                          null);
+                                                                },
+                                                                child: SizedBox(
+                                                                  height: 5.2.h,
+                                                                  width: 95.w,
+                                                                  child: Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        width:
+                                                                            100.w,
+                                                                        child:
+                                                                            AutoSizeText(
+                                                                          '  ' +
+                                                                              option,
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            fontSize:
+                                                                                16,
+                                                                            wordSpacing:
+                                                                                2,
+                                                                            letterSpacing:
+                                                                                1,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width:
-                                                                          100.w,
-                                                                      child:
-                                                                          Divider(
-                                                                        thickness:
-                                                                            1,
-                                                                        color: Colors
-                                                                            .grey
-                                                                            .shade400,
+                                                                      SizedBox(
+                                                                        width:
+                                                                            100.w,
+                                                                        child:
+                                                                            Divider(
+                                                                          thickness:
+                                                                              1,
+                                                                          color: Colors
+                                                                              .grey
+                                                                              .shade400,
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ));
-                                                        },
+                                                                    ],
+                                                                  ),
+                                                                ));
+                                                          },
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible:
+                                        searchedProducts.isEmpty ? false : true,
+                                    child: InkWell(
+                                      radius: 36,
+                                      splashColor: Colors.red,
+                                      hoverColor: Colors.red,
+                                      highlightColor: Colors.red,
+                                      onTap: () => _toggle(),
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 8.0, vertical: 8),
+                                        child: Icon(
+                                          HeartIcon.searchFilter,
+                                          color: Colors.white,
+                                          size: 42,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 60.0),
+                                  child: showSearchFilter(_animation),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            Visibility(
+                              visible: isListVisible,
+                              child: SizedBox(
+                                height: 100.h,
+                                child: VsScrollbar(
+                                  style: const VsScrollbarStyle(
+                                    thickness: 12,
+                                  ),
+                                  isAlwaysShown: true,
+                                  controller: _scrollListController,
+                                  child: GridView.count(
+                                    controller: _scrollListController,
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 5,
+                                    childAspectRatio: 3 / 6,
+                                    mainAxisSpacing: 5,
+                                    children: List.generate(
+                                      searchedProducts.length,
+                                      (index) {
+                                        log(searchedProducts[index]
+                                            .discountedPrice);
+
+                                        return Stack(
+                                          children: [
+                                            Card(
+                                              child: OpenContainer(
+                                                closedElevation: 2,
+                                                openBuilder: (BuildContext
+                                                        context,
+                                                    void Function(
+                                                            {Object? returnValue})
+                                                        action) {
+                                                  log(searchedProducts[index]
+                                                      .discountedPrice);
+                                                  return NewProductDetails(
+                                                    productId:
+                                                        searchedProducts[index]
+                                                            .id
+                                                            .toString(),
+                                                    screenName: 'Product List',
+                                                  );
+                                                },
+                                                closedBuilder:
+                                                    (BuildContext context,
+                                                        void Function() action) {
+                                                  return Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Container(
+                                                        constraints:
+                                                            BoxConstraints
+                                                                .tightFor(
+                                                          width: 42.w,
+                                                          height: 42.w,
+                                                        ),
+                                                        color: Colors.white,
+                                                        padding:
+                                                            const EdgeInsets.all(
+                                                                4.0),
+                                                        child: CachedNetworkImage(
+                                                          imageUrl:
+                                                              searchedProducts[
+                                                                      index]
+                                                                  .productPicture,
+                                                          fit: BoxFit.cover,
+                                                          placeholder: (context,
+                                                                  reason) =>
+                                                              const SpinKitRipple(
+                                                            color: Colors.red,
+                                                            size: 90,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        padding: const EdgeInsets
+                                                                .symmetric(
+                                                            vertical: 8.0,
+                                                            horizontal: 8.0),
+                                                        width:
+                                                            MediaQuery.of(context)
+                                                                .size
+                                                                .width,
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Container(
+                                                              child: Text(
+                                                                searchedProducts[
+                                                                        index]
+                                                                    .name,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                maxLines: 3,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        4.5.w,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                              ),
+                                                              constraints:
+                                                                  BoxConstraints
+                                                                      .tightFor(
+                                                                          width: 48
+                                                                              .w,
+                                                                          height:
+                                                                              18.w),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .symmetric(
+                                                                      vertical:
+                                                                          6.0),
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  AutoSizeText(
+                                                                    searchedProducts[index]
+                                                                                .discountedPrice ==
+                                                                            ''
+                                                                        ? searchedProducts[
+                                                                                index]
+                                                                            .price
+                                                                        : searchedProducts[
+                                                                                index]
+                                                                            .discountedPrice,
+                                                                    maxLines: 1,
+                                                                    style: TextStyle(
+                                                                        height: 1,
+                                                                        color: Colors
+                                                                            .grey
+                                                                            .shade600,
+                                                                        fontSize:
+                                                                            4.w,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Consumer<NewApisProvider>(
+                                                        builder: (ctx, val, _) =>
+                                                            AddCartBtn(
+                                                          productId:
+                                                              searchedProducts[
+                                                                      index]
+                                                                  .id
+                                                                  .toString(),
+                                                          isTrue: true,
+                                                          guestCustomerId:
+                                                              guestCustomerId,
+                                                          checkIcon: searchedProducts[
+                                                                      index]
+                                                                  .stockQuantity
+                                                                  .contains(
+                                                                      'Out of stock')
+                                                              ? const Icon(
+                                                                  HeartIcon.cross)
+                                                              : const Icon(
+                                                                  Icons.check),
+                                                          text: searchedProducts[
+                                                                      index]
+                                                                  .stockQuantity
+                                                                  .contains(
+                                                                      'Out of stock')
+                                                              ? 'Out of Stock'
+                                                                  .toUpperCase()
+                                                              : 'ADD TO CArt'
+                                                                  .toUpperCase(),
+                                                          color: searchedProducts[
+                                                                      index]
+                                                                  .stockQuantity
+                                                                  .contains(
+                                                                      'Out of stock')
+                                                              ? Colors.grey
+                                                              : ConstantsVar
+                                                                  .appColor,
+                                                          isGiftCard:
+                                                              searchedProducts[
+                                                                      index]
+                                                                  .isGiftCard,
+                                                          isProductAttributeAvail:
+                                                              false,
+                                                          attributeId: '',
+                                                          recipEmail: '',
+                                                          email: '',
+                                                          message: '',
+                                                          name: '',
+                                                          recipName: '',
+                                                          storeId: '',
+                                                          productName:
+                                                              searchedProducts[
+                                                                      index]
+                                                                  .name,
+                                                          productPrice:
+                                                              searchedProducts[
+                                                                      index]
+                                                                  .priceValue,
+                                                          categoryId:
+                                                              searchedProducts[
+                                                                      index]
+                                                                  .parentCategoryId, minQuantity: searchedProducts[index].minimumQuantity.toString(),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  );
+                                                },
+                                              ),
                                             ),
-                                          );
-                                        },
-                                      ),
+                                            Consumer<NewApisProvider>(
+                                              builder: (ctx, val, _) =>
+                                                  !searchedProducts[index]
+                                                              .parentCategoryId
+                                                              .contains(val
+                                                                  .bogoValue) ||
+                                                          val.bogoValue.isEmpty
+                                                      ? Visibility(
+                                                          visible: searchedProducts[
+                                                                          index]
+                                                                      .discountPercent !=
+                                                                  ''
+                                                              ? true
+                                                              : false,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child: Align(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .topLeft,
+                                                                child: SizedBox(
+                                                                  width: 14.w,
+                                                                  height: 14.w,
+                                                                  child: Stack(
+                                                                    children: [
+                                                                      Image.asset(
+                                                                        'MyAssets/plaincircle.png',
+                                                                        width:
+                                                                            15.w,
+                                                                        height:
+                                                                            15.w,
+                                                                      ),
+                                                                      Align(
+                                                                        alignment:
+                                                                            Alignment
+                                                                                .center,
+                                                                        child:
+                                                                            Text(
+                                                                          searchedProducts[index]
+                                                                              .discountPercent,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.w800,
+                                                                            fontSize:
+                                                                                4.8.w,
+                                                                            color:
+                                                                                Colors.white,
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                )),
+                                                          ),
+                                                        )
+                                                      : Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child: Align(
+                                                              alignment: Alignment
+                                                                  .topLeft,
+                                                              child: SizedBox(
+                                                                width: 14.w,
+                                                                height: 14.w,
+                                                                child:
+                                                                    Image.asset(
+                                                                  'MyAssets/bogo_logo.jpeg',
+                                                                  width: 15.w,
+                                                                  height: 15.w,
+                                                                ),
+                                                              )),
+                                                        ),
+                                            )
+                                          ],
+                                        );
+                                      },
                                     ),
                                   ),
                                 ),
-                                Visibility(
-                                  visible:
-                                      searchedProducts.isEmpty ? false : true,
-                                  child: InkWell(
-                                    radius: 36,
-                                    splashColor: Colors.red,
-                                    hoverColor: Colors.red,
-                                    highlightColor: Colors.red,
-                                    onTap: () => _toggle(),
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 8),
-                                      child: Icon(
-                                        HeartIcon.searchFilter,
-                                        color: Colors.white,
-                                        size: 42,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 60.0),
-                                child: showSearchFilter(_animation),
+                            Visibility(
+                              visible: _returnBool,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (context) => TopicPage(
+                                        paymentUrl:
+                                            'https://www.theone.com/terms-conditions-3',
+                                          customerGUID:  ConstantsVar.prefs.getString('guestGUID')??''
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Card(
+                                      child: SizedBox(
+                                        height: 32.h,
+                                        width: 42.w,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              color: Colors.white,
+                                              padding: const EdgeInsets.all(4.0),
+                                              constraints:
+                                                  BoxConstraints.tightFor(
+                                                width: 42.w,
+                                                height: 42.w,
+                                              ),
+                                              child: Image.asset(
+                                                'ServicesImages/terms&conditions_icon.jpeg',
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                  vertical: 4.0, horizontal: 8.0),
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Terms & Conditions',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 3,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 4.5.w,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
+                    ],
+                  ),
+                  Visibility(
+                    visible: widget.enableCategory,
+                    child: Center(
+                      child: SearchCategories(
+                        productList: productList,
+                        categoryList: categoryList,
+                      ),
                     ),
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          Visibility(
-                            visible: isListVisible,
-                            child: SizedBox(
-                              height: 100.h,
-                              child: VsScrollbar(
-                                style: const VsScrollbarStyle(
-                                  thickness: 12,
-                                ),
-                                isAlwaysShown: true,
-                                controller: _scrollListController,
-                                child: GridView.count(
-                                  controller: _scrollListController,
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 5,
-                                  childAspectRatio: 3 / 6,
-                                  mainAxisSpacing: 5,
-                                  children: List.generate(
-                                    searchedProducts.length,
-                                    (index) {
-                                      log(searchedProducts[index]
-                                          .discountedPrice);
-
-                                      return Stack(
-                                        children: [
-                                          Card(
-                                            child: OpenContainer(
-                                              closedElevation: 2,
-                                              openBuilder: (BuildContext
-                                                      context,
-                                                  void Function(
-                                                          {Object? returnValue})
-                                                      action) {
-                                                log(searchedProducts[index]
-                                                    .discountedPrice);
-                                                return NewProductDetails(
-                                                  productId:
-                                                      searchedProducts[index]
-                                                          .id
-                                                          .toString(),
-                                                  screenName: 'Product List',
-                                                );
-                                              },
-                                              closedBuilder:
-                                                  (BuildContext context,
-                                                      void Function() action) {
-                                                return Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      constraints:
-                                                          BoxConstraints
-                                                              .tightFor(
-                                                        width: 42.w,
-                                                        height: 42.w,
-                                                      ),
-                                                      color: Colors.white,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: CachedNetworkImage(
-                                                        imageUrl:
-                                                            searchedProducts[
-                                                                    index]
-                                                                .productPicture,
-                                                        fit: BoxFit.cover,
-                                                        placeholder: (context,
-                                                                reason) =>
-                                                            const SpinKitRipple(
-                                                          color: Colors.red,
-                                                          size: 90,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 8.0,
-                                                          horizontal: 8.0),
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Container(
-                                                            child: Text(
-                                                              searchedProducts[
-                                                                      index]
-                                                                  .name,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              maxLines: 3,
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontSize:
-                                                                      4.5.w,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                            ),
-                                                            constraints:
-                                                                BoxConstraints
-                                                                    .tightFor(
-                                                                        width: 48
-                                                                            .w,
-                                                                        height:
-                                                                            18.w),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    vertical:
-                                                                        6.0),
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                AutoSizeText(
-                                                                  searchedProducts[index]
-                                                                              .discountedPrice ==
-                                                                          ''
-                                                                      ? searchedProducts[
-                                                                              index]
-                                                                          .price
-                                                                      : searchedProducts[
-                                                                              index]
-                                                                          .discountedPrice,
-                                                                  maxLines: 1,
-                                                                  style: TextStyle(
-                                                                      height: 1,
-                                                                      color: Colors
-                                                                          .grey
-                                                                          .shade600,
-                                                                      fontSize:
-                                                                          4.w,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Consumer<NewApisProvider>(
-                                                      builder: (ctx, val, _) =>
-                                                          AddCartBtn(
-                                                        productId:
-                                                            searchedProducts[
-                                                                    index]
-                                                                .id
-                                                                .toString(),
-                                                        isTrue: true,
-                                                        guestCustomerId:
-                                                            guestCustomerId,
-                                                        checkIcon: searchedProducts[
-                                                                    index]
-                                                                .stockQuantity
-                                                                .contains(
-                                                                    'Out of stock')
-                                                            ? const Icon(
-                                                                HeartIcon.cross)
-                                                            : const Icon(
-                                                                Icons.check),
-                                                        text: searchedProducts[
-                                                                    index]
-                                                                .stockQuantity
-                                                                .contains(
-                                                                    'Out of stock')
-                                                            ? 'Out of Stock'
-                                                                .toUpperCase()
-                                                            : 'ADD TO CArt'
-                                                                .toUpperCase(),
-                                                        color: searchedProducts[
-                                                                    index]
-                                                                .stockQuantity
-                                                                .contains(
-                                                                    'Out of stock')
-                                                            ? Colors.grey
-                                                            : ConstantsVar
-                                                                .appColor,
-                                                        isGiftCard:
-                                                            searchedProducts[
-                                                                    index]
-                                                                .isGiftCard,
-                                                        isProductAttributeAvail:
-                                                            false,
-                                                        attributeId: '',
-                                                        recipEmail: '',
-                                                        email: '',
-                                                        message: '',
-                                                        name: '',
-                                                        recipName: '',
-                                                        storeId: '',
-                                                        productName:
-                                                            searchedProducts[
-                                                                    index]
-                                                                .name,
-                                                        productPrice:
-                                                            searchedProducts[
-                                                                    index]
-                                                                .priceValue,
-                                                        categoryId:
-                                                            searchedProducts[
-                                                                    index]
-                                                                .parentCategoryId,
-                                                      ),
-                                                    )
-                                                  ],
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                          Consumer<NewApisProvider>(
-                                            builder: (ctx, val, _) =>
-                                                !searchedProducts[index]
-                                                            .parentCategoryId
-                                                            .contains(val
-                                                                .bogoValue) ||
-                                                        val.bogoValue.isEmpty
-                                                    ? Visibility(
-                                                        visible: searchedProducts[
-                                                                        index]
-                                                                    .discountPercent !=
-                                                                ''
-                                                            ? true
-                                                            : false,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(4.0),
-                                                          child: Align(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .topLeft,
-                                                              child: SizedBox(
-                                                                width: 14.w,
-                                                                height: 14.w,
-                                                                child: Stack(
-                                                                  children: [
-                                                                    Image.asset(
-                                                                      'MyAssets/plaincircle.png',
-                                                                      width:
-                                                                          15.w,
-                                                                      height:
-                                                                          15.w,
-                                                                    ),
-                                                                    Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      child:
-                                                                          Text(
-                                                                        searchedProducts[index]
-                                                                            .discountPercent,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontWeight:
-                                                                              FontWeight.w800,
-                                                                          fontSize:
-                                                                              4.8.w,
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              )),
-                                                        ),
-                                                      )
-                                                    : Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(4.0),
-                                                        child: Align(
-                                                            alignment: Alignment
-                                                                .topLeft,
-                                                            child: SizedBox(
-                                                              width: 14.w,
-                                                              height: 14.w,
-                                                              child:
-                                                                  Image.asset(
-                                                                'MyAssets/bogo_logo.jpeg',
-                                                                width: 15.w,
-                                                                height: 15.w,
-                                                              ),
-                                                            )),
-                                                      ),
-                                          )
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Visibility(
-                            visible: _returnBool,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (context) => TopicPage(
-                                      paymentUrl:
-                                          'https://www.theone.com/terms-conditions-3',
-                                        customerGUID:  ConstantsVar.prefs.getString('guestGUID')??''
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Card(
-                                    child: SizedBox(
-                                      height: 32.h,
-                                      width: 42.w,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            color: Colors.white,
-                                            padding: const EdgeInsets.all(4.0),
-                                            constraints:
-                                                BoxConstraints.tightFor(
-                                              width: 42.w,
-                                              height: 42.w,
-                                            ),
-                                            child: Image.asset(
-                                              'ServicesImages/terms&conditions_icon.jpeg',
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0, horizontal: 8.0),
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'Terms & Conditions',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 3,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 4.5.w,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  textAlign: TextAlign.start,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
+                  ),
+                  Visibility(
+                    visible: noMore,
+                    child: Align(
+                      alignment: const Alignment(0, .3),
+                      child: AnimatedTextKit(
+                        repeatForever: true,
+                        animatedTexts: [
+                          ColorizeAnimatedText(
+                            'No Product Found',
+                            textStyle: colorizeTextStyle,
+                            colors: colorizeColors,
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-                Visibility(
-                  visible: widget.enableCategory,
-                  child: Center(
-                    child: SearchCategories(
-                      productList: productList,
-                      categoryList: categoryList,
-                    ),
                   ),
-                ),
-                Visibility(
-                  visible: noMore,
-                  child: Align(
-                    alignment: const Alignment(0, .3),
-                    child: AnimatedTextKit(
-                      repeatForever: true,
-                      animatedTexts: [
-                        ColorizeAnimatedText(
-                          'No Product Found',
-                          textStyle: colorizeTextStyle,
-                          colors: colorizeColors,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

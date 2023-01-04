@@ -267,11 +267,12 @@ class AddCartBtn extends StatefulWidget {
       required this.productPrice,
       required String storeId,
       required this.categoryId
+        , required this.minQuantity
       // required this.productName,
       })
       : super(key: key);
   final String productId;
-
+  final String minQuantity;
   // final String productName;
   final String guestCustomerId;
   final double productPrice;
@@ -426,13 +427,13 @@ class _AddCartBtnState extends State<AddCartBtn> {
                   recipEmail: widget.recipEmail,
                   recipName: widget.recipName,
                   name: widget.name,
-                  attributeId: widget.attributeId, quantity: widget.categoryId.contains(bogoCatId)?'2':'1',
+                  attributeId: widget.attributeId, quantity: widget.minQuantity,
                 ).then(
                   (response) async {
                     AnalyticsEventItem item = AnalyticsEventItem(
                         itemName: widget.productName,
                         currency: 'AED',
-                        quantity: widget.categoryId.contains(bogoCatId) && bogoCatId.isNotEmpty?2:1,
+                        quantity: int.parse(widget.minQuantity),
                         itemId: widget.productId.toString());
 
                     // final
@@ -498,7 +499,7 @@ class _AddCartBtnState extends State<AddCartBtn> {
                   recipName: widget.recipName,
                   name: widget.name,
                   attributeId: widget.attributeId,
-                  quantity: widget.categoryId.contains(bogoCatId) && bogoCatId.isNotEmpty?'2':'1'
+                  quantity: widget.minQuantity
                 ).then(
                   (response) async {
                     final _provider =

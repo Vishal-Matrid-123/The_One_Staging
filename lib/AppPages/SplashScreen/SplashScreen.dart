@@ -137,7 +137,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 context,
                                 CupertinoPageRoute(
                                     builder: (context) =>
-                                        const StoreSelectionScreen()),
+                                        const StoreSelectionScreen(screenName: 'Splash Screen',)),
                                 (route) => false);
                           } else {
                             Navigator.pushReplacement(
@@ -172,7 +172,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 context,
                                 CupertinoPageRoute(
                                     builder: (context) =>
-                                        const StoreSelectionScreen()),
+                                        const StoreSelectionScreen(screenName: 'SplashScreen',)),
                                 (route) => false);
                           } else {
                             Navigator.pushReplacement(
@@ -229,7 +229,7 @@ class _SplashScreenState extends State<SplashScreen>
                                     context,
                                     CupertinoPageRoute(
                                         builder: (context) =>
-                                            const StoreSelectionScreen()),
+                                            const StoreSelectionScreen(screenName: 'Splash Screen',)),
                                     (route) => false);
                               } else {
                                 Navigator.pushReplacement(
@@ -257,7 +257,7 @@ class _SplashScreenState extends State<SplashScreen>
                                   context,
                                   CupertinoPageRoute(
                                       builder: (context) =>
-                                          const StoreSelectionScreen()),
+                                          const StoreSelectionScreen(screenName: 'Splash Screen',)),
                                   (route) => false);
                             } else {
                               Navigator.pushReplacement(

@@ -50,14 +50,14 @@ class ApiCalls {
     log('Testing Api');
 
     final _url = Uri.parse(baseUrl +
-        'GetProductsByCategoryId?categoryid=$catId&pageindex=$pageIndex&pagesize=16&$kcustomerIdVar${ConstantsVar.prefs.getString('guestCustomerID')}$kstoreIdVar$storeId');
+        'GetSortedProductsByCategoryId?categoryid=$catId&pageindex=$pageIndex&pagesize=16&$kcustomerIdVar${ConstantsVar.prefs.getString('guestCustomerID')}$kstoreIdVar$storeId');
 
     log('Product List Api>>>>' + _url.toString());
 
     try {
       var response = await http.get(_url,
           headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -103,9 +103,11 @@ class ApiCalls {
         body: body,
       )
           .timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
-          Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
+          Fluttertoast.showToast(
+              msg:
+                  "Connection Timeout.\nPlease try again. Not able to get Required Data./nRestart your app again");
           // Time has run out, do what you wanted to do.
           return http.Response(
               'Error', 408); // Request Timeout response status code
@@ -175,7 +177,7 @@ class ApiCalls {
         body: body,
         headers: {'Cookie': '.Nop.Customer=$customerGuid'},
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -299,7 +301,7 @@ class ApiCalls {
     try {
       var response = await http
           .get(uri, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -343,7 +345,7 @@ class ApiCalls {
     try {
       var response = await http.get(Uri.parse(url),
           headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -397,7 +399,7 @@ class ApiCalls {
     try {
       var response = await http
           .get(uri, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -442,7 +444,7 @@ class ApiCalls {
     try {
       var response = await http
           .get(uri, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -495,7 +497,7 @@ class ApiCalls {
     try {
       var response = await http.get(_url,
           headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -541,7 +543,7 @@ class ApiCalls {
       var response = await http.post(uri,
           body: body,
           headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -593,7 +595,7 @@ class ApiCalls {
       var response = await http.post(uri,
           body: body,
           headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -642,7 +644,7 @@ class ApiCalls {
     try {
       var response = await http
           .get(uri, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -683,7 +685,7 @@ class ApiCalls {
     try {
       var response = await http.post(uri,
           headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -770,7 +772,7 @@ class ApiCalls {
               },
               body: body)
           .timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -833,7 +835,7 @@ class ApiCalls {
     try {
       var response = await http
           .get(uri, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -878,7 +880,7 @@ class ApiCalls {
       'productId': productId,
       kStoreIdVar: await secureStorage.read(key: kselectedStoreIdKey)
     }).timeout(
-      const Duration(seconds: 15),
+      const Duration(seconds: 60),
       onTimeout: () {
         Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
         // Time has run out, do what you wanted to do.
@@ -956,7 +958,7 @@ class ApiCalls {
     try {
       var response = await http
           .get(uri, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1009,7 +1011,7 @@ class ApiCalls {
     try {
       var response = await http
           .get(url, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1064,7 +1066,7 @@ class ApiCalls {
     try {
       var jsonResponse = await http
           .get(url, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1110,7 +1112,7 @@ class ApiCalls {
     try {
       var jsonResponse = await http
           .get(url, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1217,7 +1219,7 @@ class ApiCalls {
       }, headers: {
         'Cookie': '.Nop.Customer=$customerGuid'
       }).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1253,7 +1255,7 @@ class ApiCalls {
       }, headers: {
         'Cookie': '.Nop.Customer=$customerGuid'
       }).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1294,7 +1296,7 @@ class ApiCalls {
     try {
       var response = await http
           .get(uri, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1401,7 +1403,7 @@ class ApiCalls {
         'Checkout?CustId=${ConstantsVar.prefs.getString(kcustomerIdKey)}$kstoreIdVar${await secureStorage.read(key: kselectedStoreIdKey) ?? '1'}');
 
     final response = await http.get(url).timeout(
-      const Duration(seconds: 15),
+      const Duration(seconds: 60),
       onTimeout: () {
         Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
         // Time has run out, do what you wanted to do.
@@ -1449,7 +1451,7 @@ class ApiCalls {
         uri,
         headers: {'Cookie': '.Nop.Customer=$customerGuid'},
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1505,7 +1507,7 @@ class ApiCalls {
       var response = await http.post(uri,
           body: body,
           headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1546,6 +1548,13 @@ class ApiCalls {
     log("Address Model>>>>>>>>>>>>"
         " $snippingModel");
     String baseUrl = await getSelectedStore();
+    CustomProgressDialog _progressDialog = CustomProgressDialog(context,
+        loadingWidget: SpinKitRipple(
+          color: ConstantsVar.appColor,
+          size: 40,
+        ),
+        dismissable: true);
+    _progressDialog.show();
     final body = {
       ApiParams.PARAM_API_TOKEN: ConstantsVar.prefs.getString(kapiTokenKey),
       ApiParams.PARAM_CUSTOMER_ID: ConstantsVar.prefs.getString(kcustomerIdKey),
@@ -1560,7 +1569,7 @@ class ApiCalls {
       var response = await http.post(uri,
           body: body,
           headers: {'Cookie': ' .Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1568,7 +1577,7 @@ class ApiCalls {
               'Error', 408); // Request Timeout response status code
         },
       );
-
+    _progressDialog.dismiss();
       if (response.statusCode == 200) {
         if (jsonDecode(response.body)['Status'].toString().toLowerCase() ==
             kstatusFailed) {
@@ -1587,8 +1596,10 @@ class ApiCalls {
       }
     } on Exception catch (e) {
       ConstantsVar.excecptionMessage(e);
+      _progressDialog.dismiss();
       return kerrorString;
     }
+    _progressDialog.dismiss();
   }
 
   /* Edit and save address */
@@ -1600,7 +1611,13 @@ class ApiCalls {
       required bool isEditAddress}) async {
     log(">>>>>>>>>>>>"
         " $data");
-
+    CustomProgressDialog _progressDialog = CustomProgressDialog(context,
+        loadingWidget: SpinKitRipple(
+          color: ConstantsVar.appColor,
+          size: 40,
+        ),
+        dismissable: true);
+    _progressDialog.show();
     String baseUrl = await getSelectedStore();
     final body = {
       ApiParams.PARAM_API_TOKEN: ConstantsVar.prefs.getString(kapiTokenKey),
@@ -1618,7 +1635,7 @@ class ApiCalls {
       var response = await http.post(uri,
           body: body,
           headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1626,7 +1643,7 @@ class ApiCalls {
               'Error', 408); // Request Timeout response status code
         },
       );
-
+ _progressDialog.dismiss();
       if (response.statusCode == 200) {
         if (jsonDecode(response.body)['Status'].toString().toLowerCase() ==
             kstatusFailed) {
@@ -1645,9 +1662,10 @@ class ApiCalls {
       }
     } on Exception catch (e) {
       ConstantsVar.excecptionMessage(e);
-
+      _progressDialog.dismiss();
       return kerrorString;
     }
+    _progressDialog.dismiss();
   }
 
   /* Show Order Summary */
@@ -1660,7 +1678,7 @@ class ApiCalls {
     try {
       var response = await http
           .get(uri, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1709,7 +1727,7 @@ class ApiCalls {
       var response = await http.post(uri,
           body: body,
           headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1761,7 +1779,7 @@ class ApiCalls {
       var response = await http.post(uri,
           body: body,
           headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1806,7 +1824,7 @@ class ApiCalls {
     try {
       var response = await http
           .get(uri, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1850,7 +1868,7 @@ class ApiCalls {
           'Cookie': '.Nop.Customer=$customerGuid',
         },
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1894,7 +1912,7 @@ class ApiCalls {
           'Cookie': '.Nop.Customer=$customerGuid',
         },
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1936,7 +1954,7 @@ class ApiCalls {
           'Cookie': '.Nop.Customer=$customerGuid',
         },
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -1987,7 +2005,7 @@ class ApiCalls {
           'Cookie': '.Nop.Customer=$customerGuid',
         },
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -2026,7 +2044,7 @@ class ApiCalls {
         'Cookie':
             '.Nop.Customer=' + ConstantsVar.prefs.getString(kguidKey)! ?? ''
       }).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -2086,7 +2104,7 @@ class ApiCalls {
           'Cookie': '.Nop.Customer=$customerGuid',
         },
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -2140,7 +2158,7 @@ class ApiCalls {
         BuildConfig.select_shipping_address_url +
         "?" +
         "apiToken=${ConstantsVar.prefs.getString(kapiTokenKey)}&customerid=${ConstantsVar.prefs.getString(kcustomerIdKey)}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? "1"}&addressId=$addressId");
-
+    log('Shipping Response>>>>' + uri.toString());
     try {
       var response = await http.get(
         uri,
@@ -2148,7 +2166,7 @@ class ApiCalls {
           'Cookie': '.Nop.Customer=$customerGuid',
         },
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -2156,12 +2174,22 @@ class ApiCalls {
               'Error', 408); // Request Timeout response status code
         },
       );
+
       if (response.statusCode == 200) {
         if (jsonDecode(response.body)['status'].toString().toLowerCase() ==
             kstatusFailed) {
           Fluttertoast.showToast(
               msg: jsonDecode(response.body)['Message'].toString());
           return kerrorString;
+        } else if (jsonDecode(response.body)['status']
+                    .toString()
+                    .toLowerCase() !=
+                kstatusFailed &&
+            jsonDecode(response.body)['ShowPopUp'].toString() == 'true') {
+          return 'Show Popup' +
+              '' +
+              jsonDecode(response.body)['ButtonType'] +
+              jsonDecode(response.body)['Message'];
         } else {
           log("Shipping method selection  Api " + response.body);
           return "Success";
@@ -2221,7 +2249,7 @@ class ApiCalls {
     try {
       var response = await http.post(uri,
           headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -2270,7 +2298,7 @@ class ApiCalls {
           'Cookie': '.Nop.Customer=$customerGuid',
         },
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -2320,7 +2348,7 @@ class ApiCalls {
           'Cookie': '.Nop.Customer=$customerGuid',
         },
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -2367,7 +2395,7 @@ class ApiCalls {
           'Cookie': '.Nop.Customer=$customerGuid',
         },
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -2405,6 +2433,7 @@ class ApiCalls {
     String url = _baseUrl +
         "GetHomestylingBookingStatus?CustomerId=${ConstantsVar.prefs.getString('guestCustomerID')}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? '1'}";
     try {
+      print(url);
       var response = await http.get(
         Uri.parse(url),
         headers: {
@@ -2412,7 +2441,7 @@ class ApiCalls {
               '.Nop.Customer=${ConstantsVar.prefs.getString(kguidKey) ?? ''}',
         },
       ).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
           // Time has run out, do what you wanted to do.
@@ -2426,8 +2455,8 @@ class ApiCalls {
         if (jsonDecode(response.body)['status'].toString().toLowerCase() ==
             kstatusFailed) {
           Fluttertoast.showToast(
-            msg: jsonDecode(response.body)['Message'].toString(),
-          );
+              msg: jsonDecode(response.body)['Message'].toString() +
+                  jsonDecode(response.body)['ResponseData'].toString());
           return false;
         } else {
           if (jsonDecode(response.body)['ResponseData']

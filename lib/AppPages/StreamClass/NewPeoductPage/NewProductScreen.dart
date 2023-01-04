@@ -382,6 +382,7 @@ class _NewProductDetailsState extends State<NewProductDetails>
                                             isScreen: true,
                                             keyword: value,
                                             enableCategory: false,
+                                            cartIconVisible: true,
                                           ),
                                         ),
                                       )
@@ -427,6 +428,7 @@ class _NewProductDetailsState extends State<NewProductDetails>
                                                 isScreen: true,
                                                 keyword: value,
                                                 enableCategory: false,
+                                                cartIconVisible: true,
                                               ),
                                             ),
                                           )
@@ -498,6 +500,7 @@ class _NewProductDetailsState extends State<NewProductDetails>
                                                               isScreen: true,
                                                               enableCategory:
                                                                   false,
+                                                              cartIconVisible: true,
                                                             ))).then((value) =>
                                                     _searchController.clear());
                                               },
@@ -791,7 +794,7 @@ class _NewProductDetailsState extends State<NewProductDetails>
                                     isGiftCard: _isGiftCard,
                                     attributeId: data,
                                     productPrice: value.productResponse
-                                        .productPrice.priceValue, categoryId: value.productResponse.parentCategoryId,
+                                        .productPrice.priceValue, categoryId: value.productResponse.parentCategoryId, minQuantity: value.productResponse.minimumQuantity.toString(),
                                   ),
                                 ),
                                 FittedBox(
@@ -1568,9 +1571,11 @@ class _NewProductDetailsState extends State<NewProductDetails>
                                       recipName: _recNameController.text,
                                       email: _yourEmailController.text,
                                       productName: value.productResponse.name,
+                                      minQuantity: value.productResponse.minimumQuantity.toString(),
                                       productPrice: value.productResponse
                                           .productPrice.priceValue,
                                       storeId: '', categoryId: value.productResponse.parentCategoryId,
+
                                     ),
                                   ),
 

@@ -66,7 +66,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app is not required location in background</string>
+	<string>This app needs access to location for selecting the products from the nearest THE One  store. This will help us  to deliver personalized and best products and services to you. Your data will be safe and not shared with a third party. You can disable it from Settings.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location for selecting the nearest THE One  store. This will help us  to deliver personalized and best products and services to you. Your data will be safe and not shared with a third party. You can disable it from Settings</string>
 	<key>NSMicrophoneUsageDescription</key>

@@ -46,6 +46,7 @@ class ResponseData {
     required this.sorting,
     required this.totalCount,
     required this.priceRange,
+
   });
 
   final List<GetProductsByCategoryIdClass> getProductsByCategoryIdClasses;
@@ -66,6 +67,7 @@ class ResponseData {
         List<Sorting>.from(json["sorting"].map((x) => Sorting.fromJson(x))),
         totalCount: json["TotalCount"],
         priceRange: PriceRange.fromJson(json["priceRange"]),
+
       );
 
   Map<String, dynamic> toJson() =>
@@ -95,8 +97,9 @@ class GetProductsByCategoryIdClass {
     required this.isGiftCard,
     required this.havingattributes,
     required this.parentCategoryId,
+    required this.minimumQuantity
   });
-
+  final int minimumQuantity;
   final String parentCategoryId;
   final int id;
   final String name;
@@ -116,6 +119,7 @@ class GetProductsByCategoryIdClass {
         parentCategoryId: json['categoryIds'] ??'',
         id: json["Id"],
         name: json["Name"],
+        minimumQuantity: json['OrderMinimumQuantity']           ,
         stockQuantity: json["StockQuantity"] ?? 'No Available Value Return',
         productPicture: json["ProductPicture"],
         price: json["Price"] ?? 'No Pricing Available',

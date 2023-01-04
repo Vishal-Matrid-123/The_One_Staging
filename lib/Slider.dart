@@ -1,3 +1,4 @@
+
 import 'dart:core';
 import 'dart:developer';
 import 'dart:io';
@@ -53,7 +54,8 @@ class SliderClass extends StatefulWidget {
     required this.isGiftCard,
     required VoidCallback setState,
     required this.productPrice,
-    required this.categoryId
+    required this.categoryId, required this.minQuantity
+
   }) : super(key: key);
   final List<String> images;
   final List<String> largeImage;
@@ -71,7 +73,7 @@ class SliderClass extends StatefulWidget {
       senderEmail,
       receiverEmail,
       message,
-      attributeId, categoryId;
+      attributeId, categoryId,minQuantity;
 
   @override
   _SliderClassState createState() => _SliderClassState();
@@ -361,7 +363,7 @@ class _SliderClassState extends State<SliderClass> {
           receiverName: widget.recevierName,
           senderEmail: widget.senderEmail,
           attributeId: widget.attributeId,
-          itemQuantity:  (widget.categoryId.contains(bogoCatId) && bogoCatId.isNotEmpty) ? '2' : '1',
+          itemQuantity:  widget.minQuantity,
         ).then((value) => setState(() => _isLiked = value));
         final _provider = Provider.of<NewApisProvider>(
           context,

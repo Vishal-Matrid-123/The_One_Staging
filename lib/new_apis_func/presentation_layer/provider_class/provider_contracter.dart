@@ -33,6 +33,7 @@ import '../../../AppPages/MyAddresses/MyAddresses.dart';
 import '../../../AppPages/MyOrders/Response/OrderResponse.dart';
 import '../../../AppPages/SearchPage/SearchCategoryResponse/SearchCategoryResponse.dart';
 import '../../../AppPages/ShippingxxMethodxx/Responsexx/ShippingxxMethodxxResponse.dart';
+import '../../../AppPages/SplashScreen/TokenResponse/TokenxxResponsexx.dart';
 import '../../../AppPages/models/ShippingResponse.dart';
 import '../../../Constants/ConstantVariables.dart';
 import '../../../PojoClass/NetworkModelClass/CartModelClass/CartModel.dart';
@@ -65,7 +66,7 @@ class NewApisProvider extends ChangeNotifier {
   String _bogoCategoryValue = '559';
   CartModel? _cartModel;
   List<StoreData> _storeResponse = [];
-  String _phnCode = '';
+  String _phnCode = '', _initialPrefix = '';
   int _phnLimit = 1;
 
   Ordertotals _orderSummaryTotal = Ordertotals(
@@ -190,6 +191,8 @@ class NewApisProvider extends ChangeNotifier {
   List<CountriesDataResponse> get countriesInfo => _countriesInfo;
 
   String get appVersion => _appVersion;
+
+  String get initialPrefix => _initialPrefix;
 
   String get bogoValue => _bogoCategoryValue;
 
@@ -1046,7 +1049,7 @@ class NewApisProvider extends ChangeNotifier {
       if (_country.toLowerCase().contains("united arab emirates")) {
         await secureStorage.write(key: kselectedStoreIdKey, value: kuStoreId);
         await secureStorage.write(key: kcountryNameKey, value: "THE One UAE");
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
           Future.delayed(Duration.zero).whenComplete(() {
             Navigator.pushReplacement(
               context,
@@ -1060,7 +1063,7 @@ class NewApisProvider extends ChangeNotifier {
         await secureStorage.write(key: kselectedStoreIdKey, value: kbStoreId);
         await secureStorage.write(
             key: kcountryNameKey, value: "THE One Bahrain");
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
           Future.delayed(Duration.zero).whenComplete(() {
             Navigator.pushReplacement(
               context,
@@ -1074,24 +1077,7 @@ class NewApisProvider extends ChangeNotifier {
         await secureStorage.write(key: kselectedStoreIdKey, value: kkStoreId);
         await secureStorage.write(
             key: kcountryNameKey, value: "THE One Kuwait");
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
-          Future.delayed(Duration.zero).whenComplete(() {
-            Navigator.pushReplacement(
-              context,
-              CupertinoPageRoute(
-                builder: (_) => MyApp(),
-              ),
-            );
-          });
-        });
-      } else if (_country.toLowerCase().contains("india")) {
-        await secureStorage.write(
-            key: kcountryNameKey,
-            value: "THE One\nThis app is only available for Developers");
-
-        await secureStorage.write(key: kselectedStoreIdKey, value: kuStoreId);
-        // ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
           Future.delayed(Duration.zero).whenComplete(() {
             Navigator.pushReplacement(
               context,
@@ -1102,54 +1088,52 @@ class NewApisProvider extends ChangeNotifier {
           });
         });
       } else {
-        Fluttertoast.showToast(
-          msg: "App is not available for this country",
-          toastLength: Toast.LENGTH_LONG,
-        );
+        await secureStorage.write(
+            key: kcountryNameKey,
+            value: "THE One\nThis app is only available for Developers");
 
-        Navigator.pushReplacement(context, CupertinoPageRoute(
-          builder: (context) {
-            final size = MediaQuery.of(context).size;
-            return Scaffold(
-              appBar: AppBar(
-                backgroundColor: ConstantsVar.appColor,
-                toolbarHeight: size.width * 0.18,
-                centerTitle: true,
-                title: Image.asset(
-                  'MyAssets/logo.png',
-                  width: size.width * 0.15,
-                  height: size.width * 0.15,
-                ),
-              ),
-              body: SizedBox(
-                height: size.height,
-                width: size.width,
-                child: Center(
-                  child: Text(
-                    "We are sorry but app is not available for your country.\n\nComing soon.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      shadows: <Shadow>[
-                        Shadow(
-                          offset: const Offset(1.0, 1.2),
-                          blurRadius: 3.0,
-                          color: Colors.grey.shade300,
-                        ),
-                        Shadow(
-                          offset: const Offset(1.0, 1.2),
-                          blurRadius: 8.0,
-                          color: Colors.grey.shade300,
-                        ),
-                      ],
-                      fontSize: size.width * 0.045,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
+        // ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        SchedulerBinding.instance.addPostFrameCallback((_) async {
+          var _guestCustomerID = '';
+          // if()
+          _guestCustomerID =
+              ConstantsVar.prefs.getString('guestCustomerID') ?? "";
+
+          if ((_guestCustomerID == '' || _guestCustomerID.toString().isEmpty) &&
+              await ConstantsVar.prefs.getString(kExpireDateKey) == null) {
+            await ApiCalls.getApiTokken(context).then(
+              (value) async {
+                TokenResponse myResponse =
+                    TokenResponse.fromJson(jsonDecode(value));
+                _guestCustomerID = myResponse.cutomer.customerId.toString();
+                var _guestGUID = myResponse.cutomer.customerGuid;
+                ConstantsVar.prefs
+                    .setString('guestCustomerID', _guestCustomerID);
+                ConstantsVar.prefs.setString('guestGUID', _guestGUID);
+                ConstantsVar.prefs.setString('sepGuid', _guestGUID);
+                ConstantsVar.prefs.setString(
+                    kExpireDateKey, myResponse.expiryTime.toIso8601String());
+              },
             );
-          },
-        ));
+            Future.delayed(Duration.zero).whenComplete(() {
+              Navigator.pushReplacement(
+                context,
+                CupertinoPageRoute(
+                  builder: (_) => StoreSelectionScreen(screenName: 'Splash Screen',),
+                ),
+              );
+            });
+          } else {
+            Future.delayed(Duration.zero).whenComplete(() {
+              Navigator.pushReplacement(
+                context,
+                CupertinoPageRoute(
+                  builder: (_) => StoreSelectionScreen(screenName: 'Splash Screen',),
+                ),
+              );
+            });
+          }
+        });
       }
     } on Exception catch (e) {
       Fluttertoast.showToast(
@@ -1161,12 +1145,12 @@ class NewApisProvider extends ChangeNotifier {
 
       // await secureStorage.write(key: kselectedStoreIdKey, value: kuStoreId);
       // ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      SchedulerBinding.instance!.addPostFrameCallback((_) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
         Future.delayed(Duration.zero).whenComplete(() {
           Navigator.pushReplacement(
             context,
             CupertinoPageRoute(
-              builder: (_) => const StoreSelectionScreen(),
+              builder: (_) => const StoreSelectionScreen(screenName: 'Splash Screen',),
             ),
           );
         });
@@ -1475,18 +1459,16 @@ class NewApisProvider extends ChangeNotifier {
   }
 
   Future<void> readJson() async {
-    // final String response =
-    //     await rootBundle.loadString('json/nop_country.json');
-    // // final data = await json.decode(response);
-    //
-    // _countriesInfo = List<CountriesDataResponse>.from(
-    //     json.decode(response).map((x) => CountriesDataResponse.fromJson(x)));
-    //
-    // log('Country List>>>>>>>' + _countriesInfo.length.toString());
-    //
-    // notifyListeners();
+    final String response =
+        await rootBundle.loadString('json/nop_country.json');
+    // final data = await json.decode(response);
 
-// ...
+    _countriesInfo = List<CountriesDataResponse>.from(
+        json.decode(response).map((x) => CountriesDataResponse.fromJson(x)));
+
+    log('Country List>>>>>>>' + _countriesInfo.length.toString());
+    //
+    notifyListeners();
   }
 
   void getStoreID() async {
@@ -1495,16 +1477,39 @@ class NewApisProvider extends ChangeNotifier {
   }
 
   /*Booking Status*/
-Future<void> getBookingStatus() async {
-  _isBooking = false;
+  Future<void> getBookingStatus() async {
+    _isBooking = false;
 
-  _isBooking = await ApiCalls.getBookingStatus();
+    _isBooking = await ApiCalls.getBookingStatus();
 
-print('isBooking done>>>>>>>'+_isBooking.toString());
+    print('isBooking done>>>>>>>' + _isBooking.toString());
+
+    notifyListeners();
+  }
+
+ void returnInitialPrefix() async {
+    String storeId =
+        await secureStorage.read(key: kselectedStoreIdKey) ?? '1';
+    print(storeId.runtimeType);
+
+    switch (storeId) {
+      case kuStoreId:
+        _initialPrefix =  'AE';
+        break;
+      case kbStoreId:
+        _initialPrefix =  'BH';
+        break;
+      case kkStoreId:
+        _initialPrefix =  'KW';
+        break;
+      case kqStoreId:
+        _initialPrefix =  'QA';
+        break;
+   
 
 
-notifyListeners();
-}
-
+    }
+    notifyListeners();
+  }
 
 }

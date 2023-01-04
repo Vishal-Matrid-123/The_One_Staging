@@ -71,7 +71,8 @@ Future<void> setFireStoreData(
           DateTime.now().difference(time.toDate()).inHours.toString());
 
       if (_title.toLowerCase().contains(_notificationTitle.toLowerCase()) &&
-          DateTime.now().difference(time.toDate()).inHours < 24) {
+          DateTime.now().difference(time.toDate()).inHours < 24&&
+          _desc.toLowerCase().contains(_notificationDesc.toLowerCase())) {
         isAlreadyExisted = true;
 
         print('Existed');
@@ -151,12 +152,8 @@ Future<void> main() async {
 
       FirebaseMessaging _message = FirebaseMessaging.instance;
       var token = await _message.getToken(vapidKey: kFCMVApiKey);
-      Fluttertoast.showToast(
-        msg: 'FCM Token>>' + token!,
-        toastLength: Toast.LENGTH_LONG,
-      );
 
-      print('FCM Token>>' + token);
+      print('FCM Token>>' + token!);
 
       ConstantsVar.prefs = await SharedPreferences.getInstance();
       ConstantsVar.prefs.setBool('isFirstTime', true);

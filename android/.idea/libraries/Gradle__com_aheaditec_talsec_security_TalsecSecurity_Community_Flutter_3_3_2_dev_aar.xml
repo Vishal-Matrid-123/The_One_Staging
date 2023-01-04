@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.aheaditec.talsec.security:TalsecSecurity-Community-Flutter:3.3.2-dev@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/fd9b0ae185739d4c587791774188e1de/transformed/jetified-TalsecSecurity-Community-Flutter-3.3.2-dev/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/fd9b0ae185739d4c587791774188e1de/transformed/jetified-TalsecSecurity-Community-Flutter-3.3.2-dev/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/fd9b0ae185739d4c587791774188e1de/transformed/jetified-TalsecSecurity-Community-Flutter-3.3.2-dev/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

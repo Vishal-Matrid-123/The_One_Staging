@@ -456,7 +456,7 @@ class _ShippingAddressState extends State<ShippingAddress> {
                                                                               PaymentPage(
                                                                         baseUrl:
                                                                             baseUrl.replaceAll('/apisSecondVer', '') +
-                                                                                'Appcustomer/CreateCustomerOrderCheckout?',
+                                                                                'AppcustomerSecondVer/CreateCustomerOrderCheckout?',
                                                                         storeId:
                                                                             storeId,
                                                                         customerId:
@@ -667,7 +667,7 @@ class _ShippingAddressState extends State<ShippingAddress> {
                                       width: MediaQuery.of(context).size.width,
                                       child: Center(
                                         child: AutoSizeText(
-                                          'Or Add a New Shipping Address',
+                                          'Or Add & Select New Shipping Address',
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: TextStyle(
@@ -722,7 +722,7 @@ class _ShippingAddressState extends State<ShippingAddress> {
                                                 BorderRadius.circular(6.0)),
                                         child: Center(
                                           child: AutoSizeText(
-                                            'Add New Address',
+                                            'Add & Select Address',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 4.w),

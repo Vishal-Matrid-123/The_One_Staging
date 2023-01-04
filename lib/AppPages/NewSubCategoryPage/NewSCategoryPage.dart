@@ -180,6 +180,7 @@ class _SubCatNewState extends State<SubCatNew> {
                                           isScreen: true,
                                           keyword: value,
                                           enableCategory: false,
+                                          cartIconVisible: true,
                                         ),
                                       ),
                                     )
@@ -226,6 +227,7 @@ class _SubCatNewState extends State<SubCatNew> {
                                               isScreen: true,
                                               keyword: value,
                                               enableCategory: false,
+                                              cartIconVisible: true,
                                             ),
                                           ),
                                         )
@@ -295,6 +297,7 @@ class _SubCatNewState extends State<SubCatNew> {
                                                     keyword: option,
                                                     isScreen: true,
                                                     enableCategory: false,
+                                                        cartIconVisible: true,
                                                   ),
                                                 ),
                                               ).then((value) => setState(() {
@@ -514,6 +517,7 @@ class _SubCatWidgetState extends State<SubCatWidget> {
                 openElevation: 0,
                 middleColor: Colors.white,
                 transitionType: _transitionType,
+                openColor: Colors.transparent,
                 openBuilder: (BuildContext context,
                     void Function({Object? returnValue}) action) {
                   if (widget.myList[index].isSubcategory == true) {

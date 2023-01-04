@@ -118,10 +118,12 @@ class _NotificationClassState extends State<NotificationClass> {
                     ),
                   ),
                   subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
                         child: AutoSizeText(
                           doc['Desc'],
+                          textAlign: TextAlign.left,
                           style: const TextStyle(
                             color: Colors.black,
                           ),

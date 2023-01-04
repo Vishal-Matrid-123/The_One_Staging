@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:provider/provider.dart';
+import 'package:untitled2/main.dart';
 import 'package:untitled2/new_apis_func/data_layer/new_model/store_model/store_model.dart';
 
 import '../../../../AppPages/HomeScreen/HomeScreen.dart';
@@ -15,7 +15,10 @@ import '../../../data_layer/constant_data/constant_data.dart';
 import '../../provider_class/provider_contracter.dart';
 
 class StoreSelectionScreen extends StatefulWidget {
-  const StoreSelectionScreen({Key? key}) : super(key: key);
+  const StoreSelectionScreen({Key? key, required String screenName})
+      : _screenName = screenName,
+        super(key: key);
+  final String _screenName;
 
   @override
   State<StoreSelectionScreen> createState() => _StoreSelectionScreenState();
@@ -26,7 +29,9 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen> {
 
   @override
   void initState() {
-    _checkingStoreSelection();
+    widget._screenName.toLowerCase().contains('splash')
+        ? _checkingStoreSelection()
+        : null;
 
     super.initState();
   }
@@ -82,17 +87,17 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen> {
                                     name: 'THE One UAE',
                                     url: kuBaseUrl,
                                   ),
-                                StoreData(
+                                  StoreData(
                                     id: (int.parse(kbStoreId)),
                                     name: 'THE One Bahrain',
                                     url: kbBaseUrl,
                                   ),
-                                StoreData(
+                                  StoreData(
                                     id: (int.parse(kkStoreId)),
                                     name: 'THE One Kuwait',
                                     url: kkBaseUrl,
                                   ),
-                                StoreData(
+                                  StoreData(
                                     id: (int.parse(kqStoreId)),
                                     name: 'THE One Qatar',
                                     url: kqBaseUrl,
@@ -104,17 +109,32 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen> {
                                               .contains('qatar')
                                           ? const SizedBox()
                                           : GestureDetector(
-                                              onTap: () {
-                                                ApiCalls.saveSelectedStore(
-                                                    value: e.id.toString());
-                                                Navigator.pushAndRemoveUntil(
-                                                    context,
-                                                    CupertinoPageRoute(
-                                                      builder: (context) =>
-                                                          MyApp(),
-                                                    ),
-                                                    (route) => false);
-                                              },
+                                              onTap: widget._screenName
+                                                      .toLowerCase()
+                                                      .contains('splash')
+                                                  ? () {
+                                                      ApiCalls
+                                                          .saveSelectedStore(
+                                                              value: e.id
+                                                                  .toString());
+                                                      Navigator
+                                                          .pushAndRemoveUntil(
+                                                              context,
+                                                              CupertinoPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        MyApp(),
+                                                              ),
+                                                              (route) => false);
+                                                    }
+                                                  : () {
+                                                ApiCalls
+                                                    .saveSelectedStore(
+                                                    value: e.id
+                                                        .toString());
+                                                      RestartWidget.restartApp(
+                                                          context);
+                                                    },
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(10.0),
@@ -234,7 +254,7 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen> {
   }
 
   void _checkingStoreSelection() async {
-    final _provider= Provider.of<NewApisProvider>(context,listen: false);
+    final _provider = Provider.of<NewApisProvider>(context, listen: false);
     _id = await secureStorage.read(key: kselectedStoreIdKey) ?? '';
     log('store id' + _id);
     setState(() {});
