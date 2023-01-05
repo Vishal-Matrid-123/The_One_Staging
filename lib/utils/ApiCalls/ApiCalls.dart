@@ -264,7 +264,14 @@ class ApiCalls {
               Navigator.pop(context, true);
               break;
             default:
-              RestartWidget.restartApp(context);
+
+              if(screenName.toLowerCase().contains('topic screen')){
+                Navigator.pop(context,true);
+              }
+
+              else{
+                RestartWidget.restartApp(context);
+              }
               break;
           }
 

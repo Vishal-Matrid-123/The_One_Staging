@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io' show Cookie, Platform;
 
@@ -49,6 +48,7 @@ class _TopicPageState extends State<TopicPage> {
   bool isLoading = true;
   bool _willGo = true;
   var isUserLoggedIn;
+  String _userName = '', _email = '', _phoneNumber = '';
 
   Future<WebViewController>? _webViewControllerFuture;
 
@@ -57,6 +57,9 @@ class _TopicPageState extends State<TopicPage> {
 
   void getUserLoginDetails() async {
     isUserLoggedIn = await ConstantsVar.prefs.getString('userId') ?? null;
+    _phoneNumber = (await ConstantsVar.prefs.getString('phone') ?? '').replaceAll(' ', '');
+    _email = await ConstantsVar.prefs.getString('email') ?? '';
+    _userName = await ConstantsVar.prefs.getString('userName') ?? '';
     cookieValue =
         await ConstantsVar.prefs.getString('guestGUID') ?? 'No ID Pass';
     setState(() {});
@@ -74,7 +77,7 @@ class _TopicPageState extends State<TopicPage> {
     _webViewControllerFuture = _controller.future;
     // _controller.
     final provider = Provider.of<NewApisProvider>(context, listen: false);
-    isUserLoggedIn!=null?provider.getBookingStatus():null;
+    isUserLoggedIn != null ? provider.getBookingStatus() : null;
 
     // _webViewControllerFuture.
     if (Platform.isAndroid) {
@@ -246,8 +249,8 @@ class _TopicPageState extends State<TopicPage> {
                                             isLoading = true;
                                             progressCount = progress;
                                           });
-                                          if(progress ==100){
-                                            setState((){
+                                          if (progress == 100) {
+                                            setState(() {
                                               isLoading = false;
                                             });
                                           }
@@ -256,7 +259,7 @@ class _TopicPageState extends State<TopicPage> {
                                           _toasterJavascriptChannel(context),
                                         },
                                         navigationDelegate:
-                                            (NavigationRequest request) {
+                                            (NavigationRequest request) async {
                                           setState(() {
                                             isLoading = false;
                                           });
@@ -327,19 +330,24 @@ class _TopicPageState extends State<TopicPage> {
                                           if (request.url
                                               .toLowerCase()
                                               .contains("\.com\/login")) {
-                                            Navigator.pushReplacement(
+                                            // print();
+                                            String url = await controller!
+                                                    .currentUrl() ??
+                                                '';
+                                            await Navigator.push(
                                               context,
                                               CupertinoPageRoute(
                                                 builder: (context) =>
-                                                    const LoginScreen(
-                                                        screenKey:
-                                                            'Topic Screen'),
+                                                    LoginScreen(
+                                                  screenKey:
+                                                      'Topic Screen ' ,
+                                                ),
                                               ),
-                                            ).then((value) => setState(() {
-                                                  controller!.reload();
-
+                                            ).then((value) =>value == true? setState(() {
+                                                  controller.reload();
+                                                  getUserLoginDetails();
                                                   isLoading = false;
-                                                }));
+                                                }):null);
                                             return NavigationDecision.prevent;
                                           }
                                           if (request.url
@@ -397,6 +405,20 @@ class _TopicPageState extends State<TopicPage> {
                                                   '''\$('.popup').html('<h1><b style="color:#ffff">You already having a booking with us.</b></h1>')''';
                                               String javaScript3 =
                                                   'document.getElementById("ui-datepicker-div").style.top=\'1410px\';';
+                                              String javaScript4 = '''
+                                                  document.getElementById("FullName").value="$_userName"
+                                                  ''';
+                                              String javaScript5 =
+                                                  'document.getElementsByClassName("timebutton text-box single-line")[1].value=\'${_phoneNumber.replaceAll("", '')}\'';
+                                              String javaScript6 =
+                                                  'document.getElementsByClassName("timebutton text-box single-line")[2].value=\"$_email\"';
+                                              String javaScript7 = '''
+                                                  document.getElementById("fname").value="$_userName"
+                                                  ''';
+                                              String javaScript8 =
+                                                  'document.getElementsByClassName("add text-box single-line")[1].value=\'${_phoneNumber.replaceAll(' ', '')}\'';
+                                              String javaScript9 =
+                                                  'document.getElementsByClassName("add text-box single-line")[2].value=\"$_email\"';
 
                                               //
                                               if (isUserLoggedIn != null &&
@@ -435,6 +457,12 @@ class _TopicPageState extends State<TopicPage> {
                                                     'document.getElementById("Date").readOnly=true;');
                                                 value
                                                     .runJavascript(javaScript3);
+                                                value
+                                                    .runJavascript(javaScript4);
+                                                value
+                                                    .runJavascript(javaScript5);
+                                                value
+                                                    .runJavascript(javaScript6);
                                               } else if (isUserLoggedIn !=
                                                       null &&
                                                   urlPart
@@ -442,6 +470,16 @@ class _TopicPageState extends State<TopicPage> {
                                                       .contains('theoneway')) {
                                                 value.runJavascript(
                                                     'document.getElementsByClassName("popup")[0].remove();');
+                                                value
+                                                    .runJavascript(javaScript7);
+                                                value
+                                                    .runJavascript(javaScript8);
+                                                value
+                                                    .runJavascript(javaScript9);
+                                                // value
+                                                //     .evaluateJavascript(javaScript5);
+                                                // value
+                                                //     .evaluateJavascript(javaScript6);
                                               }
                                             });
                                           });
@@ -590,8 +628,8 @@ class _TopicPageState extends State<TopicPage> {
                                               }
                                             });
                                           }
-                                          if(progress ==100){
-                                            setState((){
+                                          if (progress == 100) {
+                                            setState(() {
                                               isLoading = false;
                                             });
                                           }
@@ -600,7 +638,7 @@ class _TopicPageState extends State<TopicPage> {
                                           _toasterJavascriptChannel(context),
                                         },
                                         navigationDelegate:
-                                            (NavigationRequest request) {
+                                            (NavigationRequest request) async {
                                           setState(() {
                                             isLoading = false;
                                           });
@@ -608,9 +646,9 @@ class _TopicPageState extends State<TopicPage> {
                                               'customercare@theone.com')) {
                                             ApiCalls.launchUrl(request.url)
                                                 .then((value) => setState(() {
-                                                      isLoading = false;
-                                                      controller!.reload();
-                                                    }));
+                                              isLoading = false;
+                                              controller!.reload();
+                                            }));
                                             return NavigationDecision.prevent;
                                           }
                                           if (request.url.startsWith(
@@ -631,32 +669,32 @@ class _TopicPageState extends State<TopicPage> {
                                             Navigator.push(context,
                                                 CupertinoPageRoute(
                                                     builder: (context) {
-                                              return NewProductDetails(
-                                                  productId:
-                                                      url.split('id=')[0],
-                                                  screenName: 'Topic Screen');
-                                            })).then((value) => setState(() {
-                                                  isLoading = false;
-                                                  controller!.reload();
-                                                }));
+                                                      return NewProductDetails(
+                                                          productId:
+                                                          url.split('id=')[0],
+                                                          screenName: 'Topic Screen');
+                                                    })).then((value) => setState(() {
+                                              isLoading = false;
+                                              controller!.reload();
+                                            }));
                                             return NavigationDecision.prevent;
                                           }
 
                                           if (request.url
                                               .contains('GetCategoryPage')) {
                                             Navigator.pushAndRemoveUntil(
-                                                    context,
-                                                    CupertinoPageRoute(
-                                                      builder: (context) =>
-                                                          MyHomePage(
-                                                              pageIndex: 1),
-                                                    ),
+                                                context,
+                                                CupertinoPageRoute(
+                                                  builder: (context) =>
+                                                      MyHomePage(
+                                                          pageIndex: 1),
+                                                ),
                                                     (route) => false)
                                                 .then((value) => setState(() {
-                                                      controller!.reload();
+                                              controller!.reload();
 
-                                                      isLoading = false;
-                                                    }));
+                                              isLoading = false;
+                                            }));
                                             return NavigationDecision.prevent;
                                           }
 
@@ -671,19 +709,24 @@ class _TopicPageState extends State<TopicPage> {
                                           if (request.url
                                               .toLowerCase()
                                               .contains("\.com\/login")) {
-                                            Navigator.pushReplacement(
+                                            // print();
+                                            String url = await controller!
+                                                .currentUrl() ??
+                                                '';
+                                            await Navigator.push(
                                               context,
                                               CupertinoPageRoute(
                                                 builder: (context) =>
-                                                    const LoginScreen(
-                                                        screenKey:
-                                                            'Topic Screen'),
+                                                    LoginScreen(
+                                                      screenKey:
+                                                      'Topic Screen ' ,
+                                                    ),
                                               ),
-                                            ).then((value) => setState(() {
-                                                  controller!.reload();
-
-                                                  isLoading = false;
-                                                }));
+                                            ).then((value) =>value == true? setState(() {
+                                              controller.reload();
+                                              getUserLoginDetails();
+                                              isLoading = false;
+                                            }):null);
                                             return NavigationDecision.prevent;
                                           }
                                           if (request.url
@@ -693,13 +736,13 @@ class _TopicPageState extends State<TopicPage> {
                                               context,
                                               CupertinoPageRoute(
                                                 builder: (context) =>
-                                                    const RegstrationPage(),
+                                                const RegstrationPage(),
                                               ),
                                             ).then((value) => setState(() {
-                                                  controller!.reload();
+                                              controller!.reload();
 
-                                                  isLoading = false;
-                                                }));
+                                              isLoading = false;
+                                            }));
                                             return NavigationDecision.prevent;
                                           }
 
@@ -724,6 +767,7 @@ class _TopicPageState extends State<TopicPage> {
                                           print('Page started loading: $url');
                                         },
                                         onPageFinished: (String url) async {
+                                          print('Page finished loading: $url');
                                           // cookieManager.clearCookies();
                                           // await cookieManager.setCookies([
                                           //   Cookie(cookieName, cookieValue)
@@ -732,7 +776,6 @@ class _TopicPageState extends State<TopicPage> {
                                           //         .add(Duration(days: 365))
                                           //     ..httpOnly = true
                                           // ]);
-                                          print('Page finished loading: $url');
                                           setState(() {
                                             context.loaderOverlay.hide();
                                             _willGo = true;
@@ -743,6 +786,28 @@ class _TopicPageState extends State<TopicPage> {
                                                   await value.currentUrl() ??
                                                       '';
 
+                                              String javaScriptString1 =
+                                                  '''\$('.express.app .popup').attr('style', 'z-index: 99999;position: absolute;opacity: 0.8;display:block;color: black;background: black;padding: 17%;font-weight: 700;color: white;height:-webkit-fill-available;float: left;left:0;right:0;text-align:center;');''';
+                                              String javaScriptString2 =
+                                                  '''\$('.popup').html('<h1><b style="color:#ffff">You already having a booking with us.</b></h1>')''';
+                                              String javaScript3 =
+                                                  'document.getElementById("ui-datepicker-div").style.top=\'1410px\';';
+                                              String javaScript4 = '''
+                                                  document.getElementById("FullName").value="$_userName"
+                                                  ''';
+                                              String javaScript5 =
+                                                  'document.getElementsByClassName("timebutton text-box single-line")[1].value=\'${_phoneNumber.replaceAll(' ', '')}\'';
+                                              String javaScript6 =
+                                                  'document.getElementsByClassName("timebutton text-box single-line")[2].value=\"$_email\"';
+                                              String javaScript7 = '''
+                                                  document.getElementById("fname").value="$_userName"
+                                                  ''';
+                                              String javaScript8 =
+                                                  'document.getElementsByClassName("add text-box single-line")[1].value=\'${_phoneNumber.replaceAll(' ', '')}\'';
+                                              String javaScript9 =
+                                                  'document.getElementsByClassName("add text-box single-line")[2].value=\"$_email\"';
+
+                                              //
                                               if (isUserLoggedIn != null &&
                                                   urlPart
                                                       .toLowerCase()
@@ -750,23 +815,21 @@ class _TopicPageState extends State<TopicPage> {
                                                           'theoneexpress') &&
                                                   val.isBookingAvailable ==
                                                       true) {
-                                                // value
-                                                //     .runJavascriptReturningResult(
-                                                //     'document.getElementsByClassName("popup")[0].remove();')
-                                                //     .then((value) => print(
-                                                //     value.toString()));
-
-                                                String javaScriptString1 =
-                                                    '''\$('.express.app .popup').attr('style', 'z-index: 99999;position: absolute;opacity: 0.8;display:block;color: black;background: black;padding: 17%;font-weight: 700;color: white;height:-webkit-fill-available;float: left;left:0;right:0;text-align:center;');''';
-                                                String javaScriptString2 =
-                                                    '''\$('.popup').html('<h1><b style="color:#ffff">You already having a booking with us.</b></h1>')''';
-
+                                                value
+                                                    .runJavascriptReturningResult(
+                                                        'document.getElementsByClassName("popup")[0].remove();')
+                                                    .then((value) => print(
+                                                        value.toString()));
                                                 await _webController
                                                     .runJavascript(
                                                         javaScriptString1);
                                                 await _webController
                                                     .runJavascript(
                                                         javaScriptString2);
+                                                value.runJavascript(
+                                                    'document.getElementById("Date").readOnly=true;');
+                                                value
+                                                    .runJavascript(javaScript3);
                                               } else if (isUserLoggedIn !=
                                                       null &&
                                                   urlPart
@@ -778,26 +841,35 @@ class _TopicPageState extends State<TopicPage> {
                                                 value.runJavascript(
                                                     'document.getElementsByClassName("popup")[0].remove();');
                                                 value.runJavascript(
-                                                    'document.getElementById("Date").type="date"');
+                                                    'document.getElementById("Date").readOnly=true;');
+                                                value
+                                                    .runJavascript(javaScript3);
+                                                value
+                                                    .runJavascript(javaScript4);
+                                                value
+                                                    .runJavascript(javaScript5);
+                                                value
+                                                    .runJavascript(javaScript6);
                                               } else if (isUserLoggedIn !=
                                                       null &&
                                                   urlPart
                                                       .toLowerCase()
                                                       .contains('theoneway')) {
+                                                value.runJavascript(
+                                                    'document.getElementsByClassName("popup")[0].remove();');
                                                 value
-                                                    .runJavascriptReturningResult(
-                                                        'document.getElementsByClassName("popup")[0].remove();')
-                                                    .then((value) => print(
-                                                        value.toString()));
+                                                    .runJavascript(javaScript7);
+                                                value
+                                                    .runJavascript(javaScript8);
+                                                value
+                                                    .runJavascript(javaScript9);
+                                                // value
+                                                //     .evaluateJavascript(javaScript5);
+                                                // value
+                                                //     .evaluateJavascript(javaScript6);
                                               }
                                             });
                                           });
-
-                                          var getCookies = await cookieManager
-                                              .getCookies(url);
-
-                                          print('Cookies>>>>>>>' +
-                                              jsonEncode(getCookies.join(',')));
                                         },
                                         gestureNavigationEnabled: true,
                                         zoomEnabled: true,
