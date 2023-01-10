@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:untitled2/AppPages/MyOrders/MyOrders.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NavigationControls extends StatelessWidget {
-  const NavigationControls(this._webViewControllerFuture);
+  const NavigationControls(this._webViewControllerFuture,this.screenName);
 
   final Future<WebViewController> _webViewControllerFuture;
+  final String screenName;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,20 @@ class NavigationControls extends StatelessWidget {
                           if (await controller!.canGoBack()) {
                             controller.goBack();
                           } else {
-                            Navigator.pop(context);
+                            if (screenName
+                                .toLowerCase()
+                                .contains('shipping')) {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) =>
+                                      const MyOrders(
+                                        isFromWeb: true,
+                                      )),
+                                      (route) => false);
+                            } else {
+                              Navigator.pop(context);
+                            }
                             // Scaffold.of(context).showSnackBar(
                             //   const SnackBar(
                             //       content: Text("No back history item")),

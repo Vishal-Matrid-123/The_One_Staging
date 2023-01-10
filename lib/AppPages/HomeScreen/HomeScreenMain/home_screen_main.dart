@@ -1125,7 +1125,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                                       return TopicPage(
                                                                         paymentUrl:
                                                                             e.url,
-                                                                        customerGUID:
+                                                                        screenName:
                                                                             ConstantsVar.prefs.getString('guestGUID') ??
                                                                                 '',
                                                                       );

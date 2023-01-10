@@ -21,9 +21,12 @@ import 'package:untitled2/Constants/ConstantVariables.dart';
 import 'package:untitled2/new_apis_func/data_layer/constant_data/constant_data.dart';
 import 'package:untitled2/new_apis_func/data_layer/new_model/countries_info_model/countries_info_model.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/provider_class/provider_contracter.dart';
+import 'package:untitled2/new_apis_func/presentation_layer/screens/store_selection_screen/store_selection_screen.dart';
 import 'package:untitled2/utils/ApiCalls/ApiCalls.dart';
 import 'package:untitled2/utils/utils/colors.dart';
 import 'package:untitled2/utils/utils/general_functions.dart';
+
+import '../WebxxViewxx/TopicPagexx.dart';
 
 class ShippingDetails extends StatefulWidget {
   const ShippingDetails({
@@ -173,7 +176,9 @@ class _ShippingDetailsState extends State<ShippingDetails>
               child: Container(
                 width: 70.w,
                 alignment: Alignment.centerLeft,
-                color:_initialVal!=null&& _initialVal! ==item?ConstantsVar.appColor:Colors.white,
+                color: _initialVal != null && _initialVal! == item
+                    ? ConstantsVar.appColor
+                    : Colors.white,
                 padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 6.0),
                 child: Row(children: [
                   SizedBox(
@@ -400,7 +405,8 @@ class _ShippingDetailsState extends State<ShippingDetails>
 
                                         setState(() {
                                           for (Country val in countries) {
-                                            if (val.code.toLowerCase() == country.code.toLowerCase()) {
+                                            if (val.code.toLowerCase() ==
+                                                country.code.toLowerCase()) {
                                               _initialVal = val;
                                               print(country.code);
                                               break;
@@ -553,8 +559,10 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                   context: context,
                                   builder: (context) {
                                     return Padding(
-                                      padding:EdgeInsets.only(
-                                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom),
                                       child: StatefulBuilder(
                                         builder: (BuildContext ctx,
                                                 StateSetter setStatee) =>
@@ -568,26 +576,26 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                                   padding:
                                                       EdgeInsets.only(top: 3.w),
                                                   child: Container(
-                                                    decoration: new BoxDecoration(
+                                                    decoration:
+                                                        new BoxDecoration(
                                                       color: Colors.white,
                                                       borderRadius:
                                                           new BorderRadius.only(
-                                                        topLeft:
-                                                            const Radius.circular(
-                                                                30.0),
-                                                        topRight:
-                                                            const Radius.circular(
-                                                                30.0),
-                                                        bottomLeft:
-                                                            const Radius.circular(
-                                                                30.0),
+                                                        topLeft: const Radius
+                                                            .circular(30.0),
+                                                        topRight: const Radius
+                                                            .circular(30.0),
+                                                        bottomLeft: const Radius
+                                                            .circular(30.0),
                                                         bottomRight:
-                                                            const Radius.circular(
+                                                            const Radius
+                                                                .circular(
                                                           30.0,
                                                         ),
                                                       ),
                                                     ),
-                                                    padding: EdgeInsets.all(3.w),
+                                                    padding:
+                                                        EdgeInsets.all(3.w),
                                                     child: Column(
                                                       children: [
                                                         SizedBox(
@@ -629,7 +637,8 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                                         Expanded(
                                                           child: ListView(
                                                             children: List.generate(
-                                                                _searchList.length ==
+                                                                _searchList
+                                                                            .length ==
                                                                         0
                                                                     ? countries
                                                                         .length
@@ -660,7 +669,8 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                                           color: Colors.white,
                                                         ),
                                                         onTap: () {
-                                                          Navigator.pop(context);
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                       ),
                                                     ),
@@ -913,21 +923,89 @@ class _ShippingDetailsState extends State<ShippingDetails>
                   const SizedBox(
                     height: 15,
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.maybePop(context);
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        Colors.black,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          String baseUrl = await ApiCalls.getSelectedStore();
+                          String _storeId = await secureStorage.read(
+                                  key: kselectedStoreIdKey) ??
+                              "1";
+                          message.contains('switch')
+                              ? Navigator.maybePop(context)
+                              : Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => TopicPage(
+                                        paymentUrl: baseUrl +
+                                            'CreateCustomerOrderForGlobalApp?apiToken=${ConstantsVar.prefs.getString(kapiTokenKey)}&customerid=${ConstantsVar.prefs.getString(kcustomerIdKey)}&$kStoreIdVar=${_storeId}',
+                                        screenName: 'shipping'),
+                                  ),
+                                );
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.black,
+                          ),
+                        ),
+                        child: AutoSizeText(
+                          message.contains('switch') ? 'Cancel' : 'Okay',
+                          style: TextStyle(
+                            fontSize: 4.w,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Visibility(
+                        visible: message.contains('switch') ? true : false,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.maybePop(context);
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) =>
+                                    const StoreSelectionScreen(
+                                  screenName: 'Shipping Screen',
+                                ),
+                              ),
+                            );
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.black,
+                            ),
+                          ),
+                          child: AutoSizeText(
+                            'Switch Store',
+                            style: TextStyle(
+                              fontSize: 4.w,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Visibility(
+                    visible: message.contains('switch') ? true : false,
                     child: AutoSizeText(
-                      'Okay',
+                      'It will empty your current cart. Please recreate the order on switching the store.',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 4.w,
+                        fontSize: 2.w,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                   ),

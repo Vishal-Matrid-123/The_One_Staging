@@ -1163,7 +1163,7 @@ class _RegstrationPageState extends State<RegstrationPage>
                   CupertinoPageRoute(
                     builder: (context) => TopicPage(
                       paymentUrl: 'https://www.theone.com/terms-conditions-3',
-                      customerGUID: '',
+                      screenName: '',
                     ),
                   ),
                 );

@@ -1017,7 +1017,7 @@ class _SearchPageState extends State<SearchPage>
                                       builder: (context) => TopicPage(
                                         paymentUrl:
                                             'https://www.theone.com/terms-conditions-3',
-                                          customerGUID:  ConstantsVar.prefs.getString('guestGUID')??''
+                                          screenName:  ConstantsVar.prefs.getString('guestGUID')??''
                                       ),
                                     ),
                                   );

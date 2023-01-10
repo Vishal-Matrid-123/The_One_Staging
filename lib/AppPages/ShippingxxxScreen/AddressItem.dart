@@ -10,6 +10,7 @@ import 'package:ndialog/ndialog.dart';
 import 'package:progress_loading_button/progress_loading_button.dart';
 import 'package:untitled2/AppPages/ShippingxxMethodxx/ShippingxxMethodxx.dart';
 import 'package:untitled2/AppPages/ShippingxxxScreen/BillingxxScreen/SelectBillingAddressModel/SelectBillAdd.dart';
+import 'package:untitled2/AppPages/WebxxViewxx/TopicPagexx.dart';
 import 'package:untitled2/Constants/ConstantVariables.dart';
 import 'package:untitled2/Widgets/CustomButton.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/screens/store_selection_screen/store_selection_screen.dart';
@@ -342,8 +343,23 @@ class _AddressItemState extends State<AddressItem> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.maybePop(context);
+                        onPressed: () async {
+                          String baseUrl = await ApiCalls.getSelectedStore();
+                          String _storeId = await secureStorage.read(
+                                  key: kselectedStoreIdKey) ??
+                              "1";
+                          message.contains('switch')
+                              ? Navigator.maybePop(context)
+                              : Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => TopicPage(
+                                      paymentUrl: baseUrl +
+                                          'CreateCustomerOrderForGlobalApp?apiToken=${ConstantsVar.prefs.getString(kapiTokenKey)}&customerid=${ConstantsVar.prefs.getString(kcustomerIdKey)}&$kStoreIdVar=${_storeId}',
+                                      screenName: 'shipping',
+                                    ),
+                                  ),
+                                );
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
@@ -351,7 +367,7 @@ class _AddressItemState extends State<AddressItem> {
                           ),
                         ),
                         child: AutoSizeText(
-                          message.contains('switch')?  'Cancel':'Okay',
+                          message.contains('switch') ? 'Cancel' : 'Okay',
                           style: TextStyle(
                             fontSize: 4.w,
                             fontWeight: FontWeight.bold,
@@ -363,7 +379,7 @@ class _AddressItemState extends State<AddressItem> {
                         width: 15,
                       ),
                       Visibility(
-                        visible: message.contains('switch')?true:false,
+                        visible: message.contains('switch') ? true : false,
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.maybePop(context);
@@ -393,6 +409,21 @@ class _AddressItemState extends State<AddressItem> {
                       ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Visibility(
+                    visible: message.contains('switch') ? true : false,
+                    child: AutoSizeText(
+                      'It will empty your current cart. Please recreate the order on switching the store.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 2.w,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -413,10 +444,4 @@ class _AddressItemState extends State<AddressItem> {
       ),
     );
   }
-
-  _callCustomerCare() async {
-    await ApiCalls.launchUrl('tel://+91 9350911847 ');
-  }
-
-  _switchStore({required String msg}) {}
 }

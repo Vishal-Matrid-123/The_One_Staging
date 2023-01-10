@@ -500,7 +500,8 @@ class _NewProductDetailsState extends State<NewProductDetails>
                                                               isScreen: true,
                                                               enableCategory:
                                                                   false,
-                                                              cartIconVisible: true,
+                                                              cartIconVisible:
+                                                                  true,
                                                             ))).then((value) =>
                                                     _searchController.clear());
                                               },
@@ -794,7 +795,12 @@ class _NewProductDetailsState extends State<NewProductDetails>
                                     isGiftCard: _isGiftCard,
                                     attributeId: data,
                                     productPrice: value.productResponse
-                                        .productPrice.priceValue, categoryId: value.productResponse.parentCategoryId, minQuantity: value.productResponse.minimumQuantity.toString(),
+                                        .productPrice.priceValue,
+                                    categoryId:
+                                        value.productResponse.parentCategoryId,
+                                    minQuantity: value
+                                        .productResponse.minimumQuantity
+                                        .toString(),
                                   ),
                                 ),
                                 FittedBox(
@@ -1487,7 +1493,11 @@ class _NewProductDetailsState extends State<NewProductDetails>
                                               context,
                                               CupertinoPageRoute(
                                                 builder: (context) => TopicPage(
-                                                    customerGUID:  ConstantsVar.prefs.getString('guestGUID')??'',
+                                                    screenName: ConstantsVar
+                                                            .prefs
+                                                            .getString(
+                                                                'guestGUID') ??
+                                                        '',
                                                     paymentUrl:
                                                         'https://www.theone.com/terms-and-conditions-for-online-accessory-styling-service-app'),
                                               ),
@@ -1498,9 +1508,13 @@ class _NewProductDetailsState extends State<NewProductDetails>
                                               context,
                                               CupertinoPageRoute(
                                                 builder: (context) => TopicPage(
-                                                    paymentUrl:
-                                                        'https://www.theone.com/terms-and-conditions-for-online-furniture-styling-service-by-the-one-total-home-experience-llc-app',  customerGUID:  ConstantsVar.prefs.getString('guestGUID')??''),
-
+                                                  paymentUrl:
+                                                      'https://www.theone.com/terms-and-conditions-for-online-furniture-styling-service-by-the-one-total-home-experience-llc-app',
+                                                  screenName: ConstantsVar.prefs
+                                                          .getString(
+                                                              'guestGUID') ??
+                                                      '',
+                                                ),
                                               ),
                                             );
                                           } else {
@@ -1542,43 +1556,45 @@ class _NewProductDetailsState extends State<NewProductDetails>
                                 ),
                                 SizedBox(
                                   width: 100.w,
-                                  child:  AddCartBtn(
-                                      productId: id.toString(),
-                                      isTrue: false,
-                                      guestCustomerId: guestCustomerID,
-                                      checkIcon: stockAvailabilty
-                                              .toString()
-                                              .contains('Out of stock')
-                                          ? const Icon(HeartIcon.cross)
-                                          : const Icon(Icons.check),
-                                      text: stockAvailabilty
-                                              .toString()
-                                              .contains('Out of stock')
-                                          ? 'out of stock'.toUpperCase()
-                                          : 'add to cart'.toUpperCase(),
-                                      color: stockAvailabilty
-                                              .toString()
-                                              .contains('Out of stock')
-                                          ? Colors.grey.shade700
-                                          : ConstantsVar.appColor,
-                                      isGiftCard: _isGiftCard,
-                                      isProductAttributeAvail:
-                                          _isProductAttributeAvailable,
-                                      recipEmail: recEmailController.text,
-                                      name: _yourNameController.text,
-                                      message: _messageController.text,
-                                      attributeId: data,
-                                      recipName: _recNameController.text,
-                                      email: _yourEmailController.text,
-                                      productName: value.productResponse.name,
-                                      minQuantity: value.productResponse.minimumQuantity.toString(),
-                                      productPrice: value.productResponse
-                                          .productPrice.priceValue,
-                                      storeId: '', categoryId: value.productResponse.parentCategoryId,
-
-                                    ),
+                                  child: AddCartBtn(
+                                    productId: id.toString(),
+                                    isTrue: false,
+                                    guestCustomerId: guestCustomerID,
+                                    checkIcon: stockAvailabilty
+                                            .toString()
+                                            .contains('Out of stock')
+                                        ? const Icon(HeartIcon.cross)
+                                        : const Icon(Icons.check),
+                                    text: stockAvailabilty
+                                            .toString()
+                                            .contains('Out of stock')
+                                        ? 'out of stock'.toUpperCase()
+                                        : 'add to cart'.toUpperCase(),
+                                    color: stockAvailabilty
+                                            .toString()
+                                            .contains('Out of stock')
+                                        ? Colors.grey.shade700
+                                        : ConstantsVar.appColor,
+                                    isGiftCard: _isGiftCard,
+                                    isProductAttributeAvail:
+                                        _isProductAttributeAvailable,
+                                    recipEmail: recEmailController.text,
+                                    name: _yourNameController.text,
+                                    message: _messageController.text,
+                                    attributeId: data,
+                                    recipName: _recNameController.text,
+                                    email: _yourEmailController.text,
+                                    productName: value.productResponse.name,
+                                    minQuantity: value
+                                        .productResponse.minimumQuantity
+                                        .toString(),
+                                    productPrice: value.productResponse
+                                        .productPrice.priceValue,
+                                    storeId: '',
+                                    categoryId:
+                                        value.productResponse.parentCategoryId,
                                   ),
-
+                                ),
                               ],
                             ),
                           );

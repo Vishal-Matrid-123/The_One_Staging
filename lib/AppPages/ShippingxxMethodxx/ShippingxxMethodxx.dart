@@ -30,7 +30,7 @@ class ShippingMethod extends StatefulWidget {
 class _ShippingMethodState extends State<ShippingMethod> {
   bool isSelected = false;
   var selectedVal = '';
-
+ int activeIndex = 0;
   var _apiProvider = NewApisProvider();
 
   @override
@@ -131,17 +131,20 @@ class _ShippingMethodState extends State<ShippingMethod> {
                                   return Card(
                                     child: CheckboxListTile(
                                       activeColor: ConstantsVar.appColor,
-                                      value: isSelected,
+                                      value: activeIndex == index && isSelected == true?true:false,
                                       onChanged: (bool? _value) {
                                         setState(
                                           () {
-                                            if (isSelected) {
+                                            activeIndex = index;
+                                            if (activeIndex != index && isSelected) {
                                               selectedVal = '';
                                               isSelected = _value!;
                                               log(selectedVal);
 
                                               log("$isSelected");
-                                            } else {
+                                            }
+                                            else {
+                                              if(activeIndex == index)
                                               isSelected = _value!;
                                               selectedVal = value
                                                       .shippingMethod[index]
@@ -152,6 +155,7 @@ class _ShippingMethodState extends State<ShippingMethod> {
                                               log('$isSelected');
                                               log(selectedVal);
                                             }
+                                            print(selectedVal);
                                           },
                                         );
                                       },

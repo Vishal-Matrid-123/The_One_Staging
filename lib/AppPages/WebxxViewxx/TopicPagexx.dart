@@ -23,12 +23,13 @@ import 'package:untitled2/utils/ApiCalls/ApiCalls.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../MyOrders/MyOrders.dart';
 import 'WebController.dart';
 
 class TopicPage extends StatefulWidget {
-  TopicPage({Key? key, required this.paymentUrl, required this.customerGUID})
+  TopicPage({Key? key, required this.paymentUrl, required this.screenName})
       : super(key: key);
-  final String paymentUrl, customerGUID;
+  final String paymentUrl, screenName;
 
   @override
   _TopicPageState createState() => _TopicPageState();
@@ -57,7 +58,8 @@ class _TopicPageState extends State<TopicPage> {
 
   void getUserLoginDetails() async {
     isUserLoggedIn = await ConstantsVar.prefs.getString('userId') ?? null;
-    _phoneNumber = (await ConstantsVar.prefs.getString('phone') ?? '').replaceAll(' ', '');
+    _phoneNumber =
+        (await ConstantsVar.prefs.getString('phone') ?? '').replaceAll(' ', '');
     _email = await ConstantsVar.prefs.getString('email') ?? '';
     _userName = await ConstantsVar.prefs.getString('userName') ?? '';
     cookieValue =
@@ -121,7 +123,7 @@ class _TopicPageState extends State<TopicPage> {
               backgroundColor: ConstantsVar.appColor,
               toolbarHeight: 18.w,
               centerTitle: true,
-              leading: NavigationControls(_controller.future),
+              leading: NavigationControls(_controller.future,widget.screenName),
               actions: [
                 FutureBuilder<WebViewController>(
                   future: _webViewControllerFuture,
@@ -199,18 +201,32 @@ class _TopicPageState extends State<TopicPage> {
                                   onWillPop: !webViewReady
                                       ? null
                                       : () async {
-                                          if (await controller!.canGoBack()) {
-                                            controller.goBack();
-                                            return false;
-                                          } else {
-                                            Navigator.pop(context);
-                                            // Scaffold.of(context).showSnackBar(
-                                            //   const SnackBar(
-                                            //       content: Text("No back history item")),
-                                            // );
-                                            return true;
-                                          }
-                                        },
+                                    if (await controller!.canGoBack()) {
+                                      controller.goBack();
+                                      return false;
+                                    } else {
+                                      if (widget.screenName
+                                          .toLowerCase()
+                                          .contains('shipping')) {
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            CupertinoPageRoute(
+                                                builder: (context) =>
+                                                const MyOrders(
+                                                  isFromWeb: true,
+                                                )),
+                                                (route) => false);
+                                      } else {
+                                        Navigator.pop(context);
+                                      }
+
+                                      // Scaffold.of(context).showSnackBar(
+                                      //   const SnackBar(
+                                      //       content: Text("No back history item")),
+                                      // );
+                                      return true;
+                                    }
+                                  },
                                   child: Container(
                                     width: 100.w,
                                     height: 100.h,
@@ -339,15 +355,16 @@ class _TopicPageState extends State<TopicPage> {
                                               CupertinoPageRoute(
                                                 builder: (context) =>
                                                     LoginScreen(
-                                                  screenKey:
-                                                      'Topic Screen ' ,
+                                                  screenKey: 'Topic Screen ',
                                                 ),
                                               ),
-                                            ).then((value) =>value == true? setState(() {
-                                                  controller.reload();
-                                                  getUserLoginDetails();
-                                                  isLoading = false;
-                                                }):null);
+                                            ).then((value) => value == true
+                                                ? setState(() {
+                                                    controller.reload();
+                                                    getUserLoginDetails();
+                                                    isLoading = false;
+                                                  })
+                                                : null);
                                             return NavigationDecision.prevent;
                                           }
                                           if (request.url
@@ -536,7 +553,21 @@ class _TopicPageState extends State<TopicPage> {
                                         controller.goBack();
                                         return false;
                                       } else {
-                                        Navigator.pop(context);
+                                        if (widget.screenName
+                                            .toLowerCase()
+                                            .contains('shipping')) {
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              CupertinoPageRoute(
+                                                  builder: (context) =>
+                                                      const MyOrders(
+                                                        isFromWeb: true,
+                                                      )),
+                                              (route) => false);
+                                        } else {
+                                          Navigator.pop(context);
+                                        }
+
                                         // Scaffold.of(context).showSnackBar(
                                         //   const SnackBar(
                                         //       content: Text("No back history item")),
@@ -646,9 +677,9 @@ class _TopicPageState extends State<TopicPage> {
                                               'customercare@theone.com')) {
                                             ApiCalls.launchUrl(request.url)
                                                 .then((value) => setState(() {
-                                              isLoading = false;
-                                              controller!.reload();
-                                            }));
+                                                      isLoading = false;
+                                                      controller!.reload();
+                                                    }));
                                             return NavigationDecision.prevent;
                                           }
                                           if (request.url.startsWith(
@@ -669,32 +700,32 @@ class _TopicPageState extends State<TopicPage> {
                                             Navigator.push(context,
                                                 CupertinoPageRoute(
                                                     builder: (context) {
-                                                      return NewProductDetails(
-                                                          productId:
-                                                          url.split('id=')[0],
-                                                          screenName: 'Topic Screen');
-                                                    })).then((value) => setState(() {
-                                              isLoading = false;
-                                              controller!.reload();
-                                            }));
+                                              return NewProductDetails(
+                                                  productId:
+                                                      url.split('id=')[0],
+                                                  screenName: 'Topic Screen');
+                                            })).then((value) => setState(() {
+                                                  isLoading = false;
+                                                  controller!.reload();
+                                                }));
                                             return NavigationDecision.prevent;
                                           }
 
                                           if (request.url
                                               .contains('GetCategoryPage')) {
                                             Navigator.pushAndRemoveUntil(
-                                                context,
-                                                CupertinoPageRoute(
-                                                  builder: (context) =>
-                                                      MyHomePage(
-                                                          pageIndex: 1),
-                                                ),
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                      builder: (context) =>
+                                                          MyHomePage(
+                                                              pageIndex: 1),
+                                                    ),
                                                     (route) => false)
                                                 .then((value) => setState(() {
-                                              controller!.reload();
+                                                      controller!.reload();
 
-                                              isLoading = false;
-                                            }));
+                                                      isLoading = false;
+                                                    }));
                                             return NavigationDecision.prevent;
                                           }
 
@@ -711,22 +742,23 @@ class _TopicPageState extends State<TopicPage> {
                                               .contains("\.com\/login")) {
                                             // print();
                                             String url = await controller!
-                                                .currentUrl() ??
+                                                    .currentUrl() ??
                                                 '';
                                             await Navigator.push(
                                               context,
                                               CupertinoPageRoute(
                                                 builder: (context) =>
                                                     LoginScreen(
-                                                      screenKey:
-                                                      'Topic Screen ' ,
-                                                    ),
+                                                  screenKey: 'Topic Screen ',
+                                                ),
                                               ),
-                                            ).then((value) =>value == true? setState(() {
-                                              controller.reload();
-                                              getUserLoginDetails();
-                                              isLoading = false;
-                                            }):null);
+                                            ).then((value) => value == true
+                                                ? setState(() {
+                                                    controller.reload();
+                                                    getUserLoginDetails();
+                                                    isLoading = false;
+                                                  })
+                                                : null);
                                             return NavigationDecision.prevent;
                                           }
                                           if (request.url
@@ -736,13 +768,13 @@ class _TopicPageState extends State<TopicPage> {
                                               context,
                                               CupertinoPageRoute(
                                                 builder: (context) =>
-                                                const RegstrationPage(),
+                                                    const RegstrationPage(),
                                               ),
                                             ).then((value) => setState(() {
-                                              controller!.reload();
+                                                  controller!.reload();
 
-                                              isLoading = false;
-                                            }));
+                                                  isLoading = false;
+                                                }));
                                             return NavigationDecision.prevent;
                                           }
 
@@ -916,5 +948,19 @@ class _TopicPageState extends State<TopicPage> {
           //   SnackBar(content: Text(message.message)),
           // );
         });
+  }
+
+  Future<bool> _willGoBack() async {
+    Navigator.pushAndRemoveUntil(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => const MyOrders(
+                  isFromWeb: true,
+                )),
+        (route) => false);
+    setState(() {
+      _willGo = true;
+    });
+    return _willGo;
   }
 }
