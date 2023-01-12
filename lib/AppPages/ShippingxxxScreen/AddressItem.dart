@@ -323,10 +323,11 @@ class _AddressItemState extends State<AddressItem> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: AutoSizeText(
-                      message
+                      message.replaceAll('nz', '\n\n')
                           .replaceAll('Show Popup', '')
                           .replaceFirst('switch', '')
-                          .replaceFirst('call', ''),
+                          .replaceFirst('call', '')
+                          ,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 4.5.w,

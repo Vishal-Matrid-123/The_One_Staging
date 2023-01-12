@@ -104,7 +104,7 @@ class _VerificationScreen1State extends State<VerificationScreen1> {
 }
 
 class VerificationScreen2 extends StatefulWidget {
-  String phoneNumber;
+  String phoneNumber, dialCode;
 
   String email;
 
@@ -114,6 +114,7 @@ class VerificationScreen2 extends StatefulWidget {
   VerificationScreen2({
     Key? key,
     required this.phoneNumber,
+    required this.dialCode,
     required this.email,
     required this.password,
     required this.registerBody,
@@ -215,6 +216,7 @@ class _VerificationScreen2State extends State<VerificationScreen2>
         break;
     }
   }
+
   // final ButtonStyle flatButtonStyle = TextButton.styleFrom(
   //   primary: ConstantsVar.appColor,
   //   minimumSize: Size(50.w, 0),
@@ -224,11 +226,10 @@ class _VerificationScreen2State extends State<VerificationScreen2>
   //   ),
   // );
 
-
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     onPrimary: ConstantsVar.appColor,
     primary: ConstantsVar.appColor,
-    minimumSize: Size( 50.w, 50),
+    minimumSize: Size(50.w, 50),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(2)),
     ),
@@ -346,7 +347,7 @@ class _VerificationScreen2State extends State<VerificationScreen2>
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                      style: raisedButtonStyle,
+                          style: raisedButtonStyle,
                           child: SizedBox(
                             height: 50,
                             width: MediaQuery.of(context).size.width / 2,
@@ -389,7 +390,7 @@ class _VerificationScreen2State extends State<VerificationScreen2>
                               });
                             }
                           },
-              style: raisedButtonStyle,
+                          style: raisedButtonStyle,
                           child: SizedBox(
                             height: 50,
                             width: MediaQuery.of(context).size.width / 2,
@@ -415,11 +416,9 @@ class _VerificationScreen2State extends State<VerificationScreen2>
         ),
       ),
     );
-
-
-
-
   }
+
+  String otpAPIVal = '';
 
   Future<void> getOtp() async {
     CustomProgressDialog _progressDialog = CustomProgressDialog(
@@ -435,8 +434,10 @@ class _VerificationScreen2State extends State<VerificationScreen2>
     // await SmsAutoFill().listenForCode;
     // final uri = Uri.parse(
     //    PhoneNumber=${BuildConfig.countryCode}${widget.phoneNumber}');
-    var _phnNumber =  widget.phoneNumber;
+    var _phnNumber = widget.phoneNumber;
     String _baseUrl = await ApiCalls.getSelectedStore();
+    final uri2 = Uri.parse(_baseUrl.replaceAll('/apisSecondVer', '') +
+        'AppCustomerSecondVer/CustomerVerification');
     final uri = Uri.parse(_baseUrl.replaceAll('/apisSecondVer', '') +
         'AppCustomerSecondVer/SendOTP');
     String _customerId = ConstantsVar.prefs.getString('guestCustomerID') ?? '';
@@ -448,21 +449,29 @@ class _VerificationScreen2State extends State<VerificationScreen2>
     };
 
     try {
-      var response = await post(uri, body: _body);
+      var response = await post(
+          widget.dialCode.toLowerCase() == '1' ? uri2 : uri,
+          body: _body);
 
       log(response.body);
       if (response.statusCode == 200) {
         if (jsonDecode(response.body)['Status'].toString().toLowerCase() !=
             kstatusFailed) {
           _progressDialog.dismiss();
-
-          OtpResponse _otpResponse =
-              OtpResponse.fromJson(jsonDecode(response.body));
-          if (_otpResponse.status.contains('Success')) {
+          if (widget.dialCode.toLowerCase() == '1') {
+            print('Twillio');
             setState(() {
-              otpRefs = _otpResponse.responseData.otpReference;
+              otpAPIVal = jsonDecode(response.body)['ResponseData'];
             });
-            Fluttertoast.showToast(msg: otpMessage);
+          } else {
+            OtpResponse _otpResponse =
+                OtpResponse.fromJson(jsonDecode(response.body));
+            if (_otpResponse.status.contains('Success')) {
+              setState(() {
+                otpRefs = _otpResponse.responseData.otpReference;
+              });
+              Fluttertoast.showToast(msg: otpMessage);
+            }
           }
         } else {
           Fluttertoast.showToast(
@@ -528,18 +537,38 @@ class _VerificationScreen2State extends State<VerificationScreen2>
       'CustId': ConstantsVar.prefs.getString('guestCustomerID'),
       kStoreIdVar: await secureStorage.read(key: kselectedStoreIdKey) ?? '1',
     };
+    final body2 = {
+      'Code': jsonEncode({"CodeByAPI": otpAPIVal, "CodeByCustomer": myOtp}),
+      'CustId': ConstantsVar.prefs.getString('guestCustomerID'),
+      kStoreIdVar: await secureStorage.read(key: kselectedStoreIdKey) ?? '1',
+    };
     String _baseUrl = await ApiCalls.getSelectedStore();
     String url2 = _baseUrl.replaceAll('/apisSecondVer', '') +
         'AppCustomerSecondVer/VerifyOTP';
+    String url1 = _baseUrl.replaceAll('/apisSecondVer', '') +
+        'AppCustomerSecondVer/CodeVerification';
     final url = Uri.parse(url2);
+    final urlN = Uri.parse(url1);
 
     try {
-      var response = await post(url, body: body);
+      var response = await post(
+        widget.dialCode.toLowerCase() == '1' ? urlN : url,
+        body: widget.dialCode.toLowerCase() == '1' ? body2 : body,
+      );
 
       // final result = jsonDecode(response.body);
       _progressDialog.dismiss();
 
       if (jsonDecode(response.body)['Status'].toString() == 'Failed') {
+        if( widget.dialCode.toLowerCase() == '1' ){
+          Fluttertoast.showToast(
+              msg: otpVerificationFailedMessage +
+                  '\n' +
+                  jsonDecode(response.body)['Message'],
+              toastLength: Toast.LENGTH_LONG,
+              fontSize: 12);
+          _progressDialog.dismiss();
+        }
         Fluttertoast.showToast(
             msg: otpVerificationFailedMessage +
                 '\n' +
@@ -599,7 +628,8 @@ class _VerificationScreen2State extends State<VerificationScreen2>
       log(response.body);
 
       if (jsonDecode(response.body)['status'].toString() == statusSus) {
-        Fluttertoast.showToast(msg: 'Registration Complete',toastLength: Toast.LENGTH_LONG);
+        Fluttertoast.showToast(
+            msg: 'Registration Complete', toastLength: Toast.LENGTH_LONG);
         ApiCalls.login(
                 context: context,
                 email: widget.email,

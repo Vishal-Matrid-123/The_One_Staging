@@ -941,6 +941,7 @@ class _RegstrationPageState extends State<RegstrationPage>
                                               email: eController.text,
                                               password: cpController.text,
                                               registerBody: regBody,
+                                                  dialCode: phnDialCode,
                                             )
                                             // OTP_Screen(
                                             // title: 'OTP SCREEN',

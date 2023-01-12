@@ -908,10 +908,11 @@ class _ShippingDetailsState extends State<ShippingDetails>
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: AutoSizeText(
-                      message
+                      message.replaceAll('nz', '\n\n')
                           .replaceAll('Show Popup', '')
                           .replaceFirst('switch', '')
-                          .replaceFirst('call', ''),
+                          .replaceFirst('call', '')
+                      ,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 4.5.w,
@@ -931,19 +932,20 @@ class _ShippingDetailsState extends State<ShippingDetails>
                         onPressed: () async {
                           String baseUrl = await ApiCalls.getSelectedStore();
                           String _storeId = await secureStorage.read(
-                                  key: kselectedStoreIdKey) ??
+                              key: kselectedStoreIdKey) ??
                               "1";
                           message.contains('switch')
                               ? Navigator.maybePop(context)
                               : Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (context) => TopicPage(
-                                        paymentUrl: baseUrl +
-                                            'CreateCustomerOrderForGlobalApp?apiToken=${ConstantsVar.prefs.getString(kapiTokenKey)}&customerid=${ConstantsVar.prefs.getString(kcustomerIdKey)}&$kStoreIdVar=${_storeId}',
-                                        screenName: 'shipping'),
-                                  ),
-                                );
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => TopicPage(
+                                paymentUrl: baseUrl +
+                                    'CreateCustomerOrderForGlobalApp?apiToken=${ConstantsVar.prefs.getString(kapiTokenKey)}&customerid=${ConstantsVar.prefs.getString(kcustomerIdKey)}&$kStoreIdVar=${_storeId}',
+                                screenName: 'shipping',
+                              ),
+                            ),
+                          );
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
@@ -970,8 +972,7 @@ class _ShippingDetailsState extends State<ShippingDetails>
                             Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                builder: (context) =>
-                                    const StoreSelectionScreen(
+                                builder: (context) => StoreSelectionScreen(
                                   screenName: 'Shipping Screen',
                                 ),
                               ),
@@ -1020,7 +1021,7 @@ class _ShippingDetailsState extends State<ShippingDetails>
                 radius: 45,
                 child: ClipRRect(
                     borderRadius:
-                        const BorderRadius.all(const Radius.circular(45)),
+                    const BorderRadius.all(const Radius.circular(45)),
                     child: Image.asset("MyAssets/logo.png")),
               ),
             ),
