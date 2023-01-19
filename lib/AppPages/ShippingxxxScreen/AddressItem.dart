@@ -304,8 +304,9 @@ class _AddressItemState extends State<AddressItem> {
         child: Stack(
           children: <Widget>[
             Container(
+              width: 85.w,
               padding: const EdgeInsets.only(
-                  left: 5, top: 45 + 20, right: 5, bottom: 20),
+                  left: 2, top: 45 + 20, right: 2, bottom: 20),
               margin: const EdgeInsets.only(top: 35),
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
@@ -320,19 +321,22 @@ class _AddressItemState extends State<AddressItem> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: AutoSizeText(
-                      message.replaceAll('nz', '\n\n')
-                          .replaceAll('Show Popup', '')
-                          .replaceFirst('switch', '')
-                          .replaceFirst('call', '')
-                          ,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 4.5.w,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                  SizedBox(
+                    width: 85.w,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                      child: AutoSizeText(
+                        message.replaceAll('nz', '\n')
+                            .replaceAll('Show Popup', '')
+                            .replaceFirst('switch', '')
+                            .replaceFirst('call', '')
+                            ,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 4.5.w,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),
@@ -368,7 +372,7 @@ class _AddressItemState extends State<AddressItem> {
                           ),
                         ),
                         child: AutoSizeText(
-                          message.contains('switch') ? 'Cancel' : 'Okay',
+                          message.contains('switch') ? 'Cancel' : 'Submit',
                           style: TextStyle(
                             fontSize: 4.w,
                             fontWeight: FontWeight.bold,

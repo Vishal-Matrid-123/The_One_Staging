@@ -2293,9 +2293,9 @@ class ApiCalls {
     Fluttertoast.showToast(
         msg: "Checking for updates.....", toastLength: Toast.LENGTH_LONG);
     log("111");
-
+    String _baseUrl = await ApiCalls.getSelectedStore();
     final uri =
-        Uri.parse("https://dev.theone.com/apisSecondVer/GetLatestVersion");
+        Uri.parse(_baseUrl+"GetLatestVersion");
     log(uri.toString());
     try {
       log("1111");

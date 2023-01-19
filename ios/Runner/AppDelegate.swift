@@ -4,7 +4,7 @@ import Flutter
 import Firebase
 import FBSDKCoreKit
 import FBSDKCoreKit.FBSDKSettings
-
+import Foundation
 import FBAudienceNetwork
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -39,6 +39,22 @@ import FBAudienceNetwork
 //      FBSDKCoreKit.Se
       FBAdSettings.setAdvertiserTrackingEnabled(true)
      
+      if(UserDefaults.standard.string(forKey: "isFirstTime") == nil){
+          UserDefaults.standard.removeObject(forKey: "userName");
+          UserDefaults.standard.removeObject(forKey: "userId");
+          UserDefaults.standard.removeObject(forKey: "email");
+          UserDefaults.standard.removeObject(forKey: "guestCustomerID");
+          UserDefaults.standard.removeObject(forKey: "userId");
+          UserDefaults.standard.removeObject(forKey: "guestGUID");
+          UserDefaults.standard.removeObject(forKey: "phone");
+          UserDefaults.standard.removeObject(forKey: "guestGUID");
+          UserDefaults.standard.removeObject(forKey: "sepGuid");
+          UserDefaults.standard.removeObject(forKey: "apiTokken");
+          UserDefaults.standard.set("Val", forKey: "isFirstTime")
+          print("Values reset");
+      }else{
+          print("Values available for Key>> isFirstTime");
+      }
 
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)

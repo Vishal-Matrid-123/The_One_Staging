@@ -24,7 +24,17 @@ import 'new_apis_func/services/background_fcm_services.dart';
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 const kFCMVApiKey =
     'BF27tL7I4pys6pW2j2JZUTL6zQNJxcfQZTsHQKilR_26OV6ua1xt0VdaPrPP1mEcSSQvOUZd0j911kaeXzFZhFQ';
+Future<void>  clearSharedPreference() async {
+  final prefs  =  await SharedPreferences.getInstance();
+  if(await prefs.getString('isFirstTime') == null ){
+    prefs.clear();
+    await prefs.setString('isFirstTime', 'value');
+    Fluttertoast.showToast(msg: 'Values reset');
+  }else {
+    Fluttertoast.showToast(msg: 'Value available');
+  }
 
+}
 Future<void> setFireStoreData(
   RemoteMessage message,
 ) async {

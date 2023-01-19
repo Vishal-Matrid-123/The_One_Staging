@@ -78,6 +78,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void initState() {
+
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 3));
     animation =
@@ -93,6 +94,7 @@ class _SplashScreenState extends State<SplashScreen>
         // initSecurityState()
         .whenComplete(
       () async {
+
         Future.delayed(Duration(seconds: 3));
 
         isDeviceSecure == true
@@ -366,7 +368,13 @@ class _SplashScreenState extends State<SplashScreen>
       ) ??
       false;
 
+
+
+
+
+
   Future<void> initPlugin() async {
+
     try {
       final TrackingStatus status =
           await AppTrackingTransparency.trackingAuthorizationStatus;
