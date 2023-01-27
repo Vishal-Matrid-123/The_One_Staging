@@ -8,7 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled2/utils/HeartIcon.dart';
 
 class ConstantsVar {
-  static String baseUri = 'https://www.theone.com/apis/';
+
+
 
   static double width = MediaQueryData.fromWindow(window).size.width;
   static double height = MediaQueryData.fromWindow(window).size.height;

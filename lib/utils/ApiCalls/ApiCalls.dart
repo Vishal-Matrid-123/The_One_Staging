@@ -95,7 +95,7 @@ class ApiCalls {
     log('I am being beaten');
     final body = {'email': 'apitest@gmail.com', 'password': '12345'};
 
-    final uri = Uri.parse(BuildConfig.base_url + 'token/GetToken?');
+    final uri = Uri.parse(base_url + 'token/GetToken?');
     try {
       var response = await http
           .post(
@@ -644,7 +644,7 @@ class ApiCalls {
     getYourAddresses();
     // bool apiresult = false;
 
-    final uri = Uri.parse(BuildConfig.base_url +
+    final uri = Uri.parse(base_url +
         'apis/GetCustomerAddressList?apiToken=$apiToken&customerid=$customerId');
 
     log('address url>>> $uri');

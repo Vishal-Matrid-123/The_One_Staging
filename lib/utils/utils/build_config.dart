@@ -1,6 +1,5 @@
 class BuildConfig {
-  static const String base_url = 'https://dev.theone.com/';
-  static const String base_url_for_apis = 'dev.theone.com';
+
 
   static const String banners = 'GetBanners';
   static const String token_url = 'token/GetToken';

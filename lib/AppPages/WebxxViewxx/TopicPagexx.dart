@@ -123,7 +123,7 @@ class _TopicPageState extends State<TopicPage> {
               backgroundColor: ConstantsVar.appColor,
               toolbarHeight: 18.w,
               centerTitle: true,
-              leading: NavigationControls(_controller.future,widget.screenName),
+              leading: NavigationControls(_controller.future,'Topic Screen'),
               actions: [
                 FutureBuilder<WebViewController>(
                   future: _webViewControllerFuture,

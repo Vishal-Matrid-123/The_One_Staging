@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled2/new_apis_func/data_layer/constant_data/constant_data.dart';
 
 import 'Constants/ConstantVariables.dart';
 import 'main.dart';
@@ -24,17 +24,18 @@ import 'new_apis_func/services/background_fcm_services.dart';
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 const kFCMVApiKey =
     'BF27tL7I4pys6pW2j2JZUTL6zQNJxcfQZTsHQKilR_26OV6ua1xt0VdaPrPP1mEcSSQvOUZd0j911kaeXzFZhFQ';
-Future<void>  clearSharedPreference() async {
-  final prefs  =  await SharedPreferences.getInstance();
-  if(await prefs.getString('isFirstTime') == null ){
+
+Future<void> clearSharedPreference() async {
+  final prefs = await SharedPreferences.getInstance();
+  if (await prefs.getString('isFirstTime') == null) {
     prefs.clear();
     await prefs.setString('isFirstTime', 'value');
     Fluttertoast.showToast(msg: 'Values reset');
-  }else {
+  } else {
     Fluttertoast.showToast(msg: 'Value available');
   }
-
 }
+
 Future<void> setFireStoreData(
   RemoteMessage message,
 ) async {
@@ -141,16 +142,15 @@ Future<void> main() async {
       // NotificationController.resetBadge();
 
       FirebaseMessaging _message = FirebaseMessaging.instance;
-      var token = await _message.getToken(vapidKey: kFCMVApiKey);
-      Fluttertoast.showToast(
-        msg: 'FCM Token>>' + token!,
-        toastLength: Toast.LENGTH_LONG,
-      );
-
-      log('FCM Token>>' + token);
 
       ConstantsVar.prefs = await SharedPreferences.getInstance();
-      ConstantsVar.prefs.setBool('isFirstTime', true);
+
+      if (await secureStorage.read(key: 'isFirstTime') == null) {
+        secureStorage.deleteAll();
+        ConstantsVar.prefs.clear();
+      await  secureStorage.write(key: 'isFirstTime', value: 'value');
+        print('Value reset');
+      }
 
       FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
 

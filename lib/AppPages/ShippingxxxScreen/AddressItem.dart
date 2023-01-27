@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:progress_loading_button/progress_loading_button.dart';
 import 'package:untitled2/AppPages/ShippingxxMethodxx/ShippingxxMethodxx.dart';
@@ -19,6 +20,7 @@ import 'package:untitled2/utils/utils/general_functions.dart';
 
 import '../../new_apis_func/data_layer/constant_data/constant_data.dart';
 import 'BillingxxScreen/ShippingAddress.dart';
+// import 'package:html/dom.dart' as dom;
 
 class AddressItem extends StatefulWidget {
   AddressItem(
@@ -304,7 +306,6 @@ class _AddressItemState extends State<AddressItem> {
         child: Stack(
           children: <Widget>[
             Container(
-              width: 85.w,
               padding: const EdgeInsets.only(
                   left: 2, top: 45 + 20, right: 2, bottom: 20),
               margin: const EdgeInsets.only(top: 35),
@@ -321,24 +322,16 @@ class _AddressItemState extends State<AddressItem> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  SizedBox(
-                    width: 85.w,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                      child: AutoSizeText(
-                        message.replaceAll('nz', '\n')
-                            .replaceAll('Show Popup', '')
-                            .replaceFirst('switch', '')
-                            .replaceFirst('call', '')
-                            ,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontSize: 4.5.w,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 8.0),
+                    child: HtmlWidget(
+                      message
+                          .replaceAll('Show Popup', '')
+                          .replaceFirst('switch', '')
+                          .replaceFirst('call', ''),
                     ),
+
                   ),
                   const SizedBox(
                     height: 15,

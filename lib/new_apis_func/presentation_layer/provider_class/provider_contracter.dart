@@ -1119,7 +1119,9 @@ class NewApisProvider extends ChangeNotifier {
               Navigator.pushReplacement(
                 context,
                 CupertinoPageRoute(
-                  builder: (_) => StoreSelectionScreen(screenName: 'Splash Screen',),
+                  builder: (_) => StoreSelectionScreen(
+                    screenName: 'Splash Screen',
+                  ),
                 ),
               );
             });
@@ -1128,7 +1130,9 @@ class NewApisProvider extends ChangeNotifier {
               Navigator.pushReplacement(
                 context,
                 CupertinoPageRoute(
-                  builder: (_) => StoreSelectionScreen(screenName: 'Splash Screen',),
+                  builder: (_) => StoreSelectionScreen(
+                    screenName: 'Splash Screen',
+                  ),
                 ),
               );
             });
@@ -1150,7 +1154,9 @@ class NewApisProvider extends ChangeNotifier {
           Navigator.pushReplacement(
             context,
             CupertinoPageRoute(
-              builder: (_) => const StoreSelectionScreen(screenName: 'Splash Screen',),
+              builder: (_) => const StoreSelectionScreen(
+                screenName: 'Splash Screen',
+              ),
             ),
           );
         });
@@ -1160,63 +1166,68 @@ class NewApisProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> checkAppUpdate({required BuildContext ctx}) async {
-    String version = '';
-    try {
-      PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-        version = packageInfo.version;
-        log("1");
-      });
-    } on Exception catch (e) {
-      log(e.toString());
-    }
-    log("11");
-    await ApiCalls.checkForUpdates().then(
-      (value) async {
-        switch (value) {
-          case kerrorString:
-            _isupdated = true;
-            break;
-          default:
-            try {
-              final response = jsonDecode(value);
-              String _latestBuildNumber = response['ResponseData'];
-              log(_latestBuildNumber);
-              if (_latestBuildNumber != version) {
-                _isupdated = false;
-
-                _appVersion = _latestBuildNumber;
-                // if (Platform.isIOS) {
-                //   showCupertinoAlertaDialog(
-                //       context: ctx,
-                //       version: _latestBuildNumber,
-                //       currentVersion: version);
-                // } else if (Platform.isAndroid) {
-                //   showMaterialDialogBox(
-                //       context: ctx,
-                //       version: _latestBuildNumber,
-                //       currentVersion: version);
-                // }
-                notifyListeners();
-              } else {
-                Fluttertoast.showToast(
-                    msg: "No update available.....",
-                    toastLength: Toast.LENGTH_LONG);
-                _isupdated = true;
-              }
-            } on Exception catch (e) {
-              ConstantsVar.excecptionMessage(e);
-              // log(e.toString());
-              _isupdated = true;
-            }
-            break;
-        }
-        notifyListeners();
-      },
-    );
-    log(_isupdated.toString());
-    notifyListeners();
-  }
+  // Future<void> checkAppUpdate({required BuildContext ctx}) async {
+  //   String version = '';
+  //   try {
+  //     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+  //       version = packageInfo.version;
+  //       log("1");
+  //     });
+  //   } on Exception catch (e) {
+  //     log(e.toString());
+  //   }
+  //   log("11");
+  //   await ApiCalls.checkForUpdates().then(
+  //     (value) async {
+  //       switch (value) {
+  //         case kerrorString:
+  //           _isupdated = true;
+  //           break;
+  //         default:
+  //           try {
+  //             final response = jsonDecode(value);
+  //             String _latestBuildNumber = response['ResponseData'];
+  //             log(_latestBuildNumber);
+  //
+  //             String dlVersion = _latestBuildNumber.split('.')[0];
+  //
+  //             print("Latest Version " + dlVersion);
+  //
+  //             if (_latestBuildNumber != version) {
+  //               _isupdated = false;
+  //
+  //               _appVersion = _latestBuildNumber;
+  //               // if (Platform.isIOS) {
+  //               //   showCupertinoAlertaDialog(
+  //               //       context: ctx,
+  //               //       version: _latestBuildNumber,
+  //               //       currentVersion: version);
+  //               // } else if (Platform.isAndroid) {
+  //               //   showMaterialDialogBox(
+  //               //       context: ctx,
+  //               //       version: _latestBuildNumber,
+  //               //       currentVersion: version);
+  //               // }
+  //               notifyListeners();
+  //             } else {
+  //               Fluttertoast.showToast(
+  //                   msg: "No update available.....",
+  //                   toastLength: Toast.LENGTH_LONG);
+  //               _isupdated = true;
+  //             }
+  //           } on Exception catch (e) {
+  //             ConstantsVar.excecptionMessage(e);
+  //             // log(e.toString());
+  //             _isupdated = true;
+  //           }
+  //           break;
+  //       }
+  //       notifyListeners();
+  //     },
+  //   );
+  //   log(_isupdated.toString());
+  //   notifyListeners();
+  // }
 
   showCupertinoAlertaDialog(
       {required BuildContext context,
@@ -1487,29 +1498,24 @@ class NewApisProvider extends ChangeNotifier {
     notifyListeners();
   }
 
- void returnInitialPrefix() async {
-    String storeId =
-        await secureStorage.read(key: kselectedStoreIdKey) ?? '1';
+  void returnInitialPrefix() async {
+    String storeId = await secureStorage.read(key: kselectedStoreIdKey) ?? '1';
     print(storeId.runtimeType);
 
     switch (storeId) {
       case kuStoreId:
-        _initialPrefix =  'AE';
+        _initialPrefix = 'AE';
         break;
       case kbStoreId:
-        _initialPrefix =  'BH';
+        _initialPrefix = 'BH';
         break;
       case kkStoreId:
-        _initialPrefix =  'KW';
+        _initialPrefix = 'KW';
         break;
       case kqStoreId:
-        _initialPrefix =  'QA';
+        _initialPrefix = 'QA';
         break;
-   
-
-
     }
     notifyListeners();
   }
-
 }

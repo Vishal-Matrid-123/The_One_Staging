@@ -5,8 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -889,7 +891,6 @@ class _ShippingDetailsState extends State<ShippingDetails>
         child: Stack(
           children: <Widget>[
             Container(
-              width: 85.w,
               padding: const EdgeInsets.only(
                   left: 2, top: 45 + 20, right: 2, bottom: 20),
               margin: const EdgeInsets.only(top: 35),
@@ -906,24 +907,16 @@ class _ShippingDetailsState extends State<ShippingDetails>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  SizedBox(
-                    width: 85.w,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                      child: AutoSizeText(
-                        message.replaceAll('nz', '\n')
-                            .replaceAll('Show Popup', '')
-                            .replaceFirst('switch', '')
-                            .replaceFirst('call', '')
-                        ,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontSize: 4.5.w,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 8.0),
+                    child: HtmlWidget(
+                      message
+                          .replaceAll('Show Popup', '')
+                          .replaceFirst('switch', '')
+                          .replaceFirst('call', ''),
                     ),
+
                   ),
                   const SizedBox(
                     height: 15,

@@ -73,6 +73,8 @@
 	<string>This app does not required Microphone permission</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>This will help us  to deliver personalized and best products and services to you. Your data will be safe and not shared with a third party. You can disable it from Settings</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to location for selecting the products from the nearest THE One  store but this permission is optional, you can change it from app setting. This will help us  to deliver personalized and best products and services to you. Your data will be safe and not shared with a third party. You can disable it from Settings.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>

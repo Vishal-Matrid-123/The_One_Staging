@@ -217,14 +217,7 @@ class _VerificationScreen2State extends State<VerificationScreen2>
     }
   }
 
-  // final ButtonStyle flatButtonStyle = TextButton.styleFrom(
-  //   primary: ConstantsVar.appColor,
-  //   minimumSize: Size(50.w, 0),
-  //   padding: EdgeInsets.symmetric(vertical: 16.0),
-  //   shape: const RoundedRectangleBorder(
-  //     borderRadius: BorderRadius.all(Radius.circular(2.0)),
-  //   ),
-  // );
+
 
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     onPrimary: ConstantsVar.appColor,
@@ -436,8 +429,7 @@ class _VerificationScreen2State extends State<VerificationScreen2>
     //    PhoneNumber=${BuildConfig.countryCode}${widget.phoneNumber}');
     var _phnNumber = widget.phoneNumber;
     String _baseUrl = await ApiCalls.getSelectedStore();
-    final uri2 = Uri.parse(_baseUrl.replaceAll('/apisSecondVer', '') +
-        'AppCustomerSecondVer/CustomerVerification');
+
     final uri = Uri.parse(_baseUrl.replaceAll('/apisSecondVer', '') +
         'AppCustomerSecondVer/SendOTP');
     String _customerId = ConstantsVar.prefs.getString('guestCustomerID') ?? '';
@@ -449,29 +441,21 @@ class _VerificationScreen2State extends State<VerificationScreen2>
     };
 
     try {
-      var response = await post(
-          widget.dialCode.toLowerCase() == '1' ? uri2 : uri,
-          body: _body);
+      var response = await post(uri, body: _body);
 
       log(response.body);
       if (response.statusCode == 200) {
         if (jsonDecode(response.body)['Status'].toString().toLowerCase() !=
             kstatusFailed) {
           _progressDialog.dismiss();
-          if (widget.dialCode.toLowerCase() == '1') {
-            print('Twillio');
+
+          OtpResponse _otpResponse =
+              OtpResponse.fromJson(jsonDecode(response.body));
+          if (_otpResponse.status.contains('Success')) {
             setState(() {
-              otpAPIVal = jsonDecode(response.body)['ResponseData'];
+              otpRefs = _otpResponse.responseData.otpReference;
             });
-          } else {
-            OtpResponse _otpResponse =
-                OtpResponse.fromJson(jsonDecode(response.body));
-            if (_otpResponse.status.contains('Success')) {
-              setState(() {
-                otpRefs = _otpResponse.responseData.otpReference;
-              });
-              Fluttertoast.showToast(msg: otpMessage);
-            }
+            Fluttertoast.showToast(msg: otpMessage);
           }
         } else {
           Fluttertoast.showToast(
@@ -537,38 +521,24 @@ class _VerificationScreen2State extends State<VerificationScreen2>
       'CustId': ConstantsVar.prefs.getString('guestCustomerID'),
       kStoreIdVar: await secureStorage.read(key: kselectedStoreIdKey) ?? '1',
     };
-    final body2 = {
-      'Code': jsonEncode({"CodeByAPI": otpAPIVal, "CodeByCustomer": myOtp}),
-      'CustId': ConstantsVar.prefs.getString('guestCustomerID'),
-      kStoreIdVar: await secureStorage.read(key: kselectedStoreIdKey) ?? '1',
-    };
+
     String _baseUrl = await ApiCalls.getSelectedStore();
     String url2 = _baseUrl.replaceAll('/apisSecondVer', '') +
         'AppCustomerSecondVer/VerifyOTP';
-    String url1 = _baseUrl.replaceAll('/apisSecondVer', '') +
-        'AppCustomerSecondVer/CodeVerification';
+
     final url = Uri.parse(url2);
-    final urlN = Uri.parse(url1);
 
     try {
       var response = await post(
-        widget.dialCode.toLowerCase() == '1' ? urlN : url,
-        body: widget.dialCode.toLowerCase() == '1' ? body2 : body,
+        url,
+        body: body,
       );
 
       // final result = jsonDecode(response.body);
       _progressDialog.dismiss();
 
       if (jsonDecode(response.body)['Status'].toString() == 'Failed') {
-        if( widget.dialCode.toLowerCase() == '1' ){
-          Fluttertoast.showToast(
-              msg: otpVerificationFailedMessage +
-                  '\n' +
-                  jsonDecode(response.body)['Message'],
-              toastLength: Toast.LENGTH_LONG,
-              fontSize: 12);
-          _progressDialog.dismiss();
-        }
+
         Fluttertoast.showToast(
             msg: otpVerificationFailedMessage +
                 '\n' +

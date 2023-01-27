@@ -101,7 +101,7 @@ class _SplashScreenState extends State<SplashScreen>
             ? getLocation().whenComplete(
                 () async {
                   {
-                    await x.checkAppUpdate(ctx: context).then((v) async {
+                    // await x.checkAppUpdate(ctx: context).then((v) async {
                       _guestCustomerID =
                           ConstantsVar.prefs.getString('guestCustomerID') ?? "";
 
@@ -278,7 +278,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                         printDate();
                       }
-                    });
+                    // });
                   }
                 },
               )
