@@ -573,7 +573,7 @@ class _LoginScreenState extends State<LoginScreen>
                       'https://www.theone.com/privacy-policy-uae');
                 }),
           const TextSpan(
-            text: '\nCOPYRIGHT © 2022 THE ONE UAE. ALL RIGHTS RESERVED.  ',
+            text: '\nCOPYRIGHT © 2023 THE ONE UAE. ALL RIGHTS RESERVED.  ',
           ),
         ],
       ),

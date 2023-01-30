@@ -841,7 +841,7 @@ class ApiCalls {
     log('Read Count Api>>>>>>>>>>>>>>>>>>>>>>>' + uri.toString());
     try {
       var response = await http
-          .get(uri, headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
+          .get(uri, headers: {'Cookie': '.Nop.Customer=${ConstantsVar.prefs.getString(kguidKey) ?? ''}'}).timeout(
         const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
@@ -862,6 +862,7 @@ class ApiCalls {
         log(count);
         // if(context.)
         // if(co)
+
         final _provider = Provider.of<CartCounter>(context, listen: false);
         _provider.changeCounter(count ?? "0");
       } else {

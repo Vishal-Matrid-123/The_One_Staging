@@ -300,6 +300,7 @@ class MainApp extends StatelessWidget{
                 },
                 home: const SplashScreen(),
                 darkTheme: ThemeData(
+                  useMaterial3: false,
                   platform: TargetPlatform.iOS,
                   pageTransitionsTheme: const PageTransitionsTheme(
                     builders: {

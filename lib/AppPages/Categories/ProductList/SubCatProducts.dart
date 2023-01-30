@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as b;
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -104,11 +104,11 @@ class _ProductListState extends State<ProductList> {
                     radius: 48,
                     child: Consumer<CartCounter>(
                       builder: (context, value, child) {
-                        return Badge(
+                        return b.Badge(
                           badgeColor: Colors.white,
                           padding: const EdgeInsets.all(5),
-                          shape: BadgeShape.circle,
-                          position: BadgePosition.topEnd(),
+                          shape: b.BadgeShape.circle,
+                          position: b.BadgePosition.topEnd(),
                           badgeContent:
                               AutoSizeText(value.badgeNumber.toString()),
                           child: const Icon(

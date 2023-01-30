@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -126,7 +125,7 @@ class _ShippingDetailsState extends State<ShippingDetails>
 
     for (int i = 0; i < countries.length; i++) {
       Country name = countries[i];
-      if (name.name.toLowerCase().contains(query.toLowerCase())) {
+      if (name.name.toLowerCase().startsWith(query.toLowerCase())) {
         _searchedList.add(countries[i]);
       }
     }
@@ -168,7 +167,9 @@ class _ShippingDetailsState extends State<ShippingDetails>
           },
           child: Card(
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            color: Colors.white,
+            color: _initialVal != null && _initialVal == item
+                ? ConstantsVar.appColor
+                : Colors.white,
             elevation: 4,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -178,7 +179,7 @@ class _ShippingDetailsState extends State<ShippingDetails>
               child: Container(
                 width: 70.w,
                 alignment: Alignment.centerLeft,
-                color: _initialVal != null && _initialVal! == item
+                color: _initialVal != null && _initialVal == item
                     ? ConstantsVar.appColor
                     : Colors.white,
                 padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 6.0),
@@ -200,7 +201,12 @@ class _ShippingDetailsState extends State<ShippingDetails>
                       item.name,
                       maxLines: 2,
                       style: TextStyle(
-                          fontSize: 5.w, overflow: TextOverflow.ellipsis),
+                        fontSize: 5.w,
+                        overflow: TextOverflow.ellipsis,
+                        color: _initialVal != null && _initialVal == item
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   )
                 ]),
@@ -548,54 +554,26 @@ class _ShippingDetailsState extends State<ShippingDetails>
                           addVerticalSpace(14),
                           GestureDetector(
                             onTap: () {
-                              showModalBottomSheet(
-                                  elevation: 10,
-                                  isScrollControlled: true,
-                                  isDismissible: false,
-                                  backgroundColor: Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(25.0),
-                                    ),
-                                  ),
+                              showDialog(
+                                  barrierDismissible: false,
                                   context: context,
                                   builder: (context) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                              .viewInsets
-                                              .bottom),
-                                      child: StatefulBuilder(
-                                        builder: (BuildContext ctx,
-                                                StateSetter setStatee) =>
-                                            Padding(
-                                          padding: EdgeInsets.all(3.w),
-                                          child: SizedBox(
-                                            height: 60.h,
+                                    return Dialog(
+                                      backgroundColor: Colors.transparent,
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: StatefulBuilder(
+                                          builder: (BuildContext ctx,
+                                                  StateSetter setStatee) =>
+                                              Padding(
+                                            padding: EdgeInsets.all(3.w),
                                             child: Stack(
                                               children: [
                                                 Padding(
                                                   padding:
                                                       EdgeInsets.only(top: 3.w),
                                                   child: Container(
-                                                    decoration:
-                                                        new BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          new BorderRadius.only(
-                                                        topLeft: const Radius
-                                                            .circular(30.0),
-                                                        topRight: const Radius
-                                                            .circular(30.0),
-                                                        bottomLeft: const Radius
-                                                            .circular(30.0),
-                                                        bottomRight:
-                                                            const Radius
-                                                                .circular(
-                                                          30.0,
-                                                        ),
-                                                      ),
-                                                    ),
+                                                    color: Colors.white,
                                                     padding:
                                                         EdgeInsets.all(3.w),
                                                     child: Column(
@@ -613,25 +591,18 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                                           },
                                                           controller:
                                                               editingController,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            labelText:
-                                                                "Search Your Country",
-                                                            hintText:
-                                                                "Search Your Country",
-                                                            prefixIcon: Icon(
-                                                                Icons.search),
-                                                            border:
-                                                                OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .all(
-                                                                Radius.circular(
-                                                                  5.0,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
+                                                          decoration: InputDecoration(
+                                                              labelText:
+                                                                  "Search Your Country",
+                                                              hintText:
+                                                                  "Search Your Country",
+                                                              prefixIcon: Icon(
+                                                                  Icons.search),
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              5.0)))),
                                                         ),
                                                         SizedBox(
                                                           height: 20,
@@ -660,8 +631,8 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                                   ),
                                                 ),
                                                 Positioned(
-                                                  top: 1,
-                                                  right: 1.w,
+                                                  top: 0,
+                                                  right: 0,
                                                   child: ClipOval(
                                                     child: Container(
                                                       color: Colors.black,
@@ -916,7 +887,6 @@ class _ShippingDetailsState extends State<ShippingDetails>
                           .replaceFirst('switch', '')
                           .replaceFirst('call', ''),
                     ),
-
                   ),
                   const SizedBox(
                     height: 15,
@@ -929,20 +899,20 @@ class _ShippingDetailsState extends State<ShippingDetails>
                         onPressed: () async {
                           String baseUrl = await ApiCalls.getSelectedStore();
                           String _storeId = await secureStorage.read(
-                              key: kselectedStoreIdKey) ??
+                                  key: kselectedStoreIdKey) ??
                               "1";
                           message.contains('switch')
                               ? Navigator.maybePop(context)
                               : Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => TopicPage(
-                                paymentUrl: baseUrl +
-                                    'CreateCustomerOrderForGlobalApp?apiToken=${ConstantsVar.prefs.getString(kapiTokenKey)}&customerid=${ConstantsVar.prefs.getString(kcustomerIdKey)}&$kStoreIdVar=${_storeId}',
-                                screenName: 'shipping',
-                              ),
-                            ),
-                          );
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => TopicPage(
+                                      paymentUrl: baseUrl +
+                                          'CreateCustomerOrderForGlobalApp?apiToken=${ConstantsVar.prefs.getString(kapiTokenKey)}&customerid=${ConstantsVar.prefs.getString(kcustomerIdKey)}&$kStoreIdVar=${_storeId}',
+                                      screenName: 'shipping',
+                                    ),
+                                  ),
+                                );
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
@@ -1018,7 +988,7 @@ class _ShippingDetailsState extends State<ShippingDetails>
                 radius: 45,
                 child: ClipRRect(
                     borderRadius:
-                    const BorderRadius.all(const Radius.circular(45)),
+                        const BorderRadius.all(const Radius.circular(45)),
                     child: Image.asset("MyAssets/logo.png")),
               ),
             ),

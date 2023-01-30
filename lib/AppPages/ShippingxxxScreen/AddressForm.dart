@@ -116,13 +116,12 @@ class _AddressScreenState extends State<AddressScreen>
 
     for (int i = 0; i < countries.length; i++) {
       Country name = countries[i];
-      if (name.name.toLowerCase().contains(query.toLowerCase())) {
+      if (name.name.toLowerCase().startsWith(query.toLowerCase())) {
         _searchedList.add(countries[i]);
       }
     }
     return _searchedList;
   }
-
 
   bool returnVisibility({required String countryCode}) {
     bool _isAvailable = true;
@@ -138,6 +137,7 @@ class _AddressScreenState extends State<AddressScreen>
 
     return _isAvailable;
   }
+
   Widget _searchItems(Country item) {
     print("Visibility>>>" +
         returnVisibility(countryCode: item.code).toString() +
@@ -156,7 +156,9 @@ class _AddressScreenState extends State<AddressScreen>
           },
           child: Card(
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            color: Colors.white,
+            color: _initialVal != null && _initialVal == item
+                ? ConstantsVar.appColor
+                : Colors.white,
             elevation: 4,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -166,7 +168,9 @@ class _AddressScreenState extends State<AddressScreen>
               child: Container(
                 width: 70.w,
                 alignment: Alignment.centerLeft,
-                color: _initialVal!=null&&_initialVal! ==item?ConstantsVar.appColor:Colors.white,
+                color: _initialVal != null && _initialVal == item
+                    ? ConstantsVar.appColor
+                    : Colors.white,
                 padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 6.0),
                 child: Row(children: [
                   SizedBox(
@@ -186,7 +190,12 @@ class _AddressScreenState extends State<AddressScreen>
                       item.name,
                       maxLines: 2,
                       style: TextStyle(
-                          fontSize: 5.w, overflow: TextOverflow.ellipsis),
+                        fontSize: 5.w,
+                        overflow: TextOverflow.ellipsis,
+                        color: _initialVal != null && _initialVal == item
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   )
                 ]),
@@ -276,7 +285,6 @@ class _AddressScreenState extends State<AddressScreen>
         showTitle = false;
       });
     }
-
   }
 
   @override
@@ -455,47 +463,49 @@ class _AddressScreenState extends State<AddressScreen>
                                   ),
                                 ),
                                 Consumer<NewApisProvider>(
-                                  builder: (context,val,child) {
-                                    return IntlPhoneField(
-                                      controller: numberController,
-                                      decoration: InputDecoration(
-                                          labelText: ''.toUpperCase(),
-                                          labelStyle: TextStyle(
-                                              fontSize: 1.w,
-                                              color: myFocusNode.hasFocus
-                                                  ? AppColor.PrimaryAccentColor
-                                                  : Colors.grey),
-                                          border: InputBorder.none,
-                                          counterText: ''),
-                                      initialCountryCode:widget.isEditAddress? initialCountryCode:val.initialPrefix,
-                                      onChanged: (phone) {
-                                        print(phone.countryCode);
-                                        setState(() {
-                                          phnDialCode =
-                                              phone.countryCode.replaceAll('+', '');
-                                        });
-                                      },
-                                      onCountryChanged: (country) {
-                                        print('Country changed to: ' +
-                                            country.dialCode);
-                                        setState(() {
-                                          for (Country val in countries) {
-                                            if (val.code.toLowerCase() == country.code.toLowerCase()) {
-                                              _initialVal = val;
-                                              print(country.code);
-                                              break;
-                                            }
+                                    builder: (context, val, child) {
+                                  return IntlPhoneField(
+                                    controller: numberController,
+                                    decoration: InputDecoration(
+                                        labelText: ''.toUpperCase(),
+                                        labelStyle: TextStyle(
+                                            fontSize: 1.w,
+                                            color: myFocusNode.hasFocus
+                                                ? AppColor.PrimaryAccentColor
+                                                : Colors.grey),
+                                        border: InputBorder.none,
+                                        counterText: ''),
+                                    initialCountryCode: widget.isEditAddress
+                                        ? initialCountryCode
+                                        : val.initialPrefix,
+                                    onChanged: (phone) {
+                                      print(phone.countryCode);
+                                      setState(() {
+                                        phnDialCode = phone.countryCode
+                                            .replaceAll('+', '');
+                                      });
+                                    },
+                                    onCountryChanged: (country) {
+                                      print('Country changed to: ' +
+                                          country.dialCode);
+                                      setState(() {
+                                        for (Country val in countries) {
+                                          if (val.code.toLowerCase() ==
+                                              country.code.toLowerCase()) {
+                                            _initialVal = val;
+                                            print(country.code);
+                                            break;
                                           }
-                                          phnDialCode = country.dialCode;
-                                        });
-                                      },
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 14),
-                                    );
-                                  }
-                                ),
+                                        }
+                                        phnDialCode = country.dialCode;
+                                      });
+                                    },
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 14),
+                                  );
+                                }),
                               ],
                             ),
                           ),
@@ -655,134 +665,100 @@ class _AddressScreenState extends State<AddressScreen>
                       addVerticalSpace(14),
                       GestureDetector(
                         onTap: () {
-                          showModalBottomSheet(
-                              elevation: 10,
-                              isScrollControlled: true,
-                              isDismissible: false,
-                              backgroundColor: Colors.transparent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25.0),
-                                ),
-                              ),
+                          showDialog(
+                              barrierDismissible: false,
                               context: context,
                               builder: (context) {
-                                return SafeArea(
-                                  bottom: true,
-                                  maintainBottomViewPadding: true,
-                                  child: Padding(
-                                    padding:EdgeInsets.only(
-                                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                                return Dialog(
+                                  backgroundColor: Colors.transparent,
+                                  child: Material(
+                                    color: Colors.transparent,
                                     child: StatefulBuilder(
                                       builder: (BuildContext ctx,
                                               StateSetter setStatee) =>
                                           Padding(
                                         padding: EdgeInsets.all(3.w),
-                                        child: SizedBox(
-                                          // padding:
-                                          //     new EdgeInsets.fromLTRB(
-                                          //         10.0,
-                                          //         0.0,
-                                          //         10.0,
-                                          //         10.0),
-                                          height: 50.h,
-
-                                          child: Stack(
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(top: 3.w),
+                                        child: Stack(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(top: 3.w),
+                                              child: Container(
+                                                color: Colors.white,
+                                                padding: EdgeInsets.all(3.w),
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    TextField(
+                                                      onChanged: (value) {
+                                                        setStatee(() {
+                                                          _searchList =
+                                                              filterSearchResults(
+                                                                  value);
+                                                        });
+                                                      },
+                                                      controller:
+                                                          editingController,
+                                                      decoration: InputDecoration(
+                                                          labelText:
+                                                              "Search Your Country",
+                                                          hintText:
+                                                              "Search Your Country",
+                                                          prefixIcon: Icon(
+                                                              Icons.search),
+                                                          border: OutlineInputBorder(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          5.0)))),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Expanded(
+                                                      child: ListView(
+                                                        children: List.generate(
+                                                            _searchList
+                                                                        .length ==
+                                                                    0
+                                                                ? countries
+                                                                    .length
+                                                                : _searchList
+                                                                    .length,
+                                                            (index) => _searchItems(
+                                                                _searchList.length ==
+                                                                        0
+                                                                    ? countries[
+                                                                        index]
+                                                                    : _searchList[
+                                                                        index])),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: ClipOval(
                                                 child: Container(
-                                                  decoration: new BoxDecoration(
+                                                  color: Colors.black,
+                                                  child: InkWell(
+                                                    child: Icon(
+                                                      Icons.close,
                                                       color: Colors.white,
-                                                      borderRadius: new BorderRadius
-                                                              .only(
-                                                          topLeft:
-                                                              const Radius.circular(
-                                                                  30.0),
-                                                          topRight:
-                                                              const Radius.circular(
-                                                                  30.0),
-                                                          bottomLeft:
-                                                              const Radius.circular(
-                                                                  30.0),
-                                                          bottomRight:
-                                                              const Radius.circular(
-                                                                  30.0))),
-                                                  padding: EdgeInsets.all(3.w),
-                                                  child: Column(
-                                                    children: [
-                                                      SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      TextField(
-                                                        onChanged: (value) {
-                                                          setStatee(() {
-                                                            _searchList =
-                                                                filterSearchResults(
-                                                                    value);
-                                                          });
-                                                        },
-                                                        controller:
-                                                            editingController,
-                                                        decoration: InputDecoration(
-                                                            labelText:
-                                                                "Search Your Country",
-                                                            hintText:
-                                                                "Search Your Country",
-                                                            prefixIcon:
-                                                                Icon(Icons.search),
-                                                            border: OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius.all(
-                                                                        Radius.circular(
-                                                                            5.0)))),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      Expanded(
-                                                        child: ListView
-                                                          (
-                                                          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                                                          children: List.generate(
-                                                              _searchList.length ==
-                                                                      0
-                                                                  ? countries.length
-                                                                  : _searchList
-                                                                      .length,
-                                                              (index) => _searchItems(
-                                                                  _searchList.length ==
-                                                                          0
-                                                                      ? countries[
-                                                                          index]
-                                                                      : _searchList[
-                                                                          index])),
-                                                        ),
-                                                      )
-                                                    ],
+                                                    ),
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                    },
                                                   ),
                                                 ),
                                               ),
-                                              Positioned(
-                                                top: 1,
-                                                right: 1.w,
-                                                child: ClipOval(
-                                                  child: Container(
-                                                    color: Colors.black,
-                                                    child: InkWell(
-                                                      child: Icon(
-                                                        Icons.close,
-                                                        color: Colors.white,
-                                                      ),
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
+                                            )
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -948,9 +924,7 @@ class _AddressScreenState extends State<AddressScreen>
                                 });
                                 break;
                               } else {
-
-                                  _countryId = '';
-                          
+                                _countryId = '';
                               }
                             }
 

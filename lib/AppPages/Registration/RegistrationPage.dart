@@ -18,7 +18,6 @@ import 'package:untitled2/AppPages/OtP/NewxxOTPxxScreen.dart';
 import 'package:untitled2/AppPages/WebxxViewxx/TopicPagexx.dart';
 import 'package:untitled2/Constants/ConstantVariables.dart';
 import 'package:untitled2/Widgets/widgets/AppBar.dart';
-import 'package:untitled2/new_apis_func/data_layer/constant_data/constant_data.dart';
 import 'package:untitled2/new_apis_func/data_layer/new_model/countries_info_model/countries_info_model.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/provider_class/provider_contracter.dart';
 import 'package:untitled2/utils/ApiCalls/ApiCalls.dart';
@@ -354,53 +353,58 @@ class _RegstrationPageState extends State<RegstrationPage>
                                             ),
                                           ),
                                           Consumer<NewApisProvider>(
-                                            builder: (context,value,child) {
-                                              return IntlPhoneField(
-                                                controller: mController,
-                                                decoration: InputDecoration(
-                                                    labelText: ''.toUpperCase(),
-                                                    labelStyle: TextStyle(
-                                                        fontSize: 1.w,
-                                                        color: myFocusNode.hasFocus
-                                                            ? AppColor
-                                                                .PrimaryAccentColor
-                                                            : Colors.grey),
-                                                    border: InputBorder.none,
-                                                    counterText: ''),
-                                                initialCountryCode: value.initialPrefix,
-                                                onChanged: (phone) {
-                                                  print(phone.completeNumber);
+                                              builder: (context, value, child) {
+                                            return IntlPhoneField(
+                                              controller: mController,
+                                              decoration: InputDecoration(
+                                                  labelText: ''.toUpperCase(),
+                                                  labelStyle: TextStyle(
+                                                      fontSize: 1.w,
+                                                      color: myFocusNode
+                                                              .hasFocus
+                                                          ? AppColor
+                                                              .PrimaryAccentColor
+                                                          : Colors.grey),
+                                                  border: InputBorder.none,
+                                                  counterText: ''),
+                                              initialCountryCode:
+                                                  value.initialPrefix,
+                                              onChanged: (phone) {
+                                                print(phone.completeNumber);
 
-                                                  setState(() {
+                                                setState(() {
+                                                  phnDialCode = phone
+                                                      .countryCode
+                                                      .replaceAll('+', '');
+                                                });
+                                              },
+                                              onCountryChanged: (country) {
+                                                print('Country changed to: ' +
+                                                    country.name);
 
-
-                                                    phnDialCode = phone.countryCode
-                                                        .replaceAll('+', '');
-                                                  });
-                                                },
-                                                onCountryChanged: (country) {
-                                                  print('Country changed to: ' +
-                                                      country.name);
-
-                                                  setState(() {
-                                                    for (Country val in countries) {
-                                                      if (val.code.toLowerCase() == country.code.toLowerCase()) {
-                                                        _initialVal = val;
-                                                        print(country.code);
-                                                        break;
-                                                      }
+                                                setState(() {
+                                                  for (Country val
+                                                      in countries) {
+                                                    if (val.code
+                                                            .toLowerCase() ==
+                                                        country.code
+                                                            .toLowerCase()) {
+                                                      _initialVal = val;
+                                                      print(country.code);
+                                                      break;
                                                     }
-                                                    phnDialCode = country.dialCode;
-                                                  });
-                                                },
-                                                autovalidateMode: AutovalidateMode
-                                                    .onUserInteraction,
-                                                style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14),
-                                              );
-                                            }
-                                          ),
+                                                  }
+                                                  phnDialCode =
+                                                      country.dialCode;
+                                                });
+                                              },
+                                              autovalidateMode: AutovalidateMode
+                                                  .onUserInteraction,
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14),
+                                            );
+                                          }),
                                         ],
                                       ),
                                     ),
@@ -491,135 +495,108 @@ class _RegstrationPageState extends State<RegstrationPage>
                                   addVerticalSpace(14),
                                   GestureDetector(
                                     onTap: () {
-                                      showModalBottomSheet(
-                                          elevation: 10,
-                                          isScrollControlled: true,
-                                          isDismissible: false,
-                                          backgroundColor: Colors.transparent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(25.0),
-                                            ),
-                                          ),
+                                      showDialog(
+                                          barrierDismissible: false,
                                           context: context,
                                           builder: (context) {
-                                            return StatefulBuilder(
-                                              builder: (BuildContext ctx,
-                                                      StateSetter setStatee) =>
-                                                  Padding(
-                                                padding: EdgeInsets.all(3.w),
-                                                child: SizedBox(
-                                                  // padding:
-                                                  //     new EdgeInsets.fromLTRB(
-                                                  //         10.0,
-                                                  //         0.0,
-                                                  //         10.0,
-                                                  //         10.0),
-                                                  height: 50.h,
-
-                                                  child: Stack(
-                                                    children: [
+                                            return Dialog(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              child: Material(
+                                                color: Colors.transparent,
+                                                child: StatefulBuilder(
+                                                  builder: (BuildContext ctx,
+                                                          StateSetter
+                                                              setStatee) =>
                                                       Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                top: 3.w),
-                                                        child: Container(
-                                                          decoration: new BoxDecoration(
-                                                              color: Colors
-                                                                  .white,
-                                                              borderRadius: new BorderRadius
-                                                                      .only(
-                                                                  topLeft:
-                                                                      const Radius
-                                                                              .circular(
-                                                                          30.0),
-                                                                  topRight:
-                                                                      const Radius
-                                                                              .circular(
-                                                                          30.0),
-                                                                  bottomLeft:
-                                                                      const Radius
-                                                                              .circular(
-                                                                          30.0),
-                                                                  bottomRight:
-                                                                      const Radius
-                                                                              .circular(
-                                                                          30.0))),
+                                                    padding:
+                                                        EdgeInsets.all(3.w),
+                                                    child: Stack(
+                                                      children: [
+                                                        Padding(
                                                           padding:
-                                                              EdgeInsets.all(
-                                                                  3.w),
-                                                          child: Column(
-                                                            children: [
-                                                              SizedBox(
-                                                                height: 20,
-                                                              ),
-                                                              TextField(
-                                                                onChanged:
-                                                                    (value) {
-                                                                  setStatee(() {
-                                                                    _searchList =
-                                                                        filterSearchResults(
-                                                                            value);
-                                                                  });
-                                                                },
-                                                                controller:
-                                                                    editingController,
-                                                                decoration: InputDecoration(
-                                                                    labelText:
-                                                                        "Search Your Country",
-                                                                    hintText:
-                                                                        "Search Your Country",
-                                                                    prefixIcon:
-                                                                        Icon(Icons
-                                                                            .search),
-                                                                    border: OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(5.0)))),
-                                                              ),
-                                                              SizedBox(
-                                                                height: 20,
-                                                              ),
-                                                              Expanded(
-                                                                child: ListView(
-                                                                  children: List.generate(
-                                                                      _searchList.length == 0
-                                                                          ? countries
-                                                                              .length
-                                                                          : _searchList
-                                                                              .length,
-                                                                      (index) => _searchItems(_searchList.length ==
-                                                                              0
-                                                                          ? countries[
-                                                                              index]
-                                                                          : _searchList[
-                                                                              index])),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Positioned(
-                                                        top: 1,
-                                                        right: 1.w,
-                                                        child: ClipOval(
+                                                              EdgeInsets.only(
+                                                                  top: 3.w),
                                                           child: Container(
-                                                            color: Colors.black,
-                                                            child: InkWell(
-                                                              child: Icon(
-                                                                Icons.close,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              onTap: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
+                                                            color: Colors.white,
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    3.w),
+                                                            child: Column(
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 20,
+                                                                ),
+                                                                TextField(
+                                                                  onChanged:
+                                                                      (value) {
+                                                                    setStatee(
+                                                                        () {
+                                                                      _searchList =
+                                                                          filterSearchResults(
+                                                                              value);
+                                                                    });
+                                                                  },
+                                                                  controller:
+                                                                      editingController,
+                                                                  decoration: InputDecoration(
+                                                                      labelText:
+                                                                          "Search Your Country",
+                                                                      hintText:
+                                                                          "Search Your Country",
+                                                                      prefixIcon:
+                                                                          Icon(Icons
+                                                                              .search),
+                                                                      border: OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.all(Radius.circular(5.0)))),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 20,
+                                                                ),
+                                                                Expanded(
+                                                                  child:
+                                                                      ListView(
+                                                                    children: List.generate(
+                                                                        _searchList.length ==
+                                                                                0
+                                                                            ? countries
+                                                                                .length
+                                                                            : _searchList
+                                                                                .length,
+                                                                        (index) => _searchItems(_searchList.length ==
+                                                                                0
+                                                                            ? countries[index]
+                                                                            : _searchList[index])),
+                                                                  ),
+                                                                )
+                                                              ],
                                                             ),
                                                           ),
                                                         ),
-                                                      )
-                                                    ],
+                                                        Positioned(
+                                                          top: 0,
+                                                          right: 0,
+                                                          child: ClipOval(
+                                                            child: Container(
+                                                              color:
+                                                                  Colors.black,
+                                                              child: InkWell(
+                                                                child: Icon(
+                                                                  Icons.close,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                onTap: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -941,7 +918,7 @@ class _RegstrationPageState extends State<RegstrationPage>
                                               email: eController.text,
                                               password: cpController.text,
                                               registerBody: regBody,
-                                                  dialCode: phnDialCode,
+                                              dialCode: phnDialCode,
                                             )
                                             // OTP_Screen(
                                             // title: 'OTP SCREEN',
@@ -996,8 +973,6 @@ class _RegstrationPageState extends State<RegstrationPage>
   //   print(_initialPrefix);
   // }
 
-
-
   bool returnVisibility({required String countryCode}) {
     bool _isAvailable = true;
     for (CountriesDataResponse val in provider.countriesInfo) {
@@ -1031,7 +1006,9 @@ class _RegstrationPageState extends State<RegstrationPage>
           },
           child: Card(
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            color: Colors.white,
+            color: _initialVal != null && _initialVal == item
+                ? ConstantsVar.appColor
+                : Colors.white,
             elevation: 4,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -1041,7 +1018,9 @@ class _RegstrationPageState extends State<RegstrationPage>
               child: Container(
                 width: 70.w,
                 alignment: Alignment.centerLeft,
-                color: _initialVal!=null&&_initialVal ==item?ConstantsVar.appColor:Colors.white,
+                color: _initialVal != null && _initialVal == item
+                    ? ConstantsVar.appColor
+                    : Colors.white,
                 padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 6.0),
                 child: Row(children: [
                   SizedBox(
@@ -1061,7 +1040,12 @@ class _RegstrationPageState extends State<RegstrationPage>
                       item.name,
                       maxLines: 2,
                       style: TextStyle(
-                          fontSize: 5.w, overflow: TextOverflow.ellipsis),
+                        fontSize: 5.w,
+                        overflow: TextOverflow.ellipsis,
+                        color: _initialVal != null && _initialVal == item
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   )
                 ]),
@@ -1081,7 +1065,7 @@ class _RegstrationPageState extends State<RegstrationPage>
 
     for (int i = 0; i < countries.length; i++) {
       Country name = countries[i];
-      if (name.name.toLowerCase().contains(query.toLowerCase())) {
+      if (name.name.toLowerCase().startsWith(query.toLowerCase()) ) {
         _searchedList.add(countries[i]);
       }
     }

@@ -189,18 +189,21 @@ class _HomeScreenMainState extends State<HomeScreenMain>
       log('First Time >>>>>>>>' +
           ConstantsVar.prefs.getBool('isFirstTime').toString());
       initSharedPrefs();
-      _fireEvents = FirebaseEvents.initialize(context: context);
-      late CustomProgressDialog progressDialog;
-      WidgetsBinding.instance?.addObserver(this);
+      WidgetsBinding.instance.addObserver(this);
+      if (mounted) {
+        ApiCalls.readCounter(context: context);
+      }
 
       getApiToken().whenComplete(() async {
         setState(() {});
+        apiCallToHomeScreen("value");
 
         showAdDialog().whenComplete(() {
           // await FirebaseAnalytics.instance.logEvent(
           //     name: 'screen_view_', parameters: {'screen_name': 'Home Screen'});
-          apiCallToHomeScreen("value");
-          initSharedPrefs().whenComplete(() => getRecentlyViewedProduct());
+          initSharedPrefs().whenComplete(
+            () => getRecentlyViewedProduct(),
+          );
         });
       }).then((v) => setState(() {
             isLoading = false;
@@ -211,6 +214,8 @@ class _HomeScreenMainState extends State<HomeScreenMain>
       // ApiCa readCounter(customerGuid: gUId).then((value) => context.read<cartCounter>().changeCounter(value));
       getSocialMediaLink();
       /*Facebook events*/
+      _fireEvents = FirebaseEvents.initialize(context: context);
+
       _provider.getSearchSuggestions();
       _fbEvents
           .sendScreenViewData(
@@ -231,6 +236,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
 
       ;
     }
+    getTopicPage();
 
     super.initState();
   }
@@ -430,7 +436,10 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                       ? SizedBox(
                           height: 100.h,
                           child: !categoryVisible
-                              ? const Center(child: CircularProgressIndicator())
+                              ?
+                              // SizedBox()
+                          const Center(child: CircularProgressIndicator())
+
                               : ListView(
                                   keyboardDismissBehavior:
                                       ScrollViewKeyboardDismissBehavior.onDrag,
@@ -581,9 +590,10 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                             InputBorder.none,
                                                         contentPadding:
                                                             const EdgeInsets
-                                                                    .symmetric(
-                                                                vertical: 13, ),
-                                                                                                                                                         hintText: 'Search here',
+                                                                .symmetric(
+                                                          vertical: 13,
+                                                        ),
+                                                        hintText: 'Search here',
                                                         labelStyle: TextStyle(
                                                             fontSize: 7.w,
                                                             color: Colors.grey),
@@ -677,7 +687,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                                             Alignment.bottomCenter,
                                                                         child:
                                                                             TextButton(
-                                                                                    child:
+                                                                          child:
                                                                               const Text(
                                                                             'Clear',
                                                                             style:
@@ -1328,7 +1338,6 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                             ],
                           ),
                         ),
-                  
 
                   // SizedBox()
                 ],
@@ -1384,7 +1393,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
       return OpenContainer(
         closedElevation: 0,
         clipBehavior: Clip.hardEdge,
-        openColor:Colors.transparent,
+        openColor: Colors.transparent,
         closedBuilder: (BuildContext context, void Function() action) {
           return Stack(
             children: [
@@ -1515,7 +1524,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
       {required Product list, required ThemeData theme}) {
     return OpenContainer(
       closedElevation: 0,
-      openColor:Colors.transparent,
+      openColor: Colors.transparent,
       openBuilder:
           (BuildContext context, void Function({Object? returnValue}) action) {
         return NewProductDetails(
@@ -1694,7 +1703,6 @@ class _HomeScreenMainState extends State<HomeScreenMain>
 /* Api call to home screen */
   Future<void> apiCallToHomeScreen(String value) async {
     // getSearchSuggestions();
-    getTopicPage();
     // ApiCalls.getRecentlyViewedProduct();
     // var guestCustomerId = ConstantsVar.prefs.getString('guestGUID')!;
     if (mounted) {
@@ -1758,6 +1766,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
           if (mounted) {
             setState(() {
               _isError = false;
+              categoryVisible = true;
             });
           }
           HomeResponse1 homeResponse = HomeResponse1.fromJson(
@@ -1783,7 +1792,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                           .setString('productString', _productString);
                       ConstantsVar.prefs
                           .setString('categoryString', _categoryString);
-                      categoryVisible = true;
+
                       // getServiceList();
 
                       for (var i = 0; i < categoryList.length; i++) {
@@ -1827,9 +1836,6 @@ class _HomeScreenMainState extends State<HomeScreenMain>
         });
       }
     }
-    if (mounted) {
-      ApiCalls.readCounter(context: context);
-    }
   }
 
   Widget categroryLeftView(
@@ -1853,7 +1859,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
               tappable: true,
               closedElevation: 0,
               openElevation: 0,
-              openColor:Colors.transparent ,
+              openColor: Colors.transparent,
               transitionType: _transitionType,
               closedBuilder: (BuildContext context, void Function() action) {
                 return SizedBox(
@@ -1897,7 +1903,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
               closedElevation: 0,
               openElevation: 0,
               transitionType: _transitionType,
-              openColor:Colors.transparent,
+              openColor: Colors.transparent,
               openBuilder: (BuildContext context,
                   void Function({Object? returnValue}) action) {
                 if (type == true) {
@@ -1999,7 +2005,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
               tappable: true,
               closedElevation: 0,
               openElevation: 0,
-              openColor:Colors.transparent,
+              openColor: Colors.transparent,
               transitionType: _transitionType,
               openBuilder: (BuildContext context,
                   void Function({Object? returnValue}) action) {
@@ -2087,7 +2093,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
               tappable: true,
               closedElevation: 0,
               openElevation: 0,
-              openColor:Colors.transparent,
+              openColor: Colors.transparent,
               transitionType: _transitionType,
               closedBuilder: (BuildContext context, void Function() action) {
                 return SizedBox(

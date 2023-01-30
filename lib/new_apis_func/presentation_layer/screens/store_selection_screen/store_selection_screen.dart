@@ -222,7 +222,7 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen> {
                                 padding: EdgeInsets.all(2.h),
                                 child: Center(
                                   child: AutoSizeText(
-                                    'Please note\: If you are not from following country\[UAE\, Bahrain \& Kuwait\], Shipping may not be available for your area.',
+                                    'Please note\: International shipping rates may be different for each country.',
                                     style: TextStyle(
                                         shadows: <Shadow>[
                                           Shadow(

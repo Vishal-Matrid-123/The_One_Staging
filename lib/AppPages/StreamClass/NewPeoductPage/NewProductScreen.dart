@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as b;
 import 'package:checkbox_grouped/checkbox_grouped.dart';
 import 'package:expandable/expandable.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -274,8 +274,8 @@ class _NewProductDetailsState extends State<NewProductDetails>
                   radius: 48,
                   child: Consumer<CartCounter>(
                     builder: (context, value, child) {
-                      return Badge(
-                        position: BadgePosition.topEnd(),
+                      return b.Badge(
+                        position: b.BadgePosition.topEnd(),
                         badgeColor: Colors.white,
                         badgeContent:
                             AutoSizeText(value.badgeNumber.toString()),

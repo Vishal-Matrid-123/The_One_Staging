@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart'as b;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -244,8 +244,8 @@ class _SearchPageState extends State<SearchPage>
                   radius: 48,
                   child: Consumer<CartCounter>(
                     builder: (context, value, child) {
-                      return Badge(
-                        position: BadgePosition.topEnd(),
+                      return b.Badge(
+                        position: b.BadgePosition.topEnd(),
                         badgeColor: Colors.white,
                         badgeContent:
                         AutoSizeText(value.badgeNumber.toString()),
