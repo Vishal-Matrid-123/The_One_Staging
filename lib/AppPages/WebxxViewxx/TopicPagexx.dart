@@ -65,9 +65,7 @@ class _TopicPageState extends State<TopicPage> {
     cookieValue =
         await ConstantsVar.prefs.getString('guestGUID') ?? 'No ID Pass';
     setState(() {});
-    log('User Log In>>' +
-        '$isUserLoggedIn' +
-        ' Customer GUID>>>> $cookieValue');
+    log('User Log In>>' + '$isUserLoggedIn' + ' Customer GUID>>>> $_userName');
   }
 
   @override
@@ -123,7 +121,7 @@ class _TopicPageState extends State<TopicPage> {
               backgroundColor: ConstantsVar.appColor,
               toolbarHeight: 18.w,
               centerTitle: true,
-              leading: NavigationControls(_controller.future,'Topic Screen'),
+              leading: NavigationControls(_controller.future, 'Topic Screen'),
               actions: [
                 FutureBuilder<WebViewController>(
                   future: _webViewControllerFuture,
@@ -201,32 +199,32 @@ class _TopicPageState extends State<TopicPage> {
                                   onWillPop: !webViewReady
                                       ? null
                                       : () async {
-                                    if (await controller!.canGoBack()) {
-                                      controller.goBack();
-                                      return false;
-                                    } else {
-                                      if (widget.screenName
-                                          .toLowerCase()
-                                          .contains('shipping')) {
-                                        Navigator.pushAndRemoveUntil(
-                                            context,
-                                            CupertinoPageRoute(
-                                                builder: (context) =>
-                                                const MyOrders(
-                                                  isFromWeb: true,
-                                                )),
-                                                (route) => false);
-                                      } else {
-                                        Navigator.pop(context);
-                                      }
+                                          if (await controller!.canGoBack()) {
+                                            controller.goBack();
+                                            return false;
+                                          } else {
+                                            if (widget.screenName
+                                                .toLowerCase()
+                                                .contains('shipping')) {
+                                              Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  CupertinoPageRoute(
+                                                      builder: (context) =>
+                                                          const MyOrders(
+                                                            isFromWeb: true,
+                                                          )),
+                                                  (route) => false);
+                                            } else {
+                                              Navigator.pop(context);
+                                            }
 
-                                      // Scaffold.of(context).showSnackBar(
-                                      //   const SnackBar(
-                                      //       content: Text("No back history item")),
-                                      // );
-                                      return true;
-                                    }
-                                  },
+                                            // Scaffold.of(context).showSnackBar(
+                                            //   const SnackBar(
+                                            //       content: Text("No back history item")),
+                                            // );
+                                            return true;
+                                          }
+                                        },
                                   child: Container(
                                     width: 100.w,
                                     height: 100.h,
@@ -426,9 +424,11 @@ class _TopicPageState extends State<TopicPage> {
                                                   document.getElementById("FullName").value="$_userName"
                                                   ''';
                                               String javaScript5 =
-                                                  'document.getElementsByClassName("timebutton text-box single-line")[1].value=\'${_phoneNumber.replaceAll("", '')}\'';
+                                                  '''document.getElementsByClassName("timebutton text-box single-line")[1].value=\'${_phoneNumber.replaceAll("", '')}\'
+                                                  ''';
                                               String javaScript6 =
                                                   'document.getElementsByClassName("timebutton text-box single-line")[2].value=\"$_email\"';
+
                                               String javaScript7 = '''
                                                   document.getElementById("fname").value="$_userName"
                                                   ''';
@@ -436,6 +436,9 @@ class _TopicPageState extends State<TopicPage> {
                                                   'document.getElementsByClassName("add text-box single-line")[1].value=\'${_phoneNumber.replaceAll(' ', '')}\'';
                                               String javaScript9 =
                                                   'document.getElementsByClassName("add text-box single-line")[2].value=\"$_email\"';
+                                              print('THE One Way>>> ' + javaScript7);
+                                              print('THE One Way>>> ' + javaScript8);
+                                              print('THE One Way>>> ' + javaScript9);
 
                                               //
                                               if (isUserLoggedIn != null &&
@@ -445,11 +448,9 @@ class _TopicPageState extends State<TopicPage> {
                                                           'theoneexpress') &&
                                                   val.isBookingAvailable ==
                                                       true) {
-                                                value
-                                                    .runJavascriptReturningResult(
-                                                        'document.getElementsByClassName("popup")[0].remove();')
-                                                    .then((value) => print(
-                                                        value.toString()));
+                                                print("Javascript>>" +
+                                                    javaScript4);
+
                                                 await _webController
                                                     .runJavascript(
                                                         javaScriptString1);
@@ -458,8 +459,13 @@ class _TopicPageState extends State<TopicPage> {
                                                         javaScriptString2);
                                                 value.runJavascript(
                                                     'document.getElementById("Date").readOnly=true;');
-                                                value
-                                                    .runJavascript(javaScript3);
+
+                                                await _webController
+                                                    .runJavascript(javaScript5);
+                                                await _webController
+                                                    .runJavascript(javaScript4);
+                                                await _webController
+                                                    .runJavascript(javaScript6);
                                               } else if (isUserLoggedIn !=
                                                       null &&
                                                   urlPart
@@ -472,8 +478,7 @@ class _TopicPageState extends State<TopicPage> {
                                                     'document.getElementsByClassName("popup")[0].remove();');
                                                 value.runJavascript(
                                                     'document.getElementById("Date").readOnly=true;');
-                                                value
-                                                    .runJavascript(javaScript3);
+                                                
                                                 value
                                                     .runJavascript(javaScript4);
                                                 value
@@ -487,6 +492,7 @@ class _TopicPageState extends State<TopicPage> {
                                                       .contains('theoneway')) {
                                                 value.runJavascript(
                                                     'document.getElementsByClassName("popup")[0].remove();');
+                                              
                                                 value
                                                     .runJavascript(javaScript7);
                                                 value
@@ -819,18 +825,20 @@ class _TopicPageState extends State<TopicPage> {
                                                       '';
 
                                               String javaScriptString1 =
-                                                  '''\$('.express.app .popup').attr('style', 'z-index: 99999;position: absolute;opacity: 0.8;display:block;color: black;background: black;padding: 17%;font-weight: 700;color: white;height:-webkit-fill-available;float: left;left:0;right:0;text-align:center;');''';
+                                              '''\$('.express.app .popup').attr('style', 'z-index: 99999;position: absolute;opacity: 0.8;display:block;color: black;background: black;padding: 17%;font-weight: 700;color: white;height:-webkit-fill-available;float: left;left:0;right:0;text-align:center;');''';
                                               String javaScriptString2 =
-                                                  '''\$('.popup').html('<h1><b style="color:#ffff">You already having a booking with us.</b></h1>')''';
+                                              '''\$('.popup').html('<h1><b style="color:#ffff">You already having a booking with us.</b></h1>')''';
                                               String javaScript3 =
                                                   'document.getElementById("ui-datepicker-div").style.top=\'1410px\';';
                                               String javaScript4 = '''
                                                   document.getElementById("FullName").value="$_userName"
                                                   ''';
                                               String javaScript5 =
-                                                  'document.getElementsByClassName("timebutton text-box single-line")[1].value=\'${_phoneNumber.replaceAll(' ', '')}\'';
+                                              '''document.getElementsByClassName("timebutton text-box single-line")[1].value=\'${_phoneNumber.replaceAll("", '')}\'
+                                                  ''';
                                               String javaScript6 =
                                                   'document.getElementsByClassName("timebutton text-box single-line")[2].value=\"$_email\"';
+
                                               String javaScript7 = '''
                                                   document.getElementById("fname").value="$_userName"
                                                   ''';
@@ -838,36 +846,42 @@ class _TopicPageState extends State<TopicPage> {
                                                   'document.getElementsByClassName("add text-box single-line")[1].value=\'${_phoneNumber.replaceAll(' ', '')}\'';
                                               String javaScript9 =
                                                   'document.getElementsByClassName("add text-box single-line")[2].value=\"$_email\"';
+                                              print('THE One Way>>> ' + javaScript7);
+                                              print('THE One Way>>> ' + javaScript8);
+                                              print('THE One Way>>> ' + javaScript9);
 
                                               //
                                               if (isUserLoggedIn != null &&
                                                   urlPart
                                                       .toLowerCase()
                                                       .contains(
-                                                          'theoneexpress') &&
+                                                      'theoneexpress') &&
                                                   val.isBookingAvailable ==
                                                       true) {
-                                                value
-                                                    .runJavascriptReturningResult(
-                                                        'document.getElementsByClassName("popup")[0].remove();')
-                                                    .then((value) => print(
-                                                        value.toString()));
+                                                print("Javascript>>" +
+                                                    javaScript4);
+
                                                 await _webController
                                                     .runJavascript(
-                                                        javaScriptString1);
+                                                    javaScriptString1);
                                                 await _webController
                                                     .runJavascript(
-                                                        javaScriptString2);
+                                                    javaScriptString2);
                                                 value.runJavascript(
                                                     'document.getElementById("Date").readOnly=true;');
-                                                value
-                                                    .runJavascript(javaScript3);
+
+                                                await _webController
+                                                    .runJavascript(javaScript5);
+                                                await _webController
+                                                    .runJavascript(javaScript4);
+                                                await _webController
+                                                    .runJavascript(javaScript6);
                                               } else if (isUserLoggedIn !=
-                                                      null &&
+                                                  null &&
                                                   urlPart
                                                       .toLowerCase()
                                                       .contains(
-                                                          'theoneexpress') &&
+                                                      'theoneexpress') &&
                                                   val.isBookingAvailable ==
                                                       false) {
                                                 value.runJavascript(
@@ -883,12 +897,13 @@ class _TopicPageState extends State<TopicPage> {
                                                 value
                                                     .runJavascript(javaScript6);
                                               } else if (isUserLoggedIn !=
-                                                      null &&
+                                                  null &&
                                                   urlPart
                                                       .toLowerCase()
                                                       .contains('theoneway')) {
                                                 value.runJavascript(
                                                     'document.getElementsByClassName("popup")[0].remove();');
+
                                                 value
                                                     .runJavascript(javaScript7);
                                                 value

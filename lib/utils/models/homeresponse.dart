@@ -119,7 +119,7 @@ class HomePageProductImage {
   });
 
   String price;
-  int id;
+  String id;
   String name;
   String discountPercentage;
   List<String> imageUrl;
@@ -129,7 +129,7 @@ class HomePageProductImage {
       HomePageProductImage(
         price: json["price"],
         parentCategoryId:  json['ParentCategoryId']??'',
-        id: json["Id"],
+        id: json["Id"].toString(),
         name: json["Name"],
         imageUrl: List<String>.from(json["ImageUrl"].map((x) => x)),
         discountPercentage: json['DiscountPercent'] ?? '',

@@ -12,7 +12,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:untitled2/AppPages/MyAccount/MyAccount.dart';
 import 'package:untitled2/AppPages/MyAddresses/AddressResponse.dart';
 import 'package:untitled2/AppPages/StreamClass/NewPeoductPage/ProductResponse.dart';
@@ -26,6 +25,7 @@ import 'package:untitled2/new_apis_func/presentation_layer/events_handlers/faceb
 import 'package:untitled2/new_apis_func/presentation_layer/events_handlers/firebase_events.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/screens/store_selection_screen/store_selection_screen.dart';
 import 'package:untitled2/utils/ApiCalls/ApiCalls.dart';
+import 'package:untitled2/utils/models/homeresponse.dart';
 
 import '../../../AppPages/HomeScreen/HomeScreen.dart';
 import '../../../AppPages/HomeScreen/HomeScreenMain/SearchSuggestions/SearchSuggestion.dart';
@@ -58,6 +58,14 @@ class NewApisProvider extends ChangeNotifier {
   bool _isShippingMethodScreenError = false;
   bool _isSwitchVal = false;
   bool _isBooking = false;
+  bool _isHomeScreenBannerLoading = false;
+  bool _isHomeScreenBannerError = false;
+  bool _isHomeScreenProductLoading = false;
+  bool _isHomeScreenProductError = false;
+  bool _isHomeScreenCategoryLoading = false;
+  bool _isHomeScreenCategoryError = false;
+  List<Bannerxx> _banners = [];
+
   int _productCount = 0;
 
   double _checkoutAmount = 0.0;
@@ -106,10 +114,17 @@ class NewApisProvider extends ChangeNotifier {
   List<AnalyticsEventItem> _eventItemsForViewCart = [];
   List<AnalyticsEventItem> _eventItemsForItemList = [];
   List<CountriesDataResponse> _countriesInfo = [];
+  List<HomePageProductImage> _productListHome = [];
+  List<Widget> _viewsList = [];
+  String _titleHome = '';
+
+  List<HomePageCategoriesImage> _categoryListHome = [];
 
   double get checkoutAmount => _checkoutAmount;
 
   String get currency => _currency;
+
+  String get titleHome => _titleHome;
 
   /*Getter Methods*/
 
@@ -146,6 +161,18 @@ class NewApisProvider extends ChangeNotifier {
   bool get isSwitchVal => _isSwitchVal;
 
   bool get isupdated => _isupdated;
+
+  bool get homeBannerLoading => _isHomeScreenBannerLoading;
+
+  bool get homeBannerError => _isHomeScreenBannerError;
+
+  bool get homeProductLoading => _isHomeScreenProductLoading;
+
+  bool get homeProductError => _isHomeScreenProductError;
+
+  bool get homeCategoryLoading => _isHomeScreenCategoryLoading;
+
+  bool get homeCategoryError => _isHomeScreenCategoryError;
 
   ProductResponse get productResponse => _productResponse!;
 
@@ -189,6 +216,12 @@ class NewApisProvider extends ChangeNotifier {
   List<AnalyticsEventItem> get eventItemsForViewCart => _eventItemsForViewCart;
 
   List<CountriesDataResponse> get countriesInfo => _countriesInfo;
+
+  List<HomePageProductImage> get productListHome => _productListHome;
+
+  List<Bannerxx> get banners => _banners;
+
+  List<HomePageCategoriesImage> get homeScreenCategories => _categoryListHome;
 
   String get appVersion => _appVersion;
 
@@ -1126,8 +1159,8 @@ class NewApisProvider extends ChangeNotifier {
               );
             });
           } else {
-            Future.delayed(Duration.zero).whenComplete(() {
-              Navigator.pushReplacement(
+            Future.delayed(Duration.zero).whenComplete(() async {
+              await Navigator.pushReplacement(
                 context,
                 CupertinoPageRoute(
                   builder: (_) => StoreSelectionScreen(
@@ -1491,7 +1524,7 @@ class NewApisProvider extends ChangeNotifier {
   Future<void> getBookingStatus() async {
     _isBooking = false;
 
-    _isBooking = await ApiCalls.getBookingStatus();
+    _isBooking = ConstantsVar.prefs.getString('userID')!=null?await ApiCalls.getBookingStatus():false;
 
     print('isBooking done>>>>>>>' + _isBooking.toString());
 
@@ -1516,6 +1549,94 @@ class NewApisProvider extends ChangeNotifier {
         _initialPrefix = 'QA';
         break;
     }
+    notifyListeners();
+  }
+
+  Future<void> getHomeScreenBanners() async {
+    _isHomeScreenBannerLoading = true;
+    _isHomeScreenBannerError = false;
+    await ApiCalls.getHomeBanner().then((value) {
+      switch (value) {
+        case kerrorString:
+          _banners.clear();
+          _isHomeScreenBannerError = true;
+          break;
+        default:
+          String response =
+              jsonDecode(value)['ResponseData'].toString().replaceAll('\\', '');
+
+          print('Provider Response' + response);
+          _banners = List<Bannerxx>.from(
+            jsonDecode(jsonDecode(value)['ResponseData'])["banners"].map(
+              (e) => Bannerxx.fromJson(e),
+            ),
+          );
+          print('Banner length>>' + _banners.length.toString());
+      }
+    });
+    _isHomeScreenBannerLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getHomeScreenProducts() async {
+    _isHomeScreenProductLoading = true;
+    _isHomeScreenProductError = false;
+    await ApiCalls.getHomeProducts().then((value) {
+      switch (value) {
+        case kerrorString:
+          _titleHome = '';
+          _productListHome.clear();
+          _isHomeScreenProductError = true;
+          break;
+        default:
+          String response =
+              jsonDecode(value)['ResponseData'].toString().replaceAll('\\', '');
+
+          print('Product Response' + response);
+          _titleHome = jsonDecode(jsonDecode(value)['ResponseData']
+              .toString()
+              .replaceAll('\\', ''))["HomepageProductsTitle"];
+          _productListHome = List<HomePageProductImage>.from(
+            jsonDecode(jsonDecode(value)['ResponseData']
+                    .toString()
+                    .replaceAll('\\', ''))["HomePageProductImage"]
+                .map(
+              (e) => HomePageProductImage.fromJson(e),
+            ),
+          );
+          notifyListeners();
+          print('Product List length>>' + _banners.length.toString());
+      }
+    });
+    _isHomeScreenProductLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getHomeScreenCategories() async {
+    _categoryListHome.clear();
+    _isHomeScreenCategoryLoading = true;
+    _isHomeScreenCategoryError = false;
+    await ApiCalls.getHomeCategories().then((value) {
+      switch (value) {
+        case kerrorString:
+          _categoryListHome.clear();
+          _isHomeScreenCategoryError = true;
+          break;
+        default:
+          String response =
+              jsonDecode(value)['ResponseData'].toString().replaceAll('\\', '');
+
+          _categoryListHome = List<HomePageCategoriesImage>.from(
+            jsonDecode(response)['categories'].map(
+              (e) => HomePageCategoriesImage.fromJson(e),
+            ),
+          );
+          notifyListeners();
+          print('Category Response' + response);
+          print('Category List length>>' + _categoryListHome.length.toString());
+      }
+    });
+    _isHomeScreenCategoryLoading = false;
     notifyListeners();
   }
 }

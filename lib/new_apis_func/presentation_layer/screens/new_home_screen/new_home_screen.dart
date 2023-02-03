@@ -13,17 +13,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 // import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:untitled2/AppPages/Categories/ProductList/SubCatProducts.dart';
+import 'package:untitled2/AppPages/HomeScreen/HomeScreenMain/RecentlyViewedProductResponse.dart';
 import 'package:untitled2/AppPages/HomeScreen/HomeScreenMain/TopicPageResponse/TopicPageResponse.dart';
+import 'package:untitled2/AppPages/HomeScreen/HomeScreenMain/home_screen_main.dart';
 import 'package:untitled2/AppPages/NewSubCategoryPage/NewSCategoryPage.dart';
 import 'package:untitled2/AppPages/SearchPage/SearchPage.dart';
 import 'package:untitled2/AppPages/StreamClass/NewPeoductPage/NewProductScreen.dart';
@@ -34,6 +34,7 @@ import 'package:untitled2/Constants/ConstantVariables.dart';
 import 'package:untitled2/new_apis_func/data_layer/constant_data/constant_data.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/events_handlers/facebook_events.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/events_handlers/firebase_events.dart';
+import 'package:untitled2/new_apis_func/presentation_layer/provider_class/provider_contracter.dart';
 import 'package:untitled2/utils/ApiCalls/ApiCalls.dart';
 import 'package:untitled2/utils/NewIcons.dart';
 import 'package:untitled2/utils/models/homeresponse.dart';
@@ -41,43 +42,19 @@ import 'package:untitled2/utils/utils/build_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vs_scrollbar/vs_scrollbar.dart';
 
-import '../../../new_apis_func/presentation_layer/provider_class/provider_contracter.dart';
-
 // import '../../models/OrderSummaryResponse.dart';
-import 'RecentlyViewedProductResponse.dart';
 
-class HomeScreenMain extends StatefulWidget {
-  const HomeScreenMain({Key? key}) : super(key: key);
+class NewHomeScreenMain extends StatefulWidget {
+  const NewHomeScreenMain({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenMainState createState() {
-    return _HomeScreenMainState();
+  _NewHomeScreenMainState createState() {
+    return _NewHomeScreenMainState();
   }
 }
 
-class _HomeScreenMainState extends State<HomeScreenMain>
+class _NewHomeScreenMainState extends State<NewHomeScreenMain>
     with WidgetsBindingObserver {
-  late OverlayEntry overlayEntry;
-
-  var _updateVisible = false;
-  OverlayState? overlayState;
-
-  void _showOverlay(BuildContext context) {
-    overlayState = Overlay.of(context)!;
-
-    overlayEntry = OverlayEntry(builder: (context) {
-      // You can return any widget you like here
-      // to be displayed on the Overlay
-      return const SafeArea(
-        top: true,
-        child: Center(child: SpinKitRipple(color: Colors.red, size: 40)),
-      );
-    });
-
-    // Inserting the OverlayEntry into the Overlay
-    overlayState!.insert(overlayEntry);
-  }
-
   dynamic isFirstTime;
 
   bool _isError = false;
@@ -203,12 +180,12 @@ class _HomeScreenMainState extends State<HomeScreenMain>
           // await FirebaseAnalytics.instance.logEvent(
           //     name: 'screen_view_', parameters: {'screen_name': 'Home Screen'});
           initSharedPrefs().whenComplete(
-                () => getRecentlyViewedProduct(),
+            () => getRecentlyViewedProduct(),
           );
         });
       }).then((v) => setState(() {
-        isLoading = false;
-      }));
+            isLoading = false;
+          }));
       // overlayState!.deactivate();
 
       // _globalKey.currentState?.dismiss();
@@ -220,20 +197,20 @@ class _HomeScreenMainState extends State<HomeScreenMain>
       _provider.getSearchSuggestions();
       _fbEvents
           .sendScreenViewData(
-        type: "Home Screen",
-        id: "Home",
-      )
+            type: "Home Screen",
+            id: "Home",
+          )
           .whenComplete(
             () => log("Screen event complete"),
-      );
+          );
       /*Firebase Events*/
       _fireEvents
           .sendScreenViewData(
-        screenName: "Home Screen",
-      )
+            screenName: "Home Screen",
+          )
           .whenComplete(
             () => log("Firebase Screen Event Complete"),
-      );
+          );
 
       ;
     }
@@ -241,7 +218,6 @@ class _HomeScreenMainState extends State<HomeScreenMain>
 
     super.initState();
   }
-
 
   Future showAdDialog() async {
     String baseUrl = await ApiCalls.getSelectedStore();
@@ -398,24 +374,6 @@ class _HomeScreenMainState extends State<HomeScreenMain>
     );
   }
 
-  List<Widget> categoriesView({required List<HomePageCategoriesImage> list}) {
-    List<Widget> _viewsList = [];
-
-    for (var i = 0; i < list.length; i++) {
-      if (i % 2 == 0) {
-        _viewsList.add(
-          categroryLeftView(list[i].name, list[i].imageUrl,
-              list[i].id, list[i].isSubCategory),
-        );
-      } else {
-        _viewsList.add(
-          categoryRightView(list[i].name, list[i].imageUrl,
-              list[i].id.toString(), list[i].isSubCategory),
-        );
-      }
-    }
-    return _viewsList;
-  }
   Widget buildSafeArea(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
     ThemeData theme = Theme.of(context);
@@ -456,7 +414,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                     height: 100.h,
                     child: ListView(
                       keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
+                          ScrollViewKeyboardDismissBehavior.onDrag,
                       // physics: NeverScrollableScrollPhysics(),
                       //   physics: ScrollPhysics(),
                       children: [
@@ -489,279 +447,276 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                     Radius.circular(5),
                                   ),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Consumer<NewApisProvider>(
-                                    builder: (_, value, c) {
-                                      return RawAutocomplete<String>(
-                                        optionsBuilder:
-                                            (TextEditingValue textEditingValue) {
-                                          if (textEditingValue.text == '' ||
-                                              textEditingValue.text.length < 3) {
-                                            return const Iterable<String>.empty();
-                                          }
-                                          return value.searchSuggestions
-                                              .where((String option) {
-                                            return option.toLowerCase().contains(
-                                                RegExp(
-                                                    textEditingValue.text
-                                                        .toLowerCase(),
-                                                    caseSensitive: false));
-                                          });
-                                        },
-                                        onSelected: (String selection) {
-                                          if (!currentFocus.hasPrimaryFocus) {
-                                            currentFocus.unfocus();
-                                          }
-                                          log('$selection selected');
-                                        },
-                                        fieldViewBuilder: (BuildContext context,
-                                            TextEditingController
-                                            textEditingController,
-                                            FocusNode focusNode,
-                                            VoidCallback onFieldSubmitted) {
-                                          _searchController =
-                                              textEditingController;
-                                          _focusNode = focusNode;
-                                          // FocusScopeNode currentFocus = FocusScopeNode.of(context);
-                                          return TextFormField(
-                                            autocorrect: true,
-                                            enableSuggestions: true,
-                                            onFieldSubmitted: (val) {
-                                              focusNode.unfocus();
-                                              if (currentFocus.hasPrimaryFocus) {
-                                                currentFocus.unfocus();
-                                              }
-                                              if (mounted) {
-                                                setState(() {
-                                                  var value =
-                                                      _searchController.text;
-                                                  Navigator.of(context)
-                                                      .push(
-                                                    CupertinoPageRoute(
-                                                      builder: (context) =>
-                                                          SearchPage(
-                                                            isScreen: true,
-                                                            keyword: value,
-                                                            enableCategory: false,
-                                                            cartIconVisible: true,
-                                                          ),
-                                                    ),
-                                                  )
-                                                      .then(
-                                                          (value) => setState(() {
-                                                        _searchController
-                                                            .clear();
-                                                      }));
-                                                });
-                                              }
-
-                                              log('Pressed via keypad');
-                                            },
-                                            textInputAction: isVisible
-                                                ? TextInputAction.done
-                                                : TextInputAction.search,
-                                            // keyboardType: TextInputType.,
-                                            keyboardAppearance: Brightness.light,
-                                            // autofocus: true,
-                                            onChanged: (_) => setState(() {
-                                              btnColor = ConstantsVar.appColor;
-                                            }),
-                                            controller: _searchController,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 5.w),
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                vertical: 13,
-                                              ),
-                                              hintText: 'Search here',
-                                              labelStyle: TextStyle(
-                                                  fontSize: 7.w,
-                                                  color: Colors.grey),
-                                              suffixIcon: InkWell(
-                                                onTap: () async {
-                                                  focusNode.unfocus();
-
-                                                  if (!currentFocus
-                                                      .hasPrimaryFocus) {
-                                                    currentFocus.unfocus();
-                                                  }
-                                                  if (mounted) {
-                                                    setState(() {
-                                                      var _value =
-                                                          _searchController.text;
-                                                      Navigator.of(context).push(
-                                                        CupertinoPageRoute(
-                                                          builder: (context) =>
-                                                              SearchPage(
-                                                                isScreen: true,
-                                                                keyword: _value,
-                                                                enableCategory: false,
-                                                                cartIconVisible: true,
-                                                              ),
+                                child: Consumer<NewApisProvider>(
+                                  builder: (_, value, c) {
+                                    return RawAutocomplete<String>(
+                                      optionsBuilder:
+                                          (TextEditingValue textEditingValue) {
+                                        if (textEditingValue.text == '' ||
+                                            textEditingValue.text.length < 3) {
+                                          return const Iterable<String>.empty();
+                                        }
+                                        return value.searchSuggestions
+                                            .where((String option) {
+                                          return option.toLowerCase().contains(
+                                              RegExp(
+                                                  textEditingValue.text
+                                                      .toLowerCase(),
+                                                  caseSensitive: false));
+                                        });
+                                      },
+                                      onSelected: (String selection) {
+                                        if (!currentFocus.hasPrimaryFocus) {
+                                          currentFocus.unfocus();
+                                        }
+                                        log('$selection selected');
+                                      },
+                                      fieldViewBuilder: (BuildContext context,
+                                          TextEditingController
+                                              textEditingController,
+                                          FocusNode focusNode,
+                                          VoidCallback onFieldSubmitted) {
+                                        _searchController =
+                                            textEditingController;
+                                        _focusNode = focusNode;
+                                        // FocusScopeNode currentFocus = FocusScopeNode.of(context);
+                                        return TextFormField(
+                                          autocorrect: true,
+                                          enableSuggestions: true,
+                                          onFieldSubmitted: (val) {
+                                            focusNode.unfocus();
+                                            if (currentFocus.hasPrimaryFocus) {
+                                              currentFocus.unfocus();
+                                            }
+                                            if (mounted) {
+                                              setState(() {
+                                                var value =
+                                                    _searchController.text;
+                                                Navigator.of(context)
+                                                    .push(
+                                                      CupertinoPageRoute(
+                                                        builder: (context) =>
+                                                            SearchPage(
+                                                          isScreen: true,
+                                                          keyword: value,
+                                                          enableCategory: false,
+                                                          cartIconVisible: true,
                                                         ),
-                                                      );
-                                                    });
-                                                  }
-                                                },
-                                                child: const Icon(
-                                                    Icons.search_sharp),
-                                              ),
-                                            ),
-                                            focusNode: _focusNode,
-                                          );
-                                        },
-                                        optionsViewBuilder: (BuildContext context,
-                                            AutocompleteOnSelected<String>
-                                            onSelected,
-                                            Iterable<String> options) {
-                                          return Padding(
-                                            padding: const EdgeInsets.only(
-                                              top: 8.0,
-                                              right: 10,
-                                            ),
-                                            child: Align(
-                                              alignment: Alignment.topCenter,
-                                              child: Material(
-                                                child: Card(
-                                                  child: SizedBox(
-                                                    height: 178,
-                                                    child: Scrollbar(
-                                                      controller:
-                                                      _suggestController,
-                                                      thickness: 5,
-                                                      isAlwaysShown: true,
-                                                      child: ListView.builder(
-                                                        controller:
-                                                        _suggestController,
-                                                        physics:
-                                                        const ScrollPhysics(),
-                                                        // padding: EdgeInsets.all(8.0),
-                                                        itemCount:
-                                                        options.length + 1,
-                                                        itemBuilder:
-                                                            (BuildContext context,
-                                                            int index) {
-                                                          if (index >=
-                                                              options.length) {
-                                                            return Align(
-                                                              alignment: Alignment
-                                                                  .bottomCenter,
-                                                              child: TextButton(
-                                                                child: const Text(
-                                                                  'Clear',
-                                                                  style:
-                                                                  TextStyle(
-                                                                    color: ConstantsVar
-                                                                        .appColor,
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                    fontSize: 16,
-                                                                  ),
-                                                                ),
-                                                                onPressed: () {
-                                                                  _searchController
-                                                                      .clear();
-                                                                },
-                                                              ),
-                                                            );
-                                                          }
-                                                          final String option =
-                                                          options.elementAt(
-                                                              index);
-                                                          return InkWell(
-                                                              onTap: () {
-                                                                if (!currentFocus
-                                                                    .hasPrimaryFocus) {
-                                                                  currentFocus
-                                                                      .unfocus();
-                                                                }
-                                                                onSelected(
-                                                                    option);
-                                                                Navigator.push(
-                                                                  context,
-                                                                  CupertinoPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                        SearchPage(
-                                                                          keyword:
-                                                                          option,
-                                                                          isScreen:
-                                                                          true,
-                                                                          enableCategory:
-                                                                          false,
-                                                                          cartIconVisible:
-                                                                          true,
-                                                                        ),
-                                                                  ),
-                                                                ).then((value) =>
-                                                                    setState(() {
-                                                                      _searchController
-                                                                          .clear();
-                                                                    }));
-                                                              },
-                                                              child: SizedBox(
-                                                                height: 5.8.h,
-                                                                width: 95.w,
-                                                                child: Column(
-                                                                  mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                                  crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                                  children: [
-                                                                    SizedBox(
-                                                                      width:
-                                                                      100.w,
-                                                                      child:
-                                                                      AutoSizeText(
-                                                                        '  ' +
-                                                                            option,
-                                                                        style:
-                                                                        const TextStyle(
-                                                                          fontSize:
-                                                                          16,
-                                                                          wordSpacing:
-                                                                          2,
-                                                                          letterSpacing:
-                                                                          1,
-                                                                          fontWeight:
-                                                                          FontWeight.bold,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width:
-                                                                      100.w,
-                                                                      child:
-                                                                      Divider(
-                                                                        thickness:
-                                                                        1,
-                                                                        color: Colors
-                                                                            .grey
-                                                                            .shade400,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ));
-                                                        },
                                                       ),
+                                                    )
+                                                    .then(
+                                                        (value) => setState(() {
+                                                              _searchController
+                                                                  .clear();
+                                                            }));
+                                              });
+                                            }
+
+                                            log('Pressed via keypad');
+                                          },
+                                          textInputAction: isVisible
+                                              ? TextInputAction.done
+                                              : TextInputAction.search,
+                                          // keyboardType: TextInputType.,
+                                          keyboardAppearance: Brightness.light,
+                                          // autofocus: true,
+                                          onChanged: (_) => setState(() {
+                                            btnColor = ConstantsVar.appColor;
+                                          }),
+                                          controller: _searchController,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 5.w),
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                              vertical: 13,
+                                            ),
+                                            hintText: 'Search here',
+                                            labelStyle: TextStyle(
+                                                fontSize: 7.w,
+                                                color: Colors.grey),
+                                            suffixIcon: InkWell(
+                                              onTap: () async {
+                                                focusNode.unfocus();
+
+                                                if (!currentFocus
+                                                    .hasPrimaryFocus) {
+                                                  currentFocus.unfocus();
+                                                }
+                                                if (mounted) {
+                                                  setState(() {
+                                                    var _value =
+                                                        _searchController.text;
+                                                    Navigator.of(context).push(
+                                                      CupertinoPageRoute(
+                                                        builder: (context) =>
+                                                            SearchPage(
+                                                          isScreen: true,
+                                                          keyword: _value,
+                                                          enableCategory: false,
+                                                          cartIconVisible: true,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  });
+                                                }
+                                              },
+                                              child: const Icon(
+                                                  Icons.search_sharp),
+                                            ),
+                                          ),
+                                          focusNode: _focusNode,
+                                        );
+                                      },
+                                      optionsViewBuilder: (BuildContext context,
+                                          AutocompleteOnSelected<String>
+                                              onSelected,
+                                          Iterable<String> options) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                            right: 10,
+                                          ),
+                                          child: Align(
+                                            alignment: Alignment.topCenter,
+                                            child: Material(
+                                              child: Card(
+                                                child: SizedBox(
+                                                  height: 178,
+                                                  child: Scrollbar(
+                                                    controller:
+                                                        _suggestController,
+                                                    thickness: 5,
+                                                    isAlwaysShown: true,
+                                                    child: ListView.builder(
+                                                      controller:
+                                                          _suggestController,
+                                                      physics:
+                                                          const ScrollPhysics(),
+                                                      // padding: EdgeInsets.all(8.0),
+                                                      itemCount:
+                                                          options.length + 1,
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int index) {
+                                                        if (index >=
+                                                            options.length) {
+                                                          return Align(
+                                                            alignment: Alignment
+                                                                .bottomCenter,
+                                                            child: TextButton(
+                                                              child: const Text(
+                                                                'Clear',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: ConstantsVar
+                                                                      .appColor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 16,
+                                                                ),
+                                                              ),
+                                                              onPressed: () {
+                                                                _searchController
+                                                                    .clear();
+                                                              },
+                                                            ),
+                                                          );
+                                                        }
+                                                        final String option =
+                                                            options.elementAt(
+                                                                index);
+                                                        return InkWell(
+                                                            onTap: () {
+                                                              if (!currentFocus
+                                                                  .hasPrimaryFocus) {
+                                                                currentFocus
+                                                                    .unfocus();
+                                                              }
+                                                              onSelected(
+                                                                  option);
+                                                              Navigator.push(
+                                                                context,
+                                                                CupertinoPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          SearchPage(
+                                                                    keyword:
+                                                                        option,
+                                                                    isScreen:
+                                                                        true,
+                                                                    enableCategory:
+                                                                        false,
+                                                                    cartIconVisible:
+                                                                        true,
+                                                                  ),
+                                                                ),
+                                                              ).then((value) =>
+                                                                  setState(() {
+                                                                    _searchController
+                                                                        .clear();
+                                                                  }));
+                                                            },
+                                                            child: SizedBox(
+                                                              height: 5.8.h,
+                                                              width: 95.w,
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  SizedBox(
+                                                                    width:
+                                                                        100.w,
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      '  ' +
+                                                                          option,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            16,
+                                                                        wordSpacing:
+                                                                            2,
+                                                                        letterSpacing:
+                                                                            1,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width:
+                                                                        100.w,
+                                                                    child:
+                                                                        Divider(
+                                                                      thickness:
+                                                                          1,
+                                                                      color: Colors
+                                                                          .grey
+                                                                          .shade400,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ));
+                                                      },
                                                     ),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                  ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
                                 ),
                               ),
                             ),
@@ -773,373 +728,173 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                               ),
                               child: Consumer<NewApisProvider>(
                                 builder: (context, value, _) => value
-                                    .homeBannerLoading
+                                        .homeBannerLoading
                                     ? Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Card(
-                                    child: Shimmer.fromColors(
-                                      direction: ShimmerDirection.btt,
-                                      baseColor: Colors.grey[300]!,
-                                      highlightColor: Colors.white,
-                                      enabled: true,
-                                      child: Container(
-                                        color: Colors.grey,
-                                        width: 100.w,
-                                        height: 45.w,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                    : value.homeBannerError
-                                    ? Container(
-                                  color: Colors.grey,
-                                  width: 100.w,
-                                  height: 40.w,
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 5.w,
-                                        ),
-                                        Text(kerrorString),
-                                        ElevatedButton(
-                                          onPressed: () async {
-                                            _provider
-                                                .getHomeScreenBanners();
-                                          },
-                                          child: Text(
-                                            'Retry',
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Card(
+                                          child: Shimmer.fromColors(
+                                            direction: ShimmerDirection.btt,
+                                            baseColor: Colors.grey[300]!,
+                                            highlightColor: Colors.white,
+                                            enabled: true,
+                                            child: Container(
+                                              color: Colors.grey,
+                                              width: 100.w,
+                                              height: 45.w,
+                                            ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 5.w,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                                    : CarouselSlider(
-                                  options: CarouselOptions(
-                                    // enlargeStrategy: CenterPageEnlargeStrategy.height,
-                                      disableCenter: true,
-                                      pageSnapping: true,
-                                      // height: 24.h,
-                                      viewportFraction: 1,
-                                      aspectRatio: 4.5 / 2,
-                                      autoPlay: true,
-                                      enlargeCenterPage: false),
-                                  items: value.banners.map((banner) {
-                                    return Builder(
-                                      builder:
-                                          (BuildContext context) {
-                                        return InkWell(
-                                          onTap: () {
-                                            String type = banner.type;
+                                      )
+                                    : value.homeBannerError
+                                        ? Container(
+                                            color: Colors.grey,
+                                            width: 100.w,
+                                            height: 40.w,
+                                            child: Center(
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 5.w,
+                                                  ),
+                                                  Text(kerrorString),
+                                                  ElevatedButton(
+                                                    onPressed: () async {
+                                                      _provider
+                                                          .getHomeScreenBanners();
+                                                    },
+                                                    child: Text(
+                                                      'Retry',
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5.w,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : CarouselSlider(
+                                            options: CarouselOptions(
+                                                // enlargeStrategy: CenterPageEnlargeStrategy.height,
+                                                disableCenter: true,
+                                                pageSnapping: true,
+                                                // height: 24.h,
+                                                viewportFraction: 1,
+                                                aspectRatio: 4.5 / 2,
+                                                autoPlay: true,
+                                                enlargeCenterPage: false),
+                                            items: value.banners.map((banner) {
+                                              return Builder(
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return InkWell(
+                                                    onTap: () {
+                                                      String type = banner.type;
 
-                                            if (type.contains(
-                                                'Category')) {
-                                              Navigator.push(
-                                                context,
-                                                CupertinoPageRoute(
-                                                  builder: (context) =>
-                                                      ProductList(
-                                                          categoryId:
-                                                          banner
-                                                              .id,
-                                                          title: ''),
-                                                ),
+                                                      if (type.contains(
+                                                          'Category')) {
+                                                        Navigator.push(
+                                                          context,
+                                                          CupertinoPageRoute(
+                                                            builder: (context) =>
+                                                                ProductList(
+                                                                    categoryId:
+                                                                        banner
+                                                                            .id,
+                                                                    title: ''),
+                                                          ),
+                                                        );
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        margin: const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 2.0),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          errorWidget: (context,
+                                                                  error, _) =>
+                                                              Center(
+                                                            child: AutoSizeText(
+                                                              kerrorString,
+                                                              style: TextStyle(
+                                                                fontSize: 4.w,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          imageUrl:
+                                                              banner.imageUrl,
+                                                          fit: BoxFit.fill,
+                                                          placeholder: (context,
+                                                                  reason) =>
+                                                              Shimmer
+                                                                  .fromColors(
+                                                            baseColor: Colors
+                                                                .grey[300]!,
+                                                            highlightColor:
+                                                                Colors.white,
+                                                            child: Container(
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ),
+                                                        )),
+                                                  );
+                                                },
                                               );
-                                            }
-                                          },
-                                          child: Container(
-                                              width: MediaQuery.of(
-                                                  context)
-                                                  .size
-                                                  .width,
-                                              margin: const EdgeInsets
-                                                  .symmetric(
-                                                  horizontal: 2.0),
-                                              child:
-                                              CachedNetworkImage(
-                                                errorWidget: (context,
-                                                    error, _) =>
-                                                    Center(
-                                                      child: AutoSizeText(
-                                                        kerrorString,
-                                                        style: TextStyle(
-                                                          fontSize: 4.w,
-                                                          fontWeight:
-                                                          FontWeight
-                                                              .w300,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                imageUrl:
-                                                banner.imageUrl,
-                                                fit: BoxFit.fill,
-                                                placeholder: (context,
-                                                    reason) =>
-                                                    Shimmer
-                                                        .fromColors(
-                                                      baseColor: Colors
-                                                          .grey[300]!,
-                                                      highlightColor:
-                                                      Colors.white,
-                                                      child: Container(
-                                                        color:
-                                                        Colors.grey,
-                                                      ),
-                                                    ),
-                                              )),
-                                        );
-                                      },
-                                    );
-                                  }).toList(),
-                                ),
+                                            }).toList(),
+                                          ),
                               ),
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.symmetric(vertical: 7.0),
+                                  const EdgeInsets.symmetric(vertical: 7.0),
                               color: Colors.white,
                               height: 60.w,
                               child: Consumer<NewApisProvider>(
                                   builder: (context, value, _c) {
-                                    if (value.homeProductLoading == true) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: SizedBox(
-                                          width: 100.w,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              crossAxisAlignment:
+                                if (value.homeProductLoading == true) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: SizedBox(
+                                      width: 100.w,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          crossAxisAlignment:
                                               CrossAxisAlignment.center,
-                                              mainAxisAlignment:
+                                          mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
-                                              children: List.generate(
-                                                3,
-                                                    (index) => Card(
-                                                  child: Shimmer.fromColors(
-                                                    direction: ShimmerDirection.btt,
-                                                    baseColor: Colors.grey[300]!,
-                                                    highlightColor: Colors.white,
-                                                    enabled: true,
-                                                    child: Container(
-                                                      color: Colors.grey,
-                                                      width: 35.w,
-                                                      height: 45.w,
-                                                    ),
-                                                  ),
+                                          children: List.generate(
+                                            3,
+                                            (index) => Card(
+                                              child: Shimmer.fromColors(
+                                                direction: ShimmerDirection.btt,
+                                                baseColor: Colors.grey[300]!,
+                                                highlightColor: Colors.white,
+                                                enabled: true,
+                                                child: Container(
+                                                  color: Colors.grey,
+                                                  width: 35.w,
+                                                  height: 45.w,
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      );
-                                    } else {
-                                      return value.homeProductError == true
-                                          ? Container(
-                                        color: Colors.grey,
-                                        width: 100.w,
-                                        height: 40.w,
-                                        child: Center(
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 5.w,
-                                              ),
-                                              Text(kerrorString),
-                                              ElevatedButton(
-                                                onPressed: () async {
-                                                  await _provider
-                                                      .getHomeScreenProducts();
-                                                },
-                                                child: Text(
-                                                  'Retry',
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 5.w,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                          : Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              children: [
-                                                AutoSizeText(
-                                                  value.titleHome
-                                                      .toUpperCase(),
-                                                  style: TextStyle(
-                                                    shadows: <Shadow>[
-                                                      Shadow(
-                                                        offset: const Offset(
-                                                            1.0, 1.2),
-                                                        blurRadius: 3.0,
-                                                        color: Colors
-                                                            .grey.shade300,
-                                                      ),
-                                                      Shadow(
-                                                        offset: const Offset(
-                                                            1.0, 1.2),
-                                                        blurRadius: 8.0,
-                                                        color: Colors
-                                                            .grey.shade300,
-                                                      ),
-                                                    ],
-                                                    fontSize: 5.w,
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: VsScrollbar(
-                                              style: const VsScrollbarStyle(
-                                                  thickness: 3.5),
-                                              controller: _productController,
-                                              isAlwaysShown: true,
-                                              child: ListView.builder(
-                                                  controller:
-                                                  _productController,
-                                                  clipBehavior: Clip
-                                                      .antiAliasWithSaveLayer,
-                                                  physics:
-                                                  const ScrollPhysics(),
-                                                  // padding: EdgeInsets.symmetric(vertical:6),
-                                                  scrollDirection:
-                                                  Axis.horizontal,
-                                                  itemCount:
-                                                  value.productListHome.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                      int index) {
-                                                    return listContainer(
-                                                        value.productListHome[
-                                                        index]);
-                                                  }),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                  }),
-                            ),
-                            Container(
-                              padding:
-                              const EdgeInsets.symmetric(vertical: 7.0),
-                              color: Colors.white,
-                              child: Consumer<NewApisProvider>(
-                                  builder: (context, value, _c) {
-                                    if (value.homeCategoryLoading == true &&
-                                        value.homeScreenCategories.isEmpty) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: SizedBox(
-                                          width: 100.w,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: List.generate(
-                                                    2,
-                                                        (index) => Card(
-                                                      child: Shimmer.fromColors(
-                                                        direction:
-                                                        ShimmerDirection.btt,
-                                                        baseColor:
-                                                        Colors.grey[300]!,
-                                                        highlightColor:
-                                                        Colors.white,
-                                                        enabled: true,
-                                                        child: Container(
-                                                          color: Colors.grey,
-                                                          width: 48.w,
-                                                          height: 48.w,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: List.generate(
-                                                    2,
-                                                        (index) => Card(
-                                                      child: Shimmer.fromColors(
-                                                        direction:
-                                                        ShimmerDirection.btt,
-                                                        baseColor:
-                                                        Colors.grey[300]!,
-                                                        highlightColor:
-                                                        Colors.white,
-                                                        enabled: true,
-                                                        child: Container(
-                                                          color: Colors.grey,
-                                                          width: 48.w,
-                                                          height: 48.w,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: List.generate(
-                                                    2,
-                                                        (index) => Card(
-                                                      child: Shimmer.fromColors(
-                                                        direction:
-                                                        ShimmerDirection.btt,
-                                                        baseColor:
-                                                        Colors.grey[300]!,
-                                                        highlightColor:
-                                                        Colors.white,
-                                                        enabled: true,
-                                                        child: Container(
-                                                          color: Colors.grey,
-                                                          width: 48.w,
-                                                          height: 48.w,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      if (value.homeCategoryError == true) {
-                                        return Container(
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return value.homeProductError == true
+                                      ? Container(
                                           color: Colors.grey,
                                           width: 100.w,
                                           height: 40.w,
@@ -1153,7 +908,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                 ElevatedButton(
                                                   onPressed: () async {
                                                     await _provider
-                                                        .getHomeScreenCategories();
+                                                        .getHomeScreenProducts();
                                                   },
                                                   child: Text(
                                                     'Retry',
@@ -1165,37 +920,237 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                               ],
                                             ),
                                           ),
-                                        );
-                                      } else {
-                                        return Container(
-                                          color: Colors.white,
-                                          padding: const EdgeInsets.all(4),
-                                          // margin: EdgeInsets.all(10),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                            mainAxisSize: MainAxisSize.max,
-                                            // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            children: categoriesView(
-                                              list: value.homeScreenCategories,
+                                        )
+                                      : Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: [
+                                                  AutoSizeText(
+                                                    value.titleHome
+                                                        .toUpperCase(),
+                                                    style: TextStyle(
+                                                      shadows: <Shadow>[
+                                                        Shadow(
+                                                          offset: const Offset(
+                                                              1.0, 1.2),
+                                                          blurRadius: 3.0,
+                                                          color: Colors
+                                                              .grey.shade300,
+                                                        ),
+                                                        Shadow(
+                                                          offset: const Offset(
+                                                              1.0, 1.2),
+                                                          blurRadius: 8.0,
+                                                          color: Colors
+                                                              .grey.shade300,
+                                                        ),
+                                                      ],
+                                                      fontSize: 5.w,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
+                                            Expanded(
+                                              child: VsScrollbar(
+                                                style: const VsScrollbarStyle(
+                                                    thickness: 3.5),
+                                                controller: _productController,
+                                                isAlwaysShown: true,
+                                                child: ListView.builder(
+                                                    controller:
+                                                        _productController,
+                                                    clipBehavior: Clip
+                                                        .antiAliasWithSaveLayer,
+                                                    physics:
+                                                        const ScrollPhysics(),
+                                                    // padding: EdgeInsets.symmetric(vertical:6),
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    itemCount:
+                                                        value.productListHome.length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return listContainer(
+                                                          value.productListHome[
+                                                              index]);
+                                                    }),
+                                              ),
+                                            ),
+                                          ],
                                         );
-                                      }
-                                    }
-                                  }),
+                                }
+                              }),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 7.0),
+                              color: Colors.white,
+                              child: Consumer<NewApisProvider>(
+                                  builder: (context, value, _c) {
+                                if (value.homeCategoryLoading == true &&
+                                    value.homeScreenCategories.isEmpty) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: 100.w,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: List.generate(
+                                                2,
+                                                (index) => Card(
+                                                  child: Shimmer.fromColors(
+                                                    direction:
+                                                        ShimmerDirection.btt,
+                                                    baseColor:
+                                                        Colors.grey[300]!,
+                                                    highlightColor:
+                                                        Colors.white,
+                                                    enabled: true,
+                                                    child: Container(
+                                                      color: Colors.grey,
+                                                      width: 48.w,
+                                                      height: 48.w,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: List.generate(
+                                                2,
+                                                (index) => Card(
+                                                  child: Shimmer.fromColors(
+                                                    direction:
+                                                        ShimmerDirection.btt,
+                                                    baseColor:
+                                                        Colors.grey[300]!,
+                                                    highlightColor:
+                                                        Colors.white,
+                                                    enabled: true,
+                                                    child: Container(
+                                                      color: Colors.grey,
+                                                      width: 48.w,
+                                                      height: 48.w,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: List.generate(
+                                                2,
+                                                (index) => Card(
+                                                  child: Shimmer.fromColors(
+                                                    direction:
+                                                        ShimmerDirection.btt,
+                                                    baseColor:
+                                                        Colors.grey[300]!,
+                                                    highlightColor:
+                                                        Colors.white,
+                                                    enabled: true,
+                                                    child: Container(
+                                                      color: Colors.grey,
+                                                      width: 48.w,
+                                                      height: 48.w,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  if (value.homeCategoryError == true) {
+                                    return Container(
+                                      color: Colors.grey,
+                                      width: 100.w,
+                                      height: 40.w,
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 5.w,
+                                            ),
+                                            Text(kerrorString),
+                                            ElevatedButton(
+                                              onPressed: () async {
+                                                await _provider
+                                                    .getHomeScreenCategories();
+                                              },
+                                              child: Text(
+                                                'Retry',
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5.w,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return Container(
+                                      color: Colors.white,
+                                      padding: const EdgeInsets.all(4),
+                                      // margin: EdgeInsets.all(10),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        mainAxisSize: MainAxisSize.max,
+                                        // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: categoriesView(
+                                          list: value.homeScreenCategories,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }
+                              }),
                             ),
                             Visibility(
                               visible:products.isEmpty?false:true,
                               child: Container(
                                 padding:
-                                const EdgeInsets.symmetric(vertical: 7.0),
+                                    const EdgeInsets.symmetric(vertical: 7.0),
                                 color: Colors.white,
                                 height: 60.w,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Padding(
@@ -1208,13 +1163,13 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                               shadows: <Shadow>[
                                                 Shadow(
                                                   offset:
-                                                  const Offset(1.0, 1.2),
+                                                      const Offset(1.0, 1.2),
                                                   blurRadius: 3.0,
                                                   color: Colors.grey.shade300,
                                                 ),
                                                 Shadow(
                                                   offset:
-                                                  const Offset(1.0, 1.2),
+                                                      const Offset(1.0, 1.2),
                                                   blurRadius: 8.0,
                                                   color: Colors.grey.shade300,
                                                 ),
@@ -1234,9 +1189,9 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                         isAlwaysShown: true,
                                         child: ListView.builder(
                                             controller:
-                                            _recentlyProductController,
+                                                _recentlyProductController,
                                             clipBehavior:
-                                            Clip.antiAliasWithSaveLayer,
+                                                Clip.antiAliasWithSaveLayer,
                                             // padding: EdgeInsets.symmetric(vertical:6),
                                             scrollDirection: Axis.horizontal,
                                             itemCount: products.length,
@@ -1287,7 +1242,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                 child: VsScrollbar(
                                   controller: _serviceController,
                                   style:
-                                  const VsScrollbarStyle(thickness: 3.5),
+                                      const VsScrollbarStyle(thickness: 3.5),
                                   isAlwaysShown: true,
                                   child: SingleChildScrollView(
                                     controller: _serviceController,
@@ -1298,93 +1253,93 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                           horizontal: 6.0),
                                       child: Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                            MainAxisAlignment.spaceEvenly,
                                         children: modelList
                                             .map((e) => Padding(
-                                          padding:
-                                          const EdgeInsets.all(
-                                              5.0),
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              await Navigator.push(
-                                                  context,
-                                                  CupertinoPageRoute(
-                                                      builder:
-                                                          (context) {
+                                                  padding:
+                                                      const EdgeInsets.all(
+                                                          5.0),
+                                                  child: GestureDetector(
+                                                    onTap: () async {
+                                                      await Navigator.push(
+                                                          context,
+                                                          CupertinoPageRoute(
+                                                              builder:
+                                                                  (context) {
                                                         return TopicPage(
                                                           paymentUrl: e.url,
                                                           screenName: ConstantsVar
-                                                              .prefs
-                                                              .getString(
-                                                              'guestGUID') ??
+                                                                  .prefs
+                                                                  .getString(
+                                                                      'guestGUID') ??
                                                               '',
                                                         );
                                                       }));
-                                            },
-                                            onLongPress: () {},
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment
-                                                  .start,
-                                              mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .center,
-                                              children: [
-                                                Container(
-                                                  decoration:
-                                                  BoxDecoration(
-                                                    image:
-                                                    DecorationImage(
-                                                      image:
-                                                      CachedNetworkImageProvider(
-                                                        e.imagePath,
+                                                    },
+                                                    onLongPress: () {},
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            image:
+                                                                DecorationImage(
+                                                              image:
+                                                                  CachedNetworkImageProvider(
+                                                                e.imagePath,
 
-                                                        errorListener:
-                                                            () => log(
-                                                            'Something went wrong'),
-                                                      ),
-                                                      fit:
-                                                      BoxFit.fill,
+                                                                errorListener:
+                                                                    () => log(
+                                                                        'Something went wrong'),
+                                                              ),
+                                                              fit:
+                                                                  BoxFit.fill,
 
+                                                            ),
+                                                          ),
+                                                          width: Adaptive.w(
+                                                              43.6),
+                                                          height:
+                                                              Adaptive.w(45),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            horizontal: 2.0,
+                                                            vertical: 11,
+                                                          ),
+                                                          child: SizedBox(
+                                                            width: 45.w,
+                                                            child:
+                                                                AutoSizeText(
+                                                              e.textToDisplay,
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Colors
+                                                                    .grey,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                  width: Adaptive.w(
-                                                      43.6),
-                                                  height:
-                                                  Adaptive.w(45),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 2.0,
-                                                    vertical: 11,
-                                                  ),
-                                                  child: SizedBox(
-                                                    width: 45.w,
-                                                    child:
-                                                    AutoSizeText(
-                                                      e.textToDisplay,
-                                                      maxLines: 1,
-                                                      textAlign:
-                                                      TextAlign
-                                                          .center,
-                                                      style:
-                                                      const TextStyle(
-                                                        color: Colors
-                                                            .grey,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ))
+                                                ))
                                             .toList(),
                                       ),
                                     ),
@@ -1431,18 +1386,18 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                 width: 100.w,
                                 child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                        MainAxisAlignment.center,
                                     children: socialLinks
                                         .map((e) => InkWell(
-                                        onTap: () async =>
-                                            _launchURL(e.url),
-                                        child: Padding(
-                                          padding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 6.0,
-                                          ),
-                                          child: e.icon,
-                                        )))
+                                            onTap: () async =>
+                                                _launchURL(e.url),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 6.0,
+                                              ),
+                                              child: e.icon,
+                                            )))
                                         .toList()),
                               ),
                               const SizedBox(
@@ -1542,6 +1497,19 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                 style: theme.textTheme.headline4,
                               ),
                             ),
+                            placeholder: (context,
+                                reason) =>
+                                Shimmer
+                                    .fromColors(
+                                  baseColor: Colors
+                                      .grey[300]!,
+                                  highlightColor:
+                                  Colors.white,
+                                  child: Container(
+                                    color:
+                                    Colors.grey,
+                                  ),
+                                ),
                             imageUrl: list.imageUrl[0],
                             fit: BoxFit.fill,
                           ),
@@ -1684,6 +1652,19 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                               ),
                             ),
                           ),
+                          placeholder: (context,
+                              reason) =>
+                              Shimmer
+                                  .fromColors(
+                                baseColor: Colors
+                                    .grey[300]!,
+                                highlightColor:
+                                Colors.white,
+                                child: Container(
+                                  color:
+                                  Colors.grey,
+                                ),
+                              ),
                           imageUrl: list.imageUrl[0],
                           fit: BoxFit.fill,
                         ),
@@ -1993,6 +1974,19 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                         ),
                       ),
                     ),
+                    placeholder: (context,
+                        reason) =>
+                        Shimmer
+                            .fromColors(
+                          baseColor: Colors
+                              .grey[300]!,
+                          highlightColor:
+                          Colors.white,
+                          child: Container(
+                            color:
+                            Colors.grey,
+                          ),
+                        ),
                   ),
                 );
               },
@@ -2225,6 +2219,19 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                         ),
                       ),
                     ),
+                    placeholder: (context,
+                        reason) =>
+                        Shimmer
+                            .fromColors(
+                          baseColor: Colors
+                              .grey[300]!,
+                          highlightColor:
+                          Colors.white,
+                          child: Container(
+                            color:
+                            Colors.grey,
+                          ),
+                        ),
                     imageUrl: imageUrl,
                     fit: BoxFit.fill,
                   ),
@@ -2249,6 +2256,25 @@ class _HomeScreenMainState extends State<HomeScreenMain>
         ),
       ),
     );
+  }
+
+  List<Widget> categoriesView({required List<HomePageCategoriesImage> list}) {
+    List<Widget> _viewsList = [];
+
+    for (var i = 0; i < list.length; i++) {
+      if (i % 2 == 0) {
+        _viewsList.add(
+          categroryLeftView(list[i].name, list[i].imageUrl,
+              list[i].id, list[i].isSubCategory),
+        );
+      } else {
+        _viewsList.add(
+          categoryRightView(list[i].name, list[i].imageUrl,
+              list[i].id.toString(), list[i].isSubCategory),
+        );
+      }
+    }
+    return _viewsList;
   }
 
   Future getApiToken() async {
@@ -2335,28 +2361,4 @@ class _HomeScreenMainState extends State<HomeScreenMain>
   }
 
   final itemSize = 45.w;
-}
-
-class ServicesModel {
-  String desc;
-  String shortDesc;
-  String imageName;
-
-  ServicesModel({
-    required this.desc,
-    required this.imageName,
-    required this.shortDesc,
-  });
-}
-
-class SocialModel {
-  String url;
-  Icon icon;
-  Color color;
-
-  SocialModel({
-    required this.url,
-    required this.icon,
-    required this.color,
-  });
 }

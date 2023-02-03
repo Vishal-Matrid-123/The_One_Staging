@@ -10,16 +10,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled2/new_apis_func/presentation_layer/provider_class/notification_service.dart';
 
 import 'Constants/ConstantVariables.dart';
 import 'main.dart';
@@ -71,7 +66,7 @@ Future<void> setFireStoreData(
           DateTime.now().difference(time.toDate()).inHours.toString());
 
       if (_title.toLowerCase().contains(_notificationTitle.toLowerCase()) &&
-          DateTime.now().difference(time.toDate()).inHours < 24&&
+          DateTime.now().difference(time.toDate()).inHours < 24 &&
           _desc.toLowerCase().contains(_notificationDesc.toLowerCase())) {
         isAlreadyExisted = true;
 
@@ -80,13 +75,8 @@ Future<void> setFireStoreData(
       }
     }
     if (isAlreadyExisted == true) {
-      reference.doc(id).delete();
-      // reference.snapshots()
-      reference.doc().set(data);
-      sub.cancel();
     } else {
       reference.doc().set(data);
-      sub.cancel();
     }
 
     // list.any((element){
@@ -131,28 +121,13 @@ Future<void> main() async {
 
       FirebaseMessaging.instance.requestPermission();
 
-      // FirebaseMessaging.onMessage.listen((event) async {
-      //   String _imageUrlIOS = await event.notification!.apple!.imageUrl ?? '';
-      //   print('Image Url IOS >>>' + _imageUrlIOS);
-      //   NotificationService().localNotifications.show(
-      //       12,
-      //       event.notification!.title,
-      //       event.notification!.body,
-      //       );
-      // });
       FirebaseMessaging.onBackgroundMessage(
           (message) => _messageHandler(message));
       FCMBackgroundService.initializeService();
-      // await NotificationController.initializeLocalNotifications(
-      //     debug: kDebugMode);
-      // await NotificationController.initializeRemoteNotifications(
-      //     debug: kDebugMode);
-      // await NotificationController.getInitialNotificationAction();
-      // NotificationController.resetBadge();
 
       FirebaseMessaging _message = FirebaseMessaging.instance;
       var token = await _message.getToken(vapidKey: kFCMVApiKey);
-
+                              _message.subscribeToTopic("topic");
       print('FCM Token>>' + token!);
 
       ConstantsVar.prefs = await SharedPreferences.getInstance();

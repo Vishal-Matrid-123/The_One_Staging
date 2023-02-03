@@ -40,7 +40,6 @@ class _MenuPageState extends State<MenuPage> {
   bool isLoadVisible = false;
   bool isListVisible = false;
   bool isLoading = true;
-  String _countryName = "";
   List<Color> colorList = [
     ConstantsVar.appColor,
     Colors.black26,
@@ -858,6 +857,7 @@ class _MenuPageState extends State<MenuPage> {
                         ),
                       ),
                     ),
+               
                     // Visibility(
                     //   visible: true,
                     //   child: DelayedDisplay(
@@ -986,7 +986,6 @@ class _MenuPageState extends State<MenuPage> {
       // await FirebaseAnalytics.instance.logEvent(name: 'screen_view_',parameters: {'screen_name':'Menu Screen'});
     });
 
-    _countryName = await secureStorage.read(key: kcountryNameKey) ?? "";
 
     setState(() {});
   }

@@ -30,20 +30,19 @@ const kpageSizeVar = 'pageSize=';
 const String show_order_summary_url = 'GetOrderSummaryCart?';
 const String update_cart_url = 'apis/UpdateCart';
 
-const FlutterSecureStorage secureStorage = FlutterSecureStorage(iOptions: IOSOptions());
+const FlutterSecureStorage secureStorage =
+    FlutterSecureStorage(iOptions: IOSOptions());
 const String kbillingAddress = 'GetBillingAddresses?';
 const String kget_shipping_address_url = 'GetShippingAddresses?';
 const String kcountryNameKey = "_countryName";
-const String kdeveloperUserName = "MatridTechnology@Developers";
-const String kdeveloperPassword = "MatridDeveloper@theone";
+const String kwwweloperUserName = "MatridTechnology@wwwelopers";
+const String kwwweloperPassword = "Matridwwweloper@theone";
 const String kuaeCurrency = "AED";
 const String kkuwaitCurrency = "KWD";
 const String kbahrainCurrency = "BHD";
 const String klocationScreenTag =
     "This app required location permission for providing you with a better and smooth experience of home decoration.";
 const String kExpireDateKey = 'exp_date';
-
-
 
 // const List<Country> countries = [
 //   Country(

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,10 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:intl/intl.dart';
 import 'package:untitled2/AppPages/HomeScreen/HomeScreen.dart';
 import 'package:untitled2/Constants/ConstantVariables.dart';
 import 'package:untitled2/new_apis_func/cofig/app_config.dart';
+import 'package:untitled2/new_apis_func/data_layer/new_model/firestore_model/firestore_model.dart';
 // import 'package:untitled2/new_apis_func/presentation_layer/screens/chat_screen/chat_screen.dart';
 
 class NotificationClass extends StatefulWidget {
@@ -23,11 +22,7 @@ class NotificationClass extends StatefulWidget {
 
 class _NotificationClassState extends State<NotificationClass> {
   List<NotificationClass> myNotifications = [];
-  late Stream<QuerySnapshot> _stream ;
-
-
-
-
+  late Stream<QuerySnapshot<FirestoreModel>> _stream;
 
   @override
   void initState() {
@@ -39,63 +34,64 @@ class _NotificationClassState extends State<NotificationClass> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        top: true,
-        bottom: true,
-        maintainBottomViewPadding: true,
-        child: Scaffold(
-            appBar: new AppBar(
-              backgroundColor: ConstantsVar.appColor,
-              toolbarHeight: 18.w,
-              centerTitle: true,
-              title: InkWell(
-                onTap: () => Navigator.pushAndRemoveUntil(
-                    context,
-                    CupertinoPageRoute(builder: (context) => MyApp()),
-                    (route) => false),
-                child: Image.asset(
-                  'MyAssets/logo.png',
-                  width: 15.w,
-                  height: 15.w,
-                ),
-              ),
+      top: true,
+      bottom: true,
+      maintainBottomViewPadding: true,
+      child: Scaffold(
+        appBar: new AppBar(
+          backgroundColor: ConstantsVar.appColor,
+          toolbarHeight: 18.w,
+          centerTitle: true,
+          title: InkWell(
+            onTap: () => Navigator.pushAndRemoveUntil(
+                context,
+                CupertinoPageRoute(builder: (context) => MyApp()),
+                (route) => false),
+            child: Image.asset(
+              'MyAssets/logo.png',
+              width: 15.w,
+              height: 15.w,
             ),
-            body: StreamBuilder(
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: const SpinKitRipple(
-                      color: Colors.red,
-                      size: 90,
-                    ),
-                  );
-                } else {
-                  if (snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                      child: AutoSizeText('No New Notifications'),
-                    );
-                  } else {
-                    return Container(
-                      width: 100.w,
-                      height: 100.h,
-                      child: ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          return buildListTile(snapshot.data!.docs[index]);
-                        },
-                      ),
-                    );
-                  }
-                }
-              },
-
-              stream: _stream,
-            )));
+          ),
+        ),
+        body: StreamBuilder(
+          builder:
+              (context, AsyncSnapshot<QuerySnapshot<FirestoreModel>> snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: const SpinKitRipple(
+                  color: Colors.red,
+                  size: 90,
+                ),
+              );
+            } else {
+              if (snapshot.data!.docs.isEmpty) {
+                return const Center(
+                  child: AutoSizeText('No New Notifications'),
+                );
+              } else {
+                return Container(
+                  width: 100.w,
+                  height: 100.h,
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      return buildListTile(snapshot.data!.docs[index].data());
+                    },
+                  ),
+                );
+              }
+            }
+          },
+          stream: _stream,
+        ),
+      ),
+    );
   }
 
-  Card buildListTile(DocumentSnapshot doc) {
-    log(doc['Image'].toString());
+  Card buildListTile(FirestoreModel doc) {
     return Card(
-      child: doc['Image'] != null
+      child: doc.imageUrl != null
           ? Stack(
               children: [
                 ExpansionTile(
@@ -109,7 +105,7 @@ class _NotificationClassState extends State<NotificationClass> {
                   title: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
                     child: AutoSizeText(
-                      doc['Title'] ?? '',
+                      doc.title ?? '',
                       style: TextStyle(
                         fontSize: 4.5.w,
                         color: Colors.black,
@@ -122,7 +118,7 @@ class _NotificationClassState extends State<NotificationClass> {
                     children: [
                       Padding(
                         child: AutoSizeText(
-                          doc['Desc'],
+                          doc.desc,
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                             color: Colors.black,
@@ -136,9 +132,7 @@ class _NotificationClassState extends State<NotificationClass> {
                         child: Padding(
                           padding: const EdgeInsets.all(6.0),
                           child: AutoSizeText(
-                            getTimefromTimeStamp(
-                              timestamp: doc['Time'],
-                            ),
+                            doc.timeStamp,
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 12,
@@ -150,7 +144,7 @@ class _NotificationClassState extends State<NotificationClass> {
                   ),
                   children: [
                     CachedNetworkImage(
-                      imageUrl: doc['Image'],
+                      imageUrl: doc.imageUrl,
                       placeholder: (context, reason) => Center(
                         child: SpinKitRipple(
                           size: 30,
@@ -173,7 +167,7 @@ class _NotificationClassState extends State<NotificationClass> {
               title: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
                 child: AutoSizeText(
-                  doc['Title'] ?? '',
+                  doc.title ?? '',
                   style: TextStyle(
                     fontSize: 4.5.w,
                     color: Colors.black,
@@ -186,7 +180,7 @@ class _NotificationClassState extends State<NotificationClass> {
                 children: [
                   Padding(
                     child: AutoSizeText(
-                      doc['Desc'],
+                      doc.desc,
                       style: const TextStyle(
                         color: Colors.black,
                       ),
@@ -199,9 +193,7 @@ class _NotificationClassState extends State<NotificationClass> {
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: AutoSizeText(
-                        getTimefromTimeStamp(
-                          timestamp: doc['Time'],
-                        ),
+                        doc.timeStamp,
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 12,
@@ -215,18 +207,12 @@ class _NotificationClassState extends State<NotificationClass> {
     );
   }
 
-  String getTimefromTimeStamp({required Timestamp timestamp}) {
-    final DateTime date = timestamp.toDate();
-
-    return DateFormat('dd-MM-yyyy hh:mm a').format(date);
-  }
-
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-
   }
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -234,6 +220,11 @@ class _NotificationClassState extends State<NotificationClass> {
     _stream = FirebaseFirestore.instance
         .collection(counterState.databaseTableName)
         .orderBy('Time', descending: true)
+        .withConverter<FirestoreModel>(
+          fromFirestore: (snapshots, _) =>
+              FirestoreModel.fromJson(json: snapshots.data()!),
+          toFirestore: (movie, _) => movie.toJson(),
+        )
         .snapshots();
     super.didChangeDependencies();
   }

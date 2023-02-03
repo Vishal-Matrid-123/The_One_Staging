@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,11 +7,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
+
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled2/Constants/ConstantVariables.dart';
 
 class FCMBackgroundService {
   FCMBackgroundService._();
@@ -21,8 +18,6 @@ class FCMBackgroundService {
     final service = FlutterBackgroundService();
 
     /// OPTIONAL, using custom notification channel id
-
-
 
     await service.configure(
       androidConfiguration: AndroidConfiguration(
@@ -61,12 +56,7 @@ class FCMBackgroundService {
     WidgetsFlutterBinding.ensureInitialized();
     DartPluginRegistrant.ensureInitialized();
 
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.reload();
-    final log = preferences.getStringList('log') ?? <String>[];
-    log.add(DateTime.now().toIso8601String());
-    await preferences.setStringList('log', log);
-
+    FirebaseMessaging.onBackgroundMessage(_messageHandler);
     return true;
   }
 
@@ -80,7 +70,6 @@ class FCMBackgroundService {
 
     /// OPTIONAL when use custom notification
     ///
-
 
     if (service is AndroidServiceInstance) {
       service.on('setAsForeground').listen((event) {
@@ -101,6 +90,8 @@ class FCMBackgroundService {
       if (service is AndroidServiceInstance) {
         if (await service.isForegroundService()) {
           // if you don't using custom notification, uncomment this
+          FirebaseMessaging.onBackgroundMessage(_messageHandler);
+        } else {
           FirebaseMessaging.onBackgroundMessage(_messageHandler);
         }
       }
@@ -161,9 +152,6 @@ class FCMBackgroundService {
         }
       }
       if (isAlreadyExisted == true) {
-        reference.doc(id).delete();
-        // reference.snapshots()
-        reference.doc().set(data);
         sub.cancel();
       } else {
         reference.doc().set(data);

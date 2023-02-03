@@ -264,12 +264,9 @@ class ApiCalls {
               Navigator.pop(context, true);
               break;
             default:
-
-              if(screenName.toLowerCase().contains('topic screen')){
-                Navigator.pop(context,true);
-              }
-
-              else{
+              if (screenName.toLowerCase().contains('topic screen')) {
+                Navigator.pop(context, true);
+              } else {
                 RestartWidget.restartApp(context);
               }
               break;
@@ -840,8 +837,10 @@ class ApiCalls {
 
     log('Read Count Api>>>>>>>>>>>>>>>>>>>>>>>' + uri.toString());
     try {
-      var response = await http
-          .get(uri, headers: {'Cookie': '.Nop.Customer=${ConstantsVar.prefs.getString(kguidKey) ?? ''}'}).timeout(
+      var response = await http.get(uri, headers: {
+        'Cookie':
+            '.Nop.Customer=${ConstantsVar.prefs.getString(kguidKey) ?? ''}'
+      }).timeout(
         const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
@@ -1585,7 +1584,7 @@ class ApiCalls {
               'Error', 408); // Request Timeout response status code
         },
       );
-    _progressDialog.dismiss();
+      _progressDialog.dismiss();
       if (response.statusCode == 200) {
         if (jsonDecode(response.body)['Status'].toString().toLowerCase() ==
             kstatusFailed) {
@@ -1651,7 +1650,7 @@ class ApiCalls {
               'Error', 408); // Request Timeout response status code
         },
       );
- _progressDialog.dismiss();
+      _progressDialog.dismiss();
       if (response.statusCode == 200) {
         if (jsonDecode(response.body)['Status'].toString().toLowerCase() ==
             kstatusFailed) {
@@ -2295,8 +2294,7 @@ class ApiCalls {
         msg: "Checking for updates.....", toastLength: Toast.LENGTH_LONG);
     log("111");
     String _baseUrl = await ApiCalls.getSelectedStore();
-    final uri =
-        Uri.parse(_baseUrl+"GetLatestVersion");
+    final uri = Uri.parse(_baseUrl + "GetLatestVersion");
     log(uri.toString());
     try {
       log("1111");
@@ -2439,9 +2437,9 @@ class ApiCalls {
     String _baseUrl = await getSelectedStore();
 
     String url = _baseUrl +
-        "GetHomestylingBookingStatus?CustomerId=${ConstantsVar.prefs.getString('guestCustomerID')}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? '1'}";
+        "GetHomestylingBookingStatus?CustomerId=${ConstantsVar.prefs.getString('userId')}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? '1'}";
     try {
-      print(url);
+      print("Booking url>>" + url);
       var response = await http.get(
         Uri.parse(url),
         headers: {
@@ -2486,5 +2484,147 @@ class ApiCalls {
       ConstantsVar.excecptionMessage(e);
       return false;
     }
+  }
+
+  static Future<String> getHomeBanner() async {
+    String _baseUrl = await getSelectedStore();
+    String url = _baseUrl +
+        "GetHomeScreenBanners?$kCustomerIdVar=${ConstantsVar.prefs.getString('guestCustomerID')}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? '1'}";
+    try {
+      print("Home Screen Banner  url>>" + url);
+      var response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Cookie':
+              '.Nop.Customer=${ConstantsVar.prefs.getString(kguidKey) ?? ''}',
+        },
+      ).timeout(
+        const Duration(seconds: 60),
+        onTimeout: () {
+          Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
+          // Time has run out, do what you wanted to do.
+          return http.Response(
+              'Error', 408); // Request Timeout response status code
+        },
+      );
+      Fluttertoast.cancel();
+      if (response.statusCode == 200) {
+        log('Banner  response>>>>>>' + response.body);
+        if (jsonDecode(response.body)['status'].toString().toLowerCase() ==
+            kstatusFailed) {
+          Fluttertoast.showToast(
+              msg: jsonDecode(response.body)['Message'].toString() +
+                  jsonDecode(response.body)['ResponseData'].toString());
+          return kerrorString;
+        } else {
+          return response.body;
+        }
+      } else if (response.statusCode == 408) {
+        return kerrorString;
+      } else {
+        Fluttertoast.showToast(
+            msg: '$kerrorString Status code${response.statusCode}');
+        return kerrorString;
+      }
+    } on Exception catch (e) {
+      ConstantsVar.excecptionMessage(e);
+      return kerrorString;
+    }
+
+
+  }
+  static Future<String> getHomeCategories() async {
+    String _baseUrl = await getSelectedStore();
+    String url = _baseUrl +
+        "GetHomeScreenCategories?$kCustomerIdVar=${ConstantsVar.prefs.getString('guestCustomerID')}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? '1'}";
+    try {
+      print("Home Screen Categories  url>>" + url);
+      var response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Cookie':
+              '.Nop.Customer=${ConstantsVar.prefs.getString(kguidKey) ?? ''}',
+        },
+      ).timeout(
+        const Duration(seconds: 60),
+        onTimeout: () {
+          Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
+          // Time has run out, do what you wanted to do.
+          return http.Response(
+              'Error', 408); // Request Timeout response status code
+        },
+      );
+      Fluttertoast.cancel();
+      if (response.statusCode == 200) {
+        log('Home Screen Category  response>>>>>>' + response.body);
+        if (jsonDecode(response.body)['status'].toString().toLowerCase() ==
+            kstatusFailed) {
+          Fluttertoast.showToast(
+              msg: jsonDecode(response.body)['Message'].toString() +
+                  jsonDecode(response.body)['ResponseData'].toString());
+          return kerrorString;
+        } else {
+          return response.body;
+        }
+      } else if (response.statusCode == 408) {
+        return kerrorString;
+      } else {
+        Fluttertoast.showToast(
+            msg: '$kerrorString Status code${response.statusCode}');
+        return kerrorString;
+      }
+    } on Exception catch (e) {
+      ConstantsVar.excecptionMessage(e);
+      return kerrorString;
+    }
+
+
+  }
+  static Future<String> getHomeProducts() async {
+    String _baseUrl = await getSelectedStore();
+    String url = _baseUrl +
+        "GetHomeScreenProducts?$kCustomerIdVar=${ConstantsVar.prefs.getString('guestCustomerID')}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? '1'}";
+    try {
+      print("Home Screen Products  url>>" + url);
+      var response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Cookie':
+              '.Nop.Customer=${ConstantsVar.prefs.getString(kguidKey) ?? ''}',
+        },
+      ).timeout(
+        const Duration(seconds: 60),
+        onTimeout: () {
+          Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
+          // Time has run out, do what you wanted to do.
+          return http.Response(
+              'Error', 408); // Request Timeout response status code
+        },
+      );
+      Fluttertoast.cancel();
+      if (response.statusCode == 200) {
+        log('Home Screen Product  response>>>>>>' + response.body);
+        if (jsonDecode(response.body)['status'].toString().toLowerCase() ==
+            kstatusFailed) {
+          Fluttertoast.showToast(
+              msg: jsonDecode(response.body)['Message'].toString() +
+                  jsonDecode(response.body)['ResponseData'].toString());
+          return kerrorString;
+        } else {
+          return response.body;
+        }
+      } else if (response.statusCode == 408) {
+        return kerrorString;
+      } else {
+        Fluttertoast.showToast(
+            msg: '$kerrorString Status code${response.statusCode}');
+        return kerrorString;
+      }
+    } on Exception catch (e) {
+      ConstantsVar.excecptionMessage(e);
+      return kerrorString;
+    }
+
+
   }
 }
