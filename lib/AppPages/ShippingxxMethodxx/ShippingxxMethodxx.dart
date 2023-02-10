@@ -19,9 +19,12 @@ import '../../new_apis_func/data_layer/constant_data/constant_data.dart';
 import '../../utils/ApiCalls/ApiCalls.dart';
 
 class ShippingMethod extends StatefulWidget {
-  const ShippingMethod({
-    Key? key,
-  }) : super(key: key);
+  const ShippingMethod(
+      {Key? key, required this.isPaymentFail, required this.failWarning})
+      : super(key: key);
+
+  final bool isPaymentFail;
+  final String failWarning;
 
   @override
   _ShippingMethodState createState() => _ShippingMethodState();
@@ -30,7 +33,7 @@ class ShippingMethod extends StatefulWidget {
 class _ShippingMethodState extends State<ShippingMethod> {
   bool isSelected = false;
   var selectedVal = '';
- int activeIndex = 0;
+  bool isPaymentFail = true;
   var _apiProvider = NewApisProvider();
 
   @override
@@ -113,6 +116,19 @@ class _ShippingMethodState extends State<ShippingMethod> {
                       ),
                     ),
                   ),
+                  Visibility(
+                    visible: isPaymentFail,
+                    child: Visibility(
+                        visible: widget.isPaymentFail,
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: AutoSizeText(
+                              widget.failWarning,
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(fontSize: 4.5.w, color: Colors.red),
+                            ))),
+                  ),
                   Consumer<NewApisProvider>(
                     builder: (_, value, child) => value.loading == true
                         ? const Center(
@@ -131,20 +147,20 @@ class _ShippingMethodState extends State<ShippingMethod> {
                                   return Card(
                                     child: CheckboxListTile(
                                       activeColor: ConstantsVar.appColor,
-                                      value: activeIndex == index && isSelected == true?true:false,
+                                      value: isSelected,
                                       onChanged: (bool? _value) {
+                                        setState(() {
+                                          isPaymentFail = false;
+                                        });
                                         setState(
                                           () {
-                                            activeIndex = index;
-                                            if (activeIndex != index && isSelected) {
+                                            if (isSelected) {
                                               selectedVal = '';
                                               isSelected = _value!;
                                               log(selectedVal);
 
                                               log("$isSelected");
-                                            }
-                                            else {
-                                              if(activeIndex == index)
+                                            } else {
                                               isSelected = _value!;
                                               selectedVal = value
                                                       .shippingMethod[index]
@@ -155,7 +171,6 @@ class _ShippingMethodState extends State<ShippingMethod> {
                                               log('$isSelected');
                                               log(selectedVal);
                                             }
-                                            print(selectedVal);
                                           },
                                         );
                                       },

@@ -1218,6 +1218,8 @@ class _OrderDetailsState extends State<OrderDetails>
           apiToken: apiToken,
           storeId: storeId,
           customerId: customerId,
+          paymentMethod: storeId == kqStoreId ? 'Payments.QNB' : 'Payments.CyberSource',
+          isRepayment: true,
         ),
       ),
     );

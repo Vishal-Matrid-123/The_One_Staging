@@ -12,6 +12,7 @@ import 'package:progress_loading_button/progress_loading_button.dart';
 import 'package:untitled2/AppPages/ShippingxxMethodxx/ShippingxxMethodxx.dart';
 import 'package:untitled2/AppPages/ShippingxxxScreen/BillingxxScreen/SelectBillingAddressModel/SelectBillAdd.dart';
 import 'package:untitled2/AppPages/WebxxViewxx/TopicPagexx.dart';
+import 'package:untitled2/AppPages/ZoneSelectionScreen/select_shipping_zone.dart';
 import 'package:untitled2/Constants/ConstantVariables.dart';
 import 'package:untitled2/Widgets/CustomButton.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/screens/store_selection_screen/store_selection_screen.dart';
@@ -255,8 +256,11 @@ class _AddressItemState extends State<AddressItem> {
                       _dialog.show();
                       await ApiCalls.selectShippingAddress(widget.id.toString())
                           .then(
-                        (_value) {
+                        (_value) async {
                           _dialog.dismiss();
+                          String id = await secureStorage.read(
+                              key: kselectedStoreIdKey) ??
+                              "1";
                           switch (_value) {
                             case kerrorString:
                               break;
@@ -265,13 +269,21 @@ class _AddressItemState extends State<AddressItem> {
                               if (_value.toLowerCase().contains('show popup')) {
                                 _showCustomerPopUp(message: _value);
                               } else {
-                                Navigator.pushReplacement(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (context) =>
-                                        const ShippingMethod(),
-                                  ),
-                                );
+                                if (id == kqStoreId) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (context) =>
+                                              SelectShippingZone()));
+                                } else {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (context) =>
+                                          ShippingMethod(isPaymentFail: false, failWarning: '',),
+                                    ),
+                                  );
+                                }
                               }
                               break;
                           }

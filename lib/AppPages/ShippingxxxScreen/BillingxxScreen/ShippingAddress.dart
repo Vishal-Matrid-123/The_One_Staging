@@ -456,13 +456,19 @@ class _ShippingAddressState extends State<ShippingAddress> {
                                                                               PaymentPage(
                                                                         baseUrl:
                                                                             baseUrl.replaceAll('/apisSecondVer', '') +
-                                                                                'AppcustomerSecondVer/CreateCustomerOrderCheckout?',
+                                                                                'Appcustomer/CreateCustomerOrder?',
                                                                         storeId:
                                                                             storeId,
                                                                         customerId:
                                                                             customerId,
                                                                         apiToken:
                                                                             apiToken,
+                                                                        paymentMethod: storeId ==
+                                                                                kqStoreId
+                                                                            ? 'Payments.QNB'
+                                                                            : 'Payments.CyberSource',
+                                                                        isRepayment:
+                                                                            false,
                                                                       ),
                                                                     ),
                                                                   );
@@ -567,14 +573,20 @@ class _ShippingAddressState extends State<ShippingAddress> {
                                       (index) => AddressItem(
                                         buttonName: "Ship To This Address",
                                         firstName: value
-                                            .existingShippingAddresses[index]
-                                            .firstName ?? '',
+                                                .existingShippingAddresses[
+                                                    index]
+                                                .firstName ??
+                                            '',
                                         lastName: value
-                                            .existingShippingAddresses[index]
-                                            .lastName ?? '',
+                                                .existingShippingAddresses[
+                                                    index]
+                                                .lastName ??
+                                            '',
                                         email: value
-                                            .existingShippingAddresses[index]
-                                            .email ?? '',
+                                                .existingShippingAddresses[
+                                                    index]
+                                                .email ??
+                                            '',
                                         companyEnabled: value
                                             .existingShippingAddresses[index]
                                             .companyEnabled,
@@ -588,8 +600,10 @@ class _ShippingAddressState extends State<ShippingAddress> {
                                             .existingShippingAddresses[index]
                                             .countryId,
                                         countryName: value
-                                            .existingShippingAddresses[index]
-                                            .countryName ?? '',
+                                                .existingShippingAddresses[
+                                                    index]
+                                                .countryName ??
+                                            '',
                                         stateProvinceEnabled: value
                                             .existingShippingAddresses[index]
                                             .stateProvinceEnabled,
@@ -609,8 +623,10 @@ class _ShippingAddressState extends State<ShippingAddress> {
                                             .existingShippingAddresses[index]
                                             .streetAddressRequired,
                                         address1: value
-                                            .existingShippingAddresses[index]
-                                            .address1 ?? '',
+                                                .existingShippingAddresses[
+                                                    index]
+                                                .address1 ??
+                                            '',
                                         streetAddress2Enabled: value
                                             .existingShippingAddresses[index]
                                             .streetAddress2Enabled,
@@ -633,8 +649,10 @@ class _ShippingAddressState extends State<ShippingAddress> {
                                             .existingShippingAddresses[index]
                                             .phoneRequired,
                                         phoneNumber: value
-                                            .existingShippingAddresses[index]
-                                            .phoneNumber ?? '',
+                                                .existingShippingAddresses[
+                                                    index]
+                                                .phoneNumber ??
+                                            '',
                                         faxEnabled: value
                                             .existingShippingAddresses[index]
                                             .faxEnabled,

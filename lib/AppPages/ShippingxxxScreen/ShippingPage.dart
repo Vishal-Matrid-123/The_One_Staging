@@ -818,7 +818,7 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                                 context,
                                                 CupertinoPageRoute(
                                                   builder: (context) =>
-                                                      const ShippingMethod(),
+                                                      ShippingMethod(isPaymentFail: false, failWarning: '',),
                                                 ),
                                               );
                                             }

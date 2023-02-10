@@ -15,7 +15,10 @@ import 'package:http/http.dart';
 import 'package:untitled2/AppPages/MyAccount/MyAccount.dart';
 import 'package:untitled2/AppPages/MyAddresses/AddressResponse.dart';
 import 'package:untitled2/AppPages/StreamClass/NewPeoductPage/ProductResponse.dart';
+import 'package:untitled2/AppPages/ZoneSelectionScreen/select_shipping_zone.dart';
 import 'package:untitled2/AppPages/models/AddressResponse.dart';
+import 'package:untitled2/AppPages/models/GetPaymentMethodResponse/get_payment_method_response.dart';
+import 'package:untitled2/AppPages/models/GetShippingZoneResponse/get_shipping_zone_response.dart';
 import 'package:untitled2/AppPages/models/OrderSummaryResponse.dart';
 import 'package:untitled2/new_apis_func/data_layer/constant_data/constant_data.dart';
 import 'package:untitled2/new_apis_func/data_layer/new_model/countries_info_model/countries_info_model.dart';
@@ -65,6 +68,8 @@ class NewApisProvider extends ChangeNotifier {
   bool _isHomeScreenCategoryLoading = false;
   bool _isHomeScreenCategoryError = false;
   List<Bannerxx> _banners = [];
+  bool _isSelectShippingZonesScreenError = false;
+  bool _isSelectPaymentMethodScreenError = false;
 
   int _productCount = 0;
 
@@ -108,6 +113,12 @@ class NewApisProvider extends ChangeNotifier {
   List<OrderedItems> _orderedList = [];
   List<ExistingBillingAddresses> _existingAddresses = [];
   List<ExistingShippingAddress> _existingShippingAddresses = [];
+  List<String> _zoneId = [];
+  List<String> _zoneName = [];
+  List<String> _shippingCharge = [];
+  List<ZoneModel> _zoneModelList = [];
+  List<PaymentMethod> _paymentMethods = [];
+
   List<PickupPoint> _pickupPoints = [];
   List<Order> _orders = [];
   List<AnalyticsEventItem> _eventItemsForCheckout = [];
@@ -158,6 +169,12 @@ class NewApisProvider extends ChangeNotifier {
 
   bool get isShippingMethodScreenError => _isShippingMethodScreenError;
 
+  bool get isSelectShippingZonesScreenError =>
+      _isSelectShippingZonesScreenError;
+
+  bool get isSelectPaymentMethodScreenError =>
+      _isSelectPaymentMethodScreenError;
+
   bool get isSwitchVal => _isSwitchVal;
 
   bool get isupdated => _isupdated;
@@ -202,6 +219,16 @@ class NewApisProvider extends ChangeNotifier {
 
   List<ExistingShippingAddress> get existingShippingAddresses =>
       _existingShippingAddresses;
+
+  List<String> get zoneId => _zoneId;
+
+  List<String> get zoneName => _zoneName;
+
+  List<String> get shippingCharge => _shippingCharge;
+
+  List<ZoneModel> get zoneModelList => _zoneModelList;
+
+  List<PaymentMethod> get paymentMethods => _paymentMethods;
 
   List<PickupPoint> get pickupPoints => _pickupPoints;
 
@@ -768,6 +795,71 @@ class NewApisProvider extends ChangeNotifier {
           } on Exception catch (e) {
             ConstantsVar.excecptionMessage(e);
             _isShippingDetailsScreenError = true;
+          }
+          break;
+      }
+    });
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future<void> getShippingZones() async {
+    _loading = true;
+    _isSelectShippingZonesScreenError = false;
+    await ApiCalls.getShippingZones().then((value) {
+      switch (value) {
+        case kerrorString:
+          _isSelectShippingZonesScreenError = true;
+          break;
+        default:
+          try {
+            GetShippingZonesResponse _response =
+            GetShippingZonesResponse.fromJson(jsonDecode(value));
+            _zoneId = [];
+            _zoneName = [];
+            _shippingCharge = [];
+            _zoneId.addAll(_response.responseData.map((e) => e.id));
+            _zoneName.addAll(_response.responseData.map((e) => e.name));
+            _shippingCharge
+                .addAll(_response.responseData.map((e) => e.shipping));
+            log('Zone Id :- ${jsonEncode(_zoneId)}');
+            log('Zone name :- ${jsonEncode(_zoneName)}');
+            log('Shipping :- ${_shippingCharge}');
+            log("zone id length ${_zoneId.length}");
+            _zoneModelList = List.generate(
+                _zoneId.length,
+                    (index) => ZoneModel(index, _zoneId[index], _zoneName[index],
+                    _shippingCharge[index]));
+            _isSelectShippingZonesScreenError = false;
+          } on Exception catch (e) {
+            ConstantsVar.excecptionMessage(e);
+            _isSelectShippingZonesScreenError = true;
+          }
+          break;
+      }
+    });
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future<void> getPaymentMethods() async {
+    _loading = true;
+    _isSelectPaymentMethodScreenError = false;
+    await ApiCalls.getPaymentMethod().then((value) {
+      switch (value) {
+        case kerrorString:
+          _isSelectPaymentMethodScreenError = true;
+          break;
+        default:
+          try {
+            GetPaymentMethodResponse _response =
+            GetPaymentMethodResponse.fromJson(jsonDecode(value));
+            _paymentMethods = _response.responseData.paymentMethods;
+
+            _isSelectPaymentMethodScreenError = false;
+          } on Exception catch (e) {
+            ConstantsVar.excecptionMessage(e);
+            _isSelectPaymentMethodScreenError = true;
           }
           break;
       }

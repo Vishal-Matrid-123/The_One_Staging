@@ -161,6 +161,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   shimmer: ^2.0.0
+  dropdown_button2: ^1.8.9
 
 #  upgrader: ^4.4.2
 

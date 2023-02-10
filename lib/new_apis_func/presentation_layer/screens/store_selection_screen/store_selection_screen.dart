@@ -104,11 +104,8 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen> {
                                   ),
                                 ]
                                     .map(
-                                      (e) => e.name
-                                              .toLowerCase()
-                                              .contains('qatar')
-                                          ? const SizedBox()
-                                          : GestureDetector(
+                                      (e) =>
+                                      GestureDetector(
                                               onTap: widget._screenName
                                                       .toLowerCase()
                                                       .contains('splash')
@@ -222,7 +219,7 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen> {
                                 padding: EdgeInsets.all(2.h),
                                 child: Center(
                                   child: AutoSizeText(
-                                    'Please note\: We currently only offer shipping and delivery within the UAE, Kuwait and Bahrain.',
+                                    'Please note\: We currently only offer shipping and delivery within the UAE, Kuwait, Qatar and Bahrain.',
                                     style: TextStyle(
                                         shadows: <Shadow>[
                                           Shadow(

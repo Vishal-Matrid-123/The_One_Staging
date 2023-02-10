@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
@@ -7,12 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:untitled2/AppPages/HomeScreen/HomeScreen.dart';
 import 'package:untitled2/AppPages/MyOrders/MyOrders.dart';
+import 'package:untitled2/AppPages/PaymentMethods/payment_methods.dart';
 import 'package:untitled2/Constants/ConstantVariables.dart';
+import 'package:untitled2/new_apis_func/data_layer/constant_data/constant_data.dart';
+import 'package:untitled2/utils/ApiCalls/ApiCalls.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
-import '../../utils/ApiCalls/ApiCalls.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({
@@ -21,12 +25,17 @@ class PaymentPage extends StatefulWidget {
     required String storeId,
     required String customerId,
     required String apiToken,
+    required String paymentMethod,
+    required bool isRepayment,
   })  : _baseUrl = baseUrl,
         _storeId = storeId,
         _apiToken = apiToken,
         _customerId = customerId,
+        _paymentMethod = paymentMethod,
+        _isRepayment = isRepayment,
         super(key: key);
-  final String _baseUrl, _storeId, _customerId, _apiToken;
+  final String _baseUrl, _storeId, _customerId, _apiToken, _paymentMethod;
+  final bool _isRepayment;
 
   @override
   _PaymentPageState createState() => _PaymentPageState();
@@ -37,10 +46,12 @@ class _PaymentPageState extends State<PaymentPage> with WidgetsBindingObserver {
       Completer<WebViewController>();
   var progressCount;
   bool isLoading = true;
+  bool failCaseLoading = false;
   bool _willGo = true;
 
   var _opacity = 1.0;
   String baseUrl = "";
+  late WebViewController _webController;
 
   Future<void> secureScreen() async {
     await ApiCalls.getSelectedStore().then(
@@ -59,7 +70,7 @@ class _PaymentPageState extends State<PaymentPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     // TODO: implement initState
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     secureScreen();
     setState(() {});
   }
@@ -178,11 +189,15 @@ class _PaymentPageState extends State<PaymentPage> with WidgetsBindingObserver {
                   opacity: _opacity,
                   child: WebView(
                     onWebResourceError: (error) => log(error.description),
-                    initialUrl: widget._baseUrl +
-                        "apiToken=${widget._apiToken}&CustomerId=${widget._customerId}&PaymentMethod=Payments.CyberSource&Storeid=${widget._storeId}",
+                    initialUrl: widget._isRepayment == true
+                        ? widget._baseUrl +
+                        "CustomerId=${widget._customerId}&apiToken=${widget._apiToken}&$kStoreIdVar=${widget._storeId}"
+                        : widget._baseUrl +
+                        "apiToken=${widget._apiToken}&CustomerId=${widget._customerId}&PaymentMethod=${widget._paymentMethod}&$kStoreIdVar=${widget._storeId}",
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: (WebViewController webViewController) {
                       _controller.complete(webViewController);
+                      _webController = webViewController;
                     },
                     onProgress: (int progress) {
                       setState(() {
@@ -192,10 +207,6 @@ class _PaymentPageState extends State<PaymentPage> with WidgetsBindingObserver {
                     },
                     javascriptChannels: <JavascriptChannel>{},
                     navigationDelegate: (NavigationRequest request) {
-                      // NavigationDecision.
-
-                      // Navigation
-
                       if (request.url.contains(
                           "https://secureacceptance.cybersource.com/billing")) {
                         // FacebookAppEvents().logPurchase(
@@ -219,28 +230,95 @@ class _PaymentPageState extends State<PaymentPage> with WidgetsBindingObserver {
                     },
                     onPageFinished: (String url) {
                       print('Page finished loading: $url');
-                      setState(() {
-                        _willGo = true;
-                        isLoading = false;
+                      _webController.currentUrl().then((value) {
+                        log('web controller current url - $value');
+                        if (value!.contains(
+                            "theoneqatar.com/AppCustomerSecondVer/CreateCustomerOrder?")) {
+                          setState(() {
+                            failCaseLoading = true;
+                          });
+                          getPaymentWebview().then((value) {
+                            setState(() {
+                              _willGo = true;
+                              isLoading = false;
+                              failCaseLoading = false;
+                            });
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PaymentMethodxx(
+                                      isPaymentFail: true,
+                                      failWarning: value)),
+                            );
+                          });
+                        }
+                        // else if (value.contains(
+                        //     "theone.com/AppCustomerSecondVer/CreateCustomerOrder?") ||
+                        //     value.contains(
+                        //         "theonebahrain.com/AppCustomerSecondVer/CreateCustomerOrder?") ||
+                        //     value.contains(
+                        //         "theonekuwait.com/AppCustomerSecondVer/CreateCustomerOrder?")) {
+                        //   setState(() {
+                        //     failCaseLoading = true;
+                        //   });
+                        //   getPaymentWebview().then((value) {
+                        //     setState(() {
+                        //       _willGo = true;
+                        //       isLoading = false;
+                        //       failCaseLoading = false;
+                        //     });
+                        //     Navigator.pushAndRemoveUntil(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //             builder: (context) => ShippingMethod(isPaymentFail: true, failWarning: value,)),
+                        //             (route) => route.isFirst);
+                        //   });
+                        // }
+                        else {
+                          setState(() {
+                            _willGo = true;
+                            isLoading = false;
+                            failCaseLoading = false;
+                          });
+                        }
                       });
                     },
                     gestureNavigationEnabled: true,
                   ),
                 ),
                 isLoading
-                    ? Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          children: [
-                            const SpinKitRipple(
-                              color: Colors.red,
-                              size: 90,
-                            ),
-                            Text('Loading Please Wait!.........' +
-                                progressCount.toString() +
-                                '%'),
-                          ],
-                        ))
+                    ? failCaseLoading
+                    ? Container(
+                  height: 100.h,
+                  width: 100.w,
+                  color: Colors.white,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        const SpinKitRipple(
+                          color: Colors.red,
+                          size: 90,
+                        ),
+                        Text('Loading Please Wait!.........' +
+                            progressCount.toString() +
+                            '%'),
+                      ],
+                    ),
+                  ),
+                )
+                    : Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        const SpinKitRipple(
+                          color: Colors.red,
+                          size: 90,
+                        ),
+                        Text('Loading Please Wait!.........' +
+                            progressCount.toString() +
+                            '%'),
+                      ],
+                    ))
                     : Stack(),
               ],
             ),
@@ -248,6 +326,31 @@ class _PaymentPageState extends State<PaymentPage> with WidgetsBindingObserver {
         ),
       ),
     );
+  }
+
+  Future<String> getPaymentWebview() async {
+    final uri = Uri.parse(widget._baseUrl +
+        "apiToken=${widget._apiToken}&CustomerId=${widget._customerId}&PaymentMethod=${widget._paymentMethod}&$kStoreIdVar=${widget._storeId}");
+    log("getPaymentWebview Url :- ${uri.toString()}");
+
+    var response = await http.get(uri, headers: {
+      'Cookie': '.Nop.Customer=${ConstantsVar.prefs.getString(kguidKey)}',
+    });
+    if (response.body.contains('status') && response.statusCode == 200) {
+      if (jsonDecode(response.body)['status'].toString().toLowerCase() ==
+          kstatusFailed) {
+        Fluttertoast.showToast(
+            msg: jsonDecode(response.body)['Message'].toString(),
+            toastLength: Toast.LENGTH_LONG);
+        return jsonDecode(response.body)['Message'].toString();
+      } else {
+        return "";
+      }
+    } else {
+      Fluttertoast.showToast(
+          msg: '$kerrorString\nStatus code${response.statusCode}');
+      return kerrorString;
+    }
   }
 
   JavascriptChannel _toasterJavascriptChannel(BuildContext context) {

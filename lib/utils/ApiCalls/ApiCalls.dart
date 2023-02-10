@@ -1990,6 +1990,85 @@ class ApiCalls {
     }
   }
 
+  static Future<String> getShippingZones() async {
+    String _baseUrl = await ApiCalls.getSelectedStore();
+    final uri = Uri.parse(_baseUrl.replaceAll(
+        "apisSecondVer", "ApisSecondVer") +
+        kget_shipping_zones_url +
+        "apiToken=${ConstantsVar.prefs.getString(kapiTokenKey)}&CustomerId=${ConstantsVar.prefs.getString(kcustomerIdKey)}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? "1"}");
+    log("getShippingZone Url :- ${uri.toString()}");
+
+    try {
+      var response = await http.get(uri, headers: {
+        'Cookie': '.Nop.Customer=$customerGuid',
+      }).timeout(
+        const Duration(seconds: 15),
+        onTimeout: () {
+          Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
+          return http.Response('Error', 408);
+        },
+      );
+      if (response.statusCode == 200) {
+        if (jsonDecode(response.body)['status'].toString().toLowerCase() ==
+            kstatusFailed) {
+          Fluttertoast.showToast(
+              msg: jsonDecode(response.body)['Message'].toString());
+          return kerrorString;
+        } else {
+          log("Shipping Zones Api " + response.body);
+          return response.body;
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: '$kerrorString\nStatus code${response.statusCode}');
+        return kerrorString;
+      }
+    } on Exception catch (e) {
+      ConstantsVar.excecptionMessage(e);
+      return kerrorString;
+    }
+  }
+
+  static Future<String> getPaymentMethod() async {
+    String _baseUrl = await ApiCalls.getSelectedStore();
+    final uri = Uri.parse(_baseUrl.replaceAll(
+        "apisSecondVer", "ApisSecondVer") +
+        kget_payment_method_url +
+        "apiToken=${ConstantsVar.prefs.getString(kapiTokenKey)}&CustomerId=${ConstantsVar.prefs.getString(kcustomerIdKey)}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? "1"}");
+    log("getPaymentMethod Url :- ${uri.toString()}");
+
+    try {
+      var response = await http.get(uri, headers: {
+        'Cookie': '.Nop.Customer=$customerGuid',
+      }).timeout(
+        const Duration(seconds: 15),
+        onTimeout: () {
+          Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
+          return http.Response('Error', 408);
+        },
+      );
+      if (response.statusCode == 200) {
+        if (jsonDecode(response.body)['status'].toString().toLowerCase() ==
+            kstatusFailed) {
+          Fluttertoast.showToast(
+              msg: jsonDecode(response.body)['Message'].toString());
+          return kerrorString;
+        } else {
+          log("Payment Methods Api " + response.body);
+          return response.body;
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: '$kerrorString\nStatus code${response.statusCode}');
+        return kerrorString;
+      }
+    } on Exception catch (e) {
+      ConstantsVar.excecptionMessage(e);
+      return kerrorString;
+    }
+  }
+
+
   static Future addAndSelectShippingAddress(String id2) async {
     final uri = Uri.parse(
         await getSelectedStore() + BuildConfig.add_select_shipping_address_url);
@@ -2139,10 +2218,14 @@ class ApiCalls {
             CupertinoPageRoute(
               builder: (context) => PaymentPage(
                 baseUrl: baseUrl.replaceAll('/apisSecondVer', '') +
-                    'appcustomerSecondVer/CreateCustomerOrderCheckout?',
+                    'AppCustomerSecondVer/CreateCustomerOrder?',
                 storeId: storeId,
                 customerId: customerId,
                 apiToken: apiToken,
+                paymentMethod: storeId == kqStoreId
+                    ? 'Payments.QNB'
+                    : 'Payments.CyberSource',
+                isRepayment: false,
               ),
             ),
           );
