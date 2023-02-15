@@ -105,79 +105,82 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen> {
                                 ]
                                     .map(
                                       (e) =>
-                                      GestureDetector(
-                                              onTap: widget._screenName
-                                                      .toLowerCase()
-                                                      .contains('splash')
-                                                  ? () {
-                                                      ApiCalls
-                                                          .saveSelectedStore(
-                                                              value: e.id
-                                                                  .toString());
-                                                      Navigator
-                                                          .pushAndRemoveUntil(
-                                                              context,
-                                                              CupertinoPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        MyApp(),
-                                                              ),
-                                                              (route) => false);
-                                                    }
-                                                  : () {
-                                                ApiCalls
-                                                    .saveSelectedStore(
-                                                    value: e.id
-                                                        .toString());
-                                                      RestartWidget.restartApp(
-                                                          context);
-                                                    },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(10.0),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            14),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.white
-                                                            .withOpacity(0.8),
-                                                        offset: const Offset(
-                                                            -6.0, -6.0),
-                                                        blurRadius: 10.0,
-                                                      ),
-                                                      BoxShadow(
-                                                        color: Colors.black
-                                                            .withOpacity(0.2),
-                                                        offset: const Offset(
-                                                            6.0, 6.0),
-                                                        blurRadius: 13.0,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  child: Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                      vertical: 5.w,
-                                                      horizontal: 6.w,
+                                      Visibility(
+                                        visible: e.name.contains('Qatar')?false:true,
+                                        child: GestureDetector(
+                                                onTap: widget._screenName
+                                                        .toLowerCase()
+                                                        .contains('splash')
+                                                    ? () {
+                                                        ApiCalls
+                                                            .saveSelectedStore(
+                                                                value: e.id
+                                                                    .toString());
+                                                        Navigator
+                                                            .pushAndRemoveUntil(
+                                                                context,
+                                                                CupertinoPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          MyApp(),
+                                                                ),
+                                                                (route) => false);
+                                                      }
+                                                    : () {
+                                                  ApiCalls
+                                                      .saveSelectedStore(
+                                                      value: e.id
+                                                          .toString());
+                                                        RestartWidget.restartApp(
+                                                            context);
+                                                      },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(10.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              14),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: Colors.white
+                                                              .withOpacity(0.8),
+                                                          offset: const Offset(
+                                                              -6.0, -6.0),
+                                                          blurRadius: 10.0,
+                                                        ),
+                                                        BoxShadow(
+                                                          color: Colors.black
+                                                              .withOpacity(0.2),
+                                                          offset: const Offset(
+                                                              6.0, 6.0),
+                                                          blurRadius: 13.0,
+                                                        ),
+                                                      ],
                                                     ),
-                                                    child: Center(
-                                                      child: AutoSizeText(
-                                                        e.name,
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 3.5.w,
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                        vertical: 5.w,
+                                                        horizontal: 6.w,
+                                                      ),
+                                                      child: Center(
+                                                        child: AutoSizeText(
+                                                          e.name,
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 3.5.w,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
+                                      ),
                                     )
                                     .toList(growable: true),
                               ),

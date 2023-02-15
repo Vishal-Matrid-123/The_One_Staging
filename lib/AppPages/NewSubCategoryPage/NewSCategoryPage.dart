@@ -16,6 +16,7 @@ import 'package:untitled2/AppPages/HomeScreen/HomeScreen.dart';
 import 'package:untitled2/AppPages/SearchPage/SearchPage.dart';
 // import 'package:untitled2/AppPages/NewSubCategoryPage/ModelClass/NewSubCatProductModel.dart';
 import 'package:untitled2/Constants/ConstantVariables.dart';
+import 'package:untitled2/main_dev.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/provider_class/provider_contracter.dart';
 
 import '../../new_apis_func/data_layer/constant_data/constant_data.dart';
@@ -477,26 +478,29 @@ class _SubCatWidgetState extends State<SubCatWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          color: Colors.grey.shade200,
-          padding: EdgeInsets.all(2.h),
-          child: Center(
-            child: AutoSizeText(
-              widget.title.toString().toUpperCase(),
-              style: TextStyle(shadows: <Shadow>[
-                Shadow(
-                  offset: const Offset(1.0, 1.2),
-                  blurRadius: 3.0,
-                  color: Colors.grey.shade300,
-                ),
-                Shadow(
-                  offset: const Offset(1.0, 1.2),
-                  blurRadius: 8.0,
-                  color: Colors.grey.shade300,
-                ),
-              ], fontSize: 5.w, fontWeight: FontWeight.bold),
-              softWrap: true,
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            color: fromHex('#948a7e'),
+            padding: EdgeInsets.all(2.h),
+            child: Center(
+              child: AutoSizeText(
+                widget.title.toString().toUpperCase(),
+                style: TextStyle(shadows: <Shadow>[
+                  Shadow(
+                    offset: const Offset(1.0, 1.2),
+                    blurRadius: 3.0,
+                    color: Colors.grey.shade300,
+                  ),
+                  Shadow(
+                    offset: const Offset(1.0, 1.2),
+                    blurRadius: 8.0,
+                    color: Colors.grey.shade300,
+                  ),
+                ], fontSize: 5.w, fontWeight: FontWeight.bold),
+                softWrap: true,
+              ),
             ),
           ),
         ),

@@ -394,12 +394,17 @@ class NewApisProvider extends ChangeNotifier {
               if (isLoading == true) {
                 _productList.addAll(response.responseData);
               } else {
-                _productList = response.responseData;
                 _productCount = response.productCount;
+                if (_productCount == 0) {
+                  _productList = [];
+                } else {
+                  _productList = response.responseData;
+                }
               }
               _isProductListScreenError = false;
               _loading = false;
             } catch (e) {
+
               _isProductListScreenError = true;
               _loading = false;
             }
@@ -814,7 +819,7 @@ class NewApisProvider extends ChangeNotifier {
         default:
           try {
             GetShippingZonesResponse _response =
-            GetShippingZonesResponse.fromJson(jsonDecode(value));
+                GetShippingZonesResponse.fromJson(jsonDecode(value));
             _zoneId = [];
             _zoneName = [];
             _shippingCharge = [];
@@ -828,7 +833,7 @@ class NewApisProvider extends ChangeNotifier {
             log("zone id length ${_zoneId.length}");
             _zoneModelList = List.generate(
                 _zoneId.length,
-                    (index) => ZoneModel(index, _zoneId[index], _zoneName[index],
+                (index) => ZoneModel(index, _zoneId[index], _zoneName[index],
                     _shippingCharge[index]));
             _isSelectShippingZonesScreenError = false;
           } on Exception catch (e) {
@@ -853,7 +858,7 @@ class NewApisProvider extends ChangeNotifier {
         default:
           try {
             GetPaymentMethodResponse _response =
-            GetPaymentMethodResponse.fromJson(jsonDecode(value));
+                GetPaymentMethodResponse.fromJson(jsonDecode(value));
             _paymentMethods = _response.responseData.paymentMethods;
 
             _isSelectPaymentMethodScreenError = false;
@@ -1614,9 +1619,9 @@ class NewApisProvider extends ChangeNotifier {
 
   /*Booking Status*/
   Future<void> getBookingStatus() async {
-    _isBooking = false;
 
-    _isBooking = ConstantsVar.prefs.getString('userID')!=null?await ApiCalls.getBookingStatus():false;
+     await ApiCalls.getBookingStatus().then((value) => _isBooking = value)
+       ;
 
     print('isBooking done>>>>>>>' + _isBooking.toString());
 

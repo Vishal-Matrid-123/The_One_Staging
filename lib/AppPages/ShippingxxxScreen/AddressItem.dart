@@ -259,7 +259,7 @@ class _AddressItemState extends State<AddressItem> {
                         (_value) async {
                           _dialog.dismiss();
                           String id = await secureStorage.read(
-                              key: kselectedStoreIdKey) ??
+                                  key: kselectedStoreIdKey) ??
                               "1";
                           switch (_value) {
                             case kerrorString:
@@ -279,8 +279,10 @@ class _AddressItemState extends State<AddressItem> {
                                   Navigator.pushReplacement(
                                     context,
                                     CupertinoPageRoute(
-                                      builder: (context) =>
-                                          ShippingMethod(isPaymentFail: false, failWarning: '',),
+                                      builder: (context) => ShippingMethod(
+                                        isPaymentFail: false,
+                                        failWarning: '',
+                                      ),
                                     ),
                                   );
                                 }
@@ -319,7 +321,11 @@ class _AddressItemState extends State<AddressItem> {
           children: <Widget>[
             Container(
               padding: const EdgeInsets.only(
-                  left: 2, top: 45 + 20, right: 2, bottom: 20),
+                left: 2,
+                top: 45 + 20,
+                right: 2,
+                bottom: 20,
+              ),
               margin: const EdgeInsets.only(top: 35),
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
@@ -343,7 +349,6 @@ class _AddressItemState extends State<AddressItem> {
                           .replaceFirst('switch', '')
                           .replaceFirst('call', ''),
                     ),
-
                   ),
                   const SizedBox(
                     height: 15,

@@ -123,10 +123,88 @@ class _ShippingDetailsState extends State<ShippingDetails>
   List<Country> filterSearchResults(String query) {
     List<Country> _searchedList = [];
 
-    for (int i = 0; i < countries.length; i++) {
-      Country name = countries[i];
+    for (int i = 0;
+        i <
+            [
+              Country(
+                name: "Kuwait",
+                flag: "🇰🇼",
+                code: "KW",
+                dialCode: "965",
+                minLength: 8,
+                maxLength: 8,
+              ),
+              Country(
+                name: "Bahrain",
+                flag: "🇧🇭",
+                code: "BH",
+                dialCode: "973",
+                minLength: 8,
+                maxLength: 8,
+              ),
+              Country(
+                name: "United Arab Emirates",
+                flag: "🇦🇪",
+                code: "AE",
+                dialCode: "971",
+                minLength: 9,
+                maxLength: 9,
+              )
+            ].length;
+        i++) {
+      Country name = [
+        Country(
+          name: "Kuwait",
+          flag: "🇰🇼",
+          code: "KW",
+          dialCode: "965",
+          minLength: 8,
+          maxLength: 8,
+        ),
+        Country(
+          name: "Bahrain",
+          flag: "🇧🇭",
+          code: "BH",
+          dialCode: "973",
+          minLength: 8,
+          maxLength: 8,
+        ),
+        Country(
+          name: "United Arab Emirates",
+          flag: "🇦🇪",
+          code: "AE",
+          dialCode: "971",
+          minLength: 9,
+          maxLength: 9,
+        )
+      ][i];
       if (name.name.toLowerCase().startsWith(query.toLowerCase())) {
-        _searchedList.add(countries[i]);
+        _searchedList.add([
+          Country(
+            name: "Kuwait",
+            flag: "🇰🇼",
+            code: "KW",
+            dialCode: "965",
+            minLength: 8,
+            maxLength: 8,
+          ),
+          Country(
+            name: "Bahrain",
+            flag: "🇧🇭",
+            code: "BH",
+            dialCode: "973",
+            minLength: 8,
+            maxLength: 8,
+          ),
+          Country(
+            name: "United Arab Emirates",
+            flag: "🇦🇪",
+            code: "AE",
+            dialCode: "971",
+            minLength: 9,
+            maxLength: 9,
+          )
+        ][i]);
       }
     }
     return _searchedList;
@@ -414,7 +492,15 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                         setState(() {
                                           for (Country val in countries) {
                                             if (val.code.toLowerCase() ==
-                                                country.code.toLowerCase()) {
+                                                    country.code
+                                                        .toLowerCase() &&
+                                                (val.name
+                                                    .toLowerCase()
+                                                    .contains('united arab')||val.name
+                                                    .toLowerCase()
+                                                    .contains('kuwait')||val.name
+                                                    .toLowerCase()
+                                                    .contains('bahrain'))) {
                                               _initialVal = val;
                                               print(country.code);
                                               break;
@@ -610,20 +696,98 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                                         Expanded(
                                                           child: ListView(
                                                             children: List.generate(
-                                                                _searchList
-                                                                            .length ==
-                                                                        0
-                                                                    ? countries
-                                                                        .length
-                                                                    : _searchList
-                                                                        .length,
-                                                                (index) => _searchItems(_searchList
-                                                                            .length ==
-                                                                        0
-                                                                    ? countries[
-                                                                        index]
-                                                                    : _searchList[
-                                                                        index])),
+                                                                _searchList.length == 0
+                                                                    ? [
+                                                                        Country(
+                                                                          name:
+                                                                              "Kuwait",
+                                                                          flag:
+                                                                              "🇰🇼",
+                                                                          code:
+                                                                              "KW",
+                                                                          dialCode:
+                                                                              "965",
+                                                                          minLength:
+                                                                              8,
+                                                                          maxLength:
+                                                                              8,
+                                                                        ),
+                                                                        Country(
+                                                                          name:
+                                                                              "Bahrain",
+                                                                          flag:
+                                                                              "🇧🇭",
+                                                                          code:
+                                                                              "BH",
+                                                                          dialCode:
+                                                                              "973",
+                                                                          minLength:
+                                                                              8,
+                                                                          maxLength:
+                                                                              8,
+                                                                        ),
+                                                                        Country(
+                                                                          name:
+                                                                              "United Arab Emirates",
+                                                                          flag:
+                                                                              "🇦🇪",
+                                                                          code:
+                                                                              "AE",
+                                                                          dialCode:
+                                                                              "971",
+                                                                          minLength:
+                                                                              9,
+                                                                          maxLength:
+                                                                              9,
+                                                                        )
+                                                                      ].length
+                                                                    : _searchList.length,
+                                                                (index) => _searchItems(_searchList.length == 0
+                                                                    ? [
+                                                                        Country(
+                                                                          name:
+                                                                              "Kuwait",
+                                                                          flag:
+                                                                              "🇰🇼",
+                                                                          code:
+                                                                              "KW",
+                                                                          dialCode:
+                                                                              "965",
+                                                                          minLength:
+                                                                              8,
+                                                                          maxLength:
+                                                                              8,
+                                                                        ),
+                                                                        Country(
+                                                                          name:
+                                                                              "Bahrain",
+                                                                          flag:
+                                                                              "🇧🇭",
+                                                                          code:
+                                                                              "BH",
+                                                                          dialCode:
+                                                                              "973",
+                                                                          minLength:
+                                                                              8,
+                                                                          maxLength:
+                                                                              8,
+                                                                        ),
+                                                                        Country(
+                                                                          name:
+                                                                              "United Arab Emirates",
+                                                                          flag:
+                                                                              "🇦🇪",
+                                                                          code:
+                                                                              "AE",
+                                                                          dialCode:
+                                                                              "971",
+                                                                          minLength:
+                                                                              9,
+                                                                          maxLength:
+                                                                              9,
+                                                                        )
+                                                                      ][index]
+                                                                    : _searchList[index])),
                                                           ),
                                                         )
                                                       ],
@@ -818,7 +982,10 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                                 context,
                                                 CupertinoPageRoute(
                                                   builder: (context) =>
-                                                      ShippingMethod(isPaymentFail: false, failWarning: '',),
+                                                      ShippingMethod(
+                                                    isPaymentFail: false,
+                                                    failWarning: '',
+                                                  ),
                                                 ),
                                               );
                                             }

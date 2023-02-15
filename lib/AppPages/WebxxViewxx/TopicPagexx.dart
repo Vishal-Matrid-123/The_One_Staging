@@ -77,7 +77,7 @@ class _TopicPageState extends State<TopicPage> {
     _webViewControllerFuture = _controller.future;
     // _controller.
     final provider = Provider.of<NewApisProvider>(context, listen: false);
-    isUserLoggedIn != null ? provider.getBookingStatus() : null;
+    provider.getBookingStatus() ;
 
     // _webViewControllerFuture.
     if (Platform.isAndroid) {
@@ -121,7 +121,7 @@ class _TopicPageState extends State<TopicPage> {
               backgroundColor: ConstantsVar.appColor,
               toolbarHeight: 18.w,
               centerTitle: true,
-              leading: NavigationControls(_controller.future, 'Topic Screen'),
+              leading: NavigationControls(_controller.future, widget.screenName),
               actions: [
                 FutureBuilder<WebViewController>(
                   future: _webViewControllerFuture,

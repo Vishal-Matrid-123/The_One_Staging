@@ -56,7 +56,7 @@ class _OrderReturnDetailScreenState extends State<OrderReturnDetailScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         top: true,
-        bottom: true,
+        bottom:true,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: ConstantsVar.appColor,

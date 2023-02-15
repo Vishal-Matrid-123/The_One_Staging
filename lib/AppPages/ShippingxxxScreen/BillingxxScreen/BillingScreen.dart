@@ -186,81 +186,94 @@ class _BillingDetailsState extends State<BillingDetails>
                               scrollDirection: Axis.vertical,
                               children: List.generate(
                                   value.existingAddresses.length,
-                                  (index) => AddressItem(
-                                        buttonName: "Bill To This Address",
-                                        firstName: value
-                                            .existingAddresses[index].firstName ?? '',
-                                        lastName: value
-                                            .existingAddresses[index].lastName ?? '',
-                                        email: value
-                                            .existingAddresses[index].email ?? '',
-                                        companyEnabled: value
+                                  (index) => Visibility(
+                                    visible: value
+                                        .existingAddresses[index]
+                                        .countryName  ==
+                                        null ||
+                                        value
                                             .existingAddresses[index]
-                                            .companyEnabled,
-                                        companyRequired: value
-                                            .existingAddresses[index]
-                                            .companyRequired,
-                                        countryEnabled: value
-                                            .existingAddresses[index]
-                                            .countryEnabled,
-                                        countryId: value
-                                            .existingAddresses[index].countryId,
-                                        countryName: value
-                                            .existingAddresses[index]
-                                            .countryName ?? '',
-                                        stateProvinceEnabled: value
-                                            .existingAddresses[index]
-                                            .stateProvinceEnabled,
-                                        cityEnabled: value
-                                            .existingAddresses[index]
-                                            .cityEnabled,
-                                        cityRequired: value
-                                            .existingAddresses[index]
-                                            .cityRequired,
-                                        city:
-                                            value.existingAddresses[index].city,
-                                        streetAddressEnabled: value
-                                            .existingAddresses[index]
-                                            .streetAddressEnabled,
-                                        streetAddressRequired: value
-                                            .existingAddresses[index]
-                                            .streetAddressRequired,
-                                        address1: value.existingAddresses[index].address1 ?? '',
-                                        streetAddress2Enabled: value
-                                            .existingAddresses[index]
-                                            .streetAddress2Enabled,
-                                        streetAddress2Required: value
-                                            .existingAddresses[index]
-                                            .streetAddress2Required,
-                                        zipPostalCodeEnabled: value
-                                            .existingAddresses[index]
-                                            .zipPostalCodeEnabled,
-                                        zipPostalCodeRequired: value
-                                            .existingAddresses[index]
-                                            .zipPostalCodeRequired,
-                                        zipPostalCode: value
-                                            .existingAddresses[index]
-                                            .zipPostalCode,
-                                        phoneEnabled: value
-                                            .existingAddresses[index]
-                                            .phoneEnabled,
-                                        phoneRequired: value
-                                            .existingAddresses[index]
-                                            .phoneRequired,
-                                        phoneNumber: value.existingAddresses[index].phoneNumber ?? '',
-                                        faxEnabled: value
-                                            .existingAddresses[index]
-                                            .faxEnabled,
-                                        faxRequired: value
-                                            .existingAddresses[index]
-                                            .faxRequired,
-                                        faxNumber: value
-                                            .existingAddresses[index].faxNumber,
-                                        id: value.existingAddresses[index].id,
-                                        callback: (String value) {},
-                                        guestId: "",
-                                        // isLoading: isLoading,
-                                      )),
+                                            .countryName
+                                            .length ==
+                                            0
+                                        ? false
+                                        : true,
+                                    child: AddressItem(
+                                          buttonName: "Bill To This Address",
+                                          firstName: value
+                                              .existingAddresses[index].firstName ?? '',
+                                          lastName: value
+                                              .existingAddresses[index].lastName ?? '',
+                                          email: value
+                                              .existingAddresses[index].email ?? '',
+                                          companyEnabled: value
+                                              .existingAddresses[index]
+                                              .companyEnabled,
+                                          companyRequired: value
+                                              .existingAddresses[index]
+                                              .companyRequired,
+                                          countryEnabled: value
+                                              .existingAddresses[index]
+                                              .countryEnabled,
+                                          countryId: value
+                                              .existingAddresses[index].countryId,
+                                          countryName: value
+                                              .existingAddresses[index]
+                                              .countryName ?? '',
+                                          stateProvinceEnabled: value
+                                              .existingAddresses[index]
+                                              .stateProvinceEnabled,
+                                          cityEnabled: value
+                                              .existingAddresses[index]
+                                              .cityEnabled,
+                                          cityRequired: value
+                                              .existingAddresses[index]
+                                              .cityRequired,
+                                          city:
+                                              value.existingAddresses[index].city,
+                                          streetAddressEnabled: value
+                                              .existingAddresses[index]
+                                              .streetAddressEnabled,
+                                          streetAddressRequired: value
+                                              .existingAddresses[index]
+                                              .streetAddressRequired,
+                                          address1: value.existingAddresses[index].address1 ?? '',
+                                          streetAddress2Enabled: value
+                                              .existingAddresses[index]
+                                              .streetAddress2Enabled,
+                                          streetAddress2Required: value
+                                              .existingAddresses[index]
+                                              .streetAddress2Required,
+                                          zipPostalCodeEnabled: value
+                                              .existingAddresses[index]
+                                              .zipPostalCodeEnabled,
+                                          zipPostalCodeRequired: value
+                                              .existingAddresses[index]
+                                              .zipPostalCodeRequired,
+                                          zipPostalCode: value
+                                              .existingAddresses[index]
+                                              .zipPostalCode,
+                                          phoneEnabled: value
+                                              .existingAddresses[index]
+                                              .phoneEnabled,
+                                          phoneRequired: value
+                                              .existingAddresses[index]
+                                              .phoneRequired,
+                                          phoneNumber: value.existingAddresses[index].phoneNumber ?? '',
+                                          faxEnabled: value
+                                              .existingAddresses[index]
+                                              .faxEnabled,
+                                          faxRequired: value
+                                              .existingAddresses[index]
+                                              .faxRequired,
+                                          faxNumber: value
+                                              .existingAddresses[index].faxNumber,
+                                          id: value.existingAddresses[index].id,
+                                          callback: (String value) {},
+                                          guestId: "",
+                                          // isLoading: isLoading,
+                                        ),
+                                  )),
                             ),
                           ),
                           Padding(

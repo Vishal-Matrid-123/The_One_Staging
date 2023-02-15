@@ -319,7 +319,7 @@ class _VerificationScreen2State extends State<VerificationScreen2>
                 },
                 child: Center(
                   child: AutoSizeText(
-                    "Didn't get code?",
+                    "Didn't get code? Resend OTP",
                     style: theme.textTheme.subtitle1,
                   ),
                 ),

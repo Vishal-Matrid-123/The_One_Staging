@@ -50,7 +50,7 @@ class ApiCalls {
     log('Testing Api');
 
     final _url = Uri.parse(baseUrl +
-        'GetSortedProductsByCategoryId?categoryid=$catId&pageindex=$pageIndex&pagesize=16&$kcustomerIdVar${ConstantsVar.prefs.getString('guestCustomerID')}$kstoreIdVar$storeId');
+        'GetSortedProductsByCategoryId?categoryid=$catId&pageindex=$pageIndex&pagesize=6&$kcustomerIdVar${ConstantsVar.prefs.getString('guestCustomerID')}$kstoreIdVar$storeId');
 
     log('Product List Api>>>>' + _url.toString());
 
@@ -2521,6 +2521,7 @@ class ApiCalls {
 
     String url = _baseUrl +
         "GetHomestylingBookingStatus?CustomerId=${ConstantsVar.prefs.getString('userId')}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? '1'}";
+    log("Booking url>>" + url);
     try {
       print("Booking url>>" + url);
       var response = await http.get(

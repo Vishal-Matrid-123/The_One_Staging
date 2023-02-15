@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 
@@ -8,30 +7,21 @@ import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:freerasp/talsec_app.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:intl/intl.dart';
-import 'package:logger/logger.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled2/AppPages/ErrorScreen/error_screen.dart';
-import 'package:untitled2/new_apis_func/presentation_layer/provider_class/notification_controller.dart';
-import 'package:untitled2/new_apis_func/services/background_fcm_services.dart';
 import 'package:untitled2/utils/CartBadgeCounter/CartBadgetLogic.dart';
 import 'package:untitled2/utils/CartBadgeCounter/SearchModel/SearchNotifier.dart';
 
 import 'AppPages/SplashScreen/SplashScreen.dart';
 import 'Constants/ConstantVariables.dart';
+import 'main_dev.dart';
 import 'new_apis_func/presentation_layer/provider_class/provider_contracter.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
@@ -41,7 +31,8 @@ const kFCMVApiKey =
 Future<void> setFireStoreData(
   RemoteMessage message,
 ) async {
-  final reference = FirebaseFirestore.instance.collection('UserNotificationsStaging');
+  final reference =
+      FirebaseFirestore.instance.collection('UserNotificationsStaging');
   DateTime _now = DateTime.now();
   DateTime _current = DateTime(_now.year, _now.month, _now.day);
   DateTime _notificationTime = message.sentTime!;
@@ -89,7 +80,7 @@ Future<void> setFireStoreData(
         break;
       }
     }
-    if (isAlreadyExisted == true ) {
+    if (isAlreadyExisted == true) {
       reference.doc(id).delete();
       // reference.snapshots()
       reference.doc().set(data);
@@ -199,8 +190,6 @@ var permDenied = "denied";
 var permUnknown = "unknown";
 var permProvisional = "provisional";
 
-
-
 const Map<int, Color> color = {
   50: Color.fromRGBO(225, 17, 75, .1),
   100: Color.fromRGBO(225, 17, 75, .2),
@@ -254,13 +243,15 @@ class _RestartWidgetState extends State<RestartWidget> {
   }
 }
 
+class MainApp extends StatelessWidget {
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+  final bool requiredBanner;
 
-class MainApp extends StatelessWidget{
-                                final FirebaseAnalytics analytics;
-                                final FirebaseAnalyticsObserver  observer;
-                                final bool requiredBanner;
-  const MainApp({required this.analytics,required this.observer, required this.requiredBanner});
-
+  const MainApp(
+      {required this.analytics,
+      required this.observer,
+      required this.requiredBanner});
 
   @override
   Widget build(BuildContext context) {
@@ -294,19 +285,21 @@ class MainApp extends StatelessWidget{
                 builder: (context, child) {
                   return MediaQuery(
                     child: child!,
-                    data: MediaQuery.of(context)
-                        .copyWith(textScaleFactor: 0.9),
+                    data: MediaQuery.of(context).copyWith(textScaleFactor: 0.9),
                   );
                 },
                 home: const SplashScreen(),
-                darkTheme: ThemeData(
-                  useMaterial3: false,
-                  platform: TargetPlatform.iOS,
+                darkTheme:ThemeData(
+                  appBarTheme: AppBarTheme(
+                      backgroundColor: Colors.grey,
+                      systemOverlayStyle: SystemUiOverlayStyle(
+                          statusBarColor: fromHex('#948a7e'))),
+                  bottomAppBarColor: fromHex('#948a7e'),
                   pageTransitionsTheme: const PageTransitionsTheme(
                     builders: {
-                      TargetPlatform.android:
-                      CupertinoPageTransitionsBuilder(),
-                      TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+                      TargetPlatform.android: ZoomPageTransitionsBuilder(),
+                      TargetPlatform.iOS:
+                      CupertinoWillPopScopePageTransionsBuilder(),
                     },
                   ),
                   fontFamily: 'Arial',
@@ -314,12 +307,16 @@ class MainApp extends StatelessWidget{
                   primaryColor: ConstantsVar.appColor,
                 ),
                 theme: ThemeData(
+                  appBarTheme: AppBarTheme(
+                      backgroundColor: Colors.grey,
+                      systemOverlayStyle: SystemUiOverlayStyle(
+                          statusBarColor: fromHex('#948a7e'))),
+                  bottomAppBarColor: fromHex('#948a7e'),
                   pageTransitionsTheme: const PageTransitionsTheme(
                     builders: {
-                      TargetPlatform.android:
-                      ZoomPageTransitionsBuilder(),
+                      TargetPlatform.android: ZoomPageTransitionsBuilder(),
                       TargetPlatform.iOS:
-                      CupertinoWillPopScopePageTransionsBuilder(),
+                          CupertinoWillPopScopePageTransionsBuilder(),
                     },
                   ),
                   fontFamily: 'Arial',
@@ -334,4 +331,19 @@ class MainApp extends StatelessWidget{
     );
   }
 }
+changeStatusColor(Color color) async {
+  try {
+    await FlutterStatusbarcolor.setStatusBarColor(color, animate: true);
 
+  } on PlatformException catch (e) {
+    debugPrint(e.toString());
+  }
+}
+
+changeNavigationColor(Color color) async {
+  try {
+    await FlutterStatusbarcolor.setNavigationBarColor(color, animate: true);
+  } on PlatformException catch (e) {
+    debugPrint(e.toString());
+  }
+}

@@ -30,8 +30,8 @@ class NewProductListResponse {
         status: json["Status"],
         message: json["Message"],
         productCount: json["ProductCount"],
-        responseData: List<ProductListResponse>.from(
-            json["ResponseData"].map((x) => ProductListResponse.fromJson(x))),
+        responseData:json["ResponseData"] == null?[] :List<ProductListResponse>.from(
+            json["ResponseData"].map((x) => ProductListResponse.fromJson(x))) ,
         storeId: json["StoreId"],
       );
 

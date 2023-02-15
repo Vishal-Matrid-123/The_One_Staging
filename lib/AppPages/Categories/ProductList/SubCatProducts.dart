@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:badges/badges.dart' as b;
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:untitled2/AppPages/CartxxScreen/CartScreen2.dart';
 import 'package:untitled2/AppPages/HomeScreen/HomeScreen.dart';
 import 'package:untitled2/AppPages/StreamClass/NewPeoductPage/AddToCartResponse/AddToCartResponse.dart';
@@ -48,42 +50,40 @@ class _ProductListState extends State<ProductList> {
     // TODO: implement initState
     super.initState();
     _provider = Provider.of<NewApisProvider>(context, listen: false);
-    getId().whenComplete(
-      () async => _provider
-          .getProductList(
-              catId: widget._categoryId, pageIndex: pageIndex, isLoading: false)
-          .then((value) async {
-        _provider.getCurrency();
-        // await FirebaseAnalytics.instance.logEvent(
-        //     name: 'screen_view_',
-        //     parameters: {'screen_name': 'Product List  Screen'});
-        // await FacebookAppEvents()
-        //     .logViewContent(
+    _provider
+        .getProductList(
+            catId: widget._categoryId, pageIndex: pageIndex, isLoading: false)
+        .then((value) async {
+      _provider.getCurrency();
+      // await FirebaseAnalytics.instance.logEvent(
+      //     name: 'screen_view_',
+      //     parameters: {'screen_name': 'Product List  Screen'});
+      // await FacebookAppEvents()
+      //     .logViewContent(
 
-        //       currency: CurrencyCode.AED.name,
-        //     )
-        //     .whenComplete(() => log('Content Viewed on Product List Page'));
-      }).whenComplete(
-        () async {
-          /*Firebase Event*/
-          _sendAnalytics(
-            products: _provider.productList,
-          );
+      //       currency: CurrencyCode.AED.name,
+      //     )
+      //     .whenComplete(() => log('Content Viewed on Product List Page'));
+    }).whenComplete(
+      () async {
+        /*Firebase Event*/
+        _sendAnalytics(
+          products: _provider.productList,
+        );
 
-          /*Facebook Events*/
-          final _fbEvent = FacebookEvents();
-          _fbEvent
-              .sendScreenViewData(
-                type: 'Product List Screen',
-                id: widget._categoryId.toString(),
-              )
-              .whenComplete(
-                () => log(
-                  "Event complete",
-                ),
-              );
-        },
-      ),
+        /*Facebook Events*/
+        final _fbEvent = FacebookEvents();
+        _fbEvent
+            .sendScreenViewData(
+              type: 'Product List Screen',
+              id: widget._categoryId.toString(),
+            )
+            .whenComplete(
+              () => log(
+                "Event complete",
+              ),
+            );
+      },
     );
   }
 
@@ -152,10 +152,23 @@ class _ProductListState extends State<ProductList> {
             ),
             body: Consumer<NewApisProvider>(
               builder: (_, value, c) => value.loading == true
-                  ? const Center(
-                      child: SpinKitRipple(
-                        color: ConstantsVar.appColor,
-                        size: 40,
+                  ? SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.center,
+                          runAlignment: WrapAlignment.center,
+                          runSpacing: 2,
+                          spacing: 2,
+                          children: List.generate(
+                            6,
+                            (index) => SizedBox(
+                              width: 48.w,
+                              child: getLoadingWidget(),
+                            ),
+                          ),
+                        ),
                       ),
                     )
                   : value.isProductListScreenError
@@ -212,7 +225,22 @@ class _ProductListState extends State<ProductList> {
                             ],
                           ),
                         )
-                      : ProdListWidget(
+                      :value.productList.isEmpty? SizedBox(
+                width: 100.w,
+                height: 70.h,
+                child: Center(
+                  child: AnimatedTextKit(
+                    repeatForever: true,
+                    animatedTexts: [
+                      ColorizeAnimatedText(
+                        'No Products Available',
+                        textStyle: colorizeTextStyle,
+                        colors: colorizeColors,
+                      ),
+                    ],
+                  ),
+                ),
+              ): ProdListWidget(
                           products: value.productList,
                           title: widget._title.toString().toUpperCase(),
                           // result: result,
@@ -223,6 +251,16 @@ class _ProductListState extends State<ProductList> {
             )));
   }
 
+
+  final colorizeTextStyle =
+  TextStyle(fontSize: 6.w, fontWeight: FontWeight.bold);
+
+  final colorizeColors = [
+    Colors.lightBlueAccent,
+    Colors.grey,
+    Colors.black,
+    ConstantsVar.appColor,
+  ];
   void _sendAnalytics({required List<ProductListResponse> products}) async {
     FirebaseEvents.initialize(
       context: context,
@@ -237,6 +275,19 @@ class _ProductListState extends State<ProductList> {
       ),
       itemListName: widget._title,
       itemListId: widget._categoryId,
+    );
+  }
+
+  Widget getLoadingWidget() {
+    return Card(
+      // elevation: 2,
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.white,
+        enabled: true,
+        child: Container(width: 45.w,
+        height: 35.h,color: Colors.grey.shade300,),
+      ),
     );
   }
 
@@ -266,13 +317,14 @@ class AddCartBtn extends StatefulWidget {
       required this.recipName,
       required this.productPrice,
       required String storeId,
-      required this.categoryId
-        , required this.minQuantity
+      required this.categoryId,
+      required this.minQuantity
       // required this.productName,
       })
       : super(key: key);
   final String productId;
   final String minQuantity;
+
   // final String productName;
   final String guestCustomerId;
   final double productPrice;
@@ -300,13 +352,14 @@ class _AddCartBtnState extends State<AddCartBtn> {
   // var checkedIcon;
   //This is for Cart Badge
   var warning;
- String bogoCatId = '';
+  String bogoCatId = '';
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     stateId = AddToCartButtonStateId.idle;
-    final provider = Provider.of<NewApisProvider>(context,listen:false);
+    final provider = Provider.of<NewApisProvider>(context, listen: false);
     provider.setBogoCategoryValue();
     setState(() {
       bogoCatId = provider.bogoValue;
@@ -345,12 +398,8 @@ class _AddCartBtnState extends State<AddCartBtn> {
   }
 
   void checkStateId(
-
-
-
-
       AddToCartButtonStateId id, FocusScopeNode currentFocus) async {
-    log('Parent CategoryId>>>>>>'+widget.categoryId+ '>>>>>>'+bogoCatId);
+    log('Parent CategoryId>>>>>>' + widget.categoryId + '>>>>>>' + bogoCatId);
     // FirebaseAnalytics analytics =
     //     Provider.of<FirebaseAnalytics>(context, listen: false);
     // await analytics.logAddToCart(
@@ -427,7 +476,8 @@ class _AddCartBtnState extends State<AddCartBtn> {
                   recipEmail: widget.recipEmail,
                   recipName: widget.recipName,
                   name: widget.name,
-                  attributeId: widget.attributeId, quantity: widget.minQuantity,
+                  attributeId: widget.attributeId,
+                  quantity: widget.minQuantity,
                 ).then(
                   (response) async {
                     AnalyticsEventItem item = AnalyticsEventItem(
@@ -488,19 +538,20 @@ class _AddCartBtnState extends State<AddCartBtn> {
               AddToCartResponse result;
               Future.delayed(const Duration(seconds: 0)).then(
                 (value) async => ApiCalls.addToCart(
-                  context: context,
-                  baseUrl: await ApiCalls.getSelectedStore(),
-                  storeId:
-                      await secureStorage.read(key: kselectedStoreIdKey) ?? '1',
-                  productId: widget.productId,
-                  message: widget.message,
-                  email: widget.email,
-                  recipEmail: widget.recipEmail,
-                  recipName: widget.recipName,
-                  name: widget.name,
-                  attributeId: widget.attributeId,
-                  quantity: widget.minQuantity
-                ).then(
+                        context: context,
+                        baseUrl: await ApiCalls.getSelectedStore(),
+                        storeId: await secureStorage.read(
+                                key: kselectedStoreIdKey) ??
+                            '1',
+                        productId: widget.productId,
+                        message: widget.message,
+                        email: widget.email,
+                        recipEmail: widget.recipEmail,
+                        recipName: widget.recipName,
+                        name: widget.name,
+                        attributeId: widget.attributeId,
+                        quantity: widget.minQuantity)
+                    .then(
                   (response) async {
                     final _provider =
                         Provider.of<NewApisProvider>(context, listen: false);

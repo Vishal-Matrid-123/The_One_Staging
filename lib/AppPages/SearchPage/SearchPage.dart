@@ -214,7 +214,7 @@ class _SearchPageState extends State<SearchPage>
     _animationController.forward();
     return SafeArea(
       top:true,
-      bottom:true,
+      bottom:false,
       child: GestureDetector(
         onTap: () {
           if (!currentFocus.hasPrimaryFocus) {

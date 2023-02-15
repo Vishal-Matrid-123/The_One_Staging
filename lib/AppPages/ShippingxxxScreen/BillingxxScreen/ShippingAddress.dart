@@ -555,6 +555,52 @@ class _ShippingAddressState extends State<ShippingAddress> {
                                   ),
                                 ),
                               ),
+                              Visibility(
+                                visible: value.existingShippingAddresses.isEmpty
+                                    ? false
+                                    : true,
+                                child: Visibility(
+                                  visible: isVisible,
+                                  child: Visibility(
+                                    visible:
+                                        value.existingShippingAddresses.isEmpty
+                                            ? false
+                                            : true,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 4.0,
+                                      ),
+                                      child: Container(
+                                        margin:
+                                            const EdgeInsets.only(left: 10.0),
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: AutoSizeText(
+                                          '* Please note: we currently only offer shipping and delivery within the UAE, Kuwait and Bahrain.',
+                                          style: TextStyle(
+                                              shadows: <Shadow>[
+                                                Shadow(
+                                                  offset:
+                                                      const Offset(1.0, 1.2),
+                                                  blurRadius: 3.0,
+                                                  color: Colors.grey.shade300,
+                                                ),
+                                                Shadow(
+                                                  offset:
+                                                      const Offset(1.0, 1.2),
+                                                  blurRadius: 8.0,
+                                                  color: Colors.grey.shade300,
+                                                ),
+                                              ],
+                                              fontSize: 5.w,
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
 
                               /************** Show Address List ******************/
                               Visibility(
@@ -570,103 +616,118 @@ class _ShippingAddressState extends State<ShippingAddress> {
                                     scrollDirection: Axis.vertical,
                                     children: List.generate(
                                       value.existingShippingAddresses.length,
-                                      (index) => AddressItem(
-                                        buttonName: "Ship To This Address",
-                                        firstName: value
-                                                .existingShippingAddresses[
-                                                    index]
-                                                .firstName ??
-                                            '',
-                                        lastName: value
-                                                .existingShippingAddresses[
-                                                    index]
-                                                .lastName ??
-                                            '',
-                                        email: value
-                                                .existingShippingAddresses[
-                                                    index]
-                                                .email ??
-                                            '',
-                                        companyEnabled: value
-                                            .existingShippingAddresses[index]
-                                            .companyEnabled,
-                                        companyRequired: value
-                                            .existingShippingAddresses[index]
-                                            .companyRequired,
-                                        countryEnabled: value
-                                            .existingShippingAddresses[index]
-                                            .countryEnabled,
-                                        countryId: value
-                                            .existingShippingAddresses[index]
-                                            .countryId,
-                                        countryName: value
-                                                .existingShippingAddresses[
-                                                    index]
-                                                .countryName ??
-                                            '',
-                                        stateProvinceEnabled: value
-                                            .existingShippingAddresses[index]
-                                            .stateProvinceEnabled,
-                                        cityEnabled: value
-                                            .existingShippingAddresses[index]
-                                            .cityEnabled,
-                                        cityRequired: value
-                                            .existingShippingAddresses[index]
-                                            .cityRequired,
-                                        city: value
-                                            .existingShippingAddresses[index]
-                                            .city,
-                                        streetAddressEnabled: value
-                                            .existingShippingAddresses[index]
-                                            .streetAddressEnabled,
-                                        streetAddressRequired: value
-                                            .existingShippingAddresses[index]
-                                            .streetAddressRequired,
-                                        address1: value
-                                                .existingShippingAddresses[
-                                                    index]
-                                                .address1 ??
-                                            '',
-                                        streetAddress2Enabled: value
-                                            .existingShippingAddresses[index]
-                                            .streetAddress2Enabled,
-                                        streetAddress2Required: value
-                                            .existingShippingAddresses[index]
-                                            .streetAddress2Required,
-                                        zipPostalCodeEnabled: value
-                                            .existingShippingAddresses[index]
-                                            .zipPostalCodeEnabled,
-                                        zipPostalCodeRequired: value
-                                            .existingShippingAddresses[index]
-                                            .zipPostalCodeRequired,
-                                        zipPostalCode: value
-                                            .existingShippingAddresses[index]
-                                            .zipPostalCode,
-                                        phoneEnabled: value
-                                            .existingShippingAddresses[index]
-                                            .phoneEnabled,
-                                        phoneRequired: value
-                                            .existingShippingAddresses[index]
-                                            .phoneRequired,
-                                        phoneNumber: value
-                                                .existingShippingAddresses[
-                                                    index]
-                                                .phoneNumber ??
-                                            '',
-                                        faxEnabled: value
-                                            .existingShippingAddresses[index]
-                                            .faxEnabled,
-                                        faxRequired: value
-                                            .existingShippingAddresses[index]
-                                            .faxRequired,
-                                        faxNumber: value
-                                            .existingShippingAddresses[index]
-                                            .faxNumber,
-                                        id: value
-                                            .existingShippingAddresses[index]
-                                            .id,
-                                        callback: (String value) {},
-                                        guestId: _id,
+                                      (index) => Visibility(
+                                        visible: value
+                                                        .existingShippingAddresses[
+                                                            index]
+                                                        .countryName ==
+                                                    null ||
+                                                value
+                                                        .existingShippingAddresses[
+                                                            index]
+                                                        .countryName
+                                                        .length ==
+                                                    0
+                                            ? false
+                                            : true,
+                                        child: AddressItem(
+                                          buttonName: "Ship To This Address",
+                                          firstName: value
+                                                  .existingShippingAddresses[
+                                                      index]
+                                                  .firstName ??
+                                              '',
+                                          lastName: value
+                                                  .existingShippingAddresses[
+                                                      index]
+                                                  .lastName ??
+                                              '',
+                                          email: value
+                                                  .existingShippingAddresses[
+                                                      index]
+                                                  .email ??
+                                              '',
+                                          companyEnabled: value
+                                              .existingShippingAddresses[index]
+                                              .companyEnabled,
+                                          companyRequired: value
+                                              .existingShippingAddresses[index]
+                                              .companyRequired,
+                                          countryEnabled: value
+                                              .existingShippingAddresses[index]
+                                              .countryEnabled,
+                                          countryId: value
+                                              .existingShippingAddresses[index]
+                                              .countryId,
+                                          countryName: value
+                                                  .existingShippingAddresses[
+                                                      index]
+                                                  .countryName ??
+                                              '',
+                                          stateProvinceEnabled: value
+                                              .existingShippingAddresses[index]
+                                              .stateProvinceEnabled,
+                                          cityEnabled: value
+                                              .existingShippingAddresses[index]
+                                              .cityEnabled,
+                                          cityRequired: value
+                                              .existingShippingAddresses[index]
+                                              .cityRequired,
+                                          city: value
+                                              .existingShippingAddresses[index]
+                                              .city,
+                                          streetAddressEnabled: value
+                                              .existingShippingAddresses[index]
+                                              .streetAddressEnabled,
+                                          streetAddressRequired: value
+                                              .existingShippingAddresses[index]
+                                              .streetAddressRequired,
+                                          address1: value
+                                                  .existingShippingAddresses[
+                                                      index]
+                                                  .address1 ??
+                                              '',
+                                          streetAddress2Enabled: value
+                                              .existingShippingAddresses[index]
+                                              .streetAddress2Enabled,
+                                          streetAddress2Required: value
+                                              .existingShippingAddresses[index]
+                                              .streetAddress2Required,
+                                          zipPostalCodeEnabled: value
+                                              .existingShippingAddresses[index]
+                                              .zipPostalCodeEnabled,
+                                          zipPostalCodeRequired: value
+                                              .existingShippingAddresses[index]
+                                              .zipPostalCodeRequired,
+                                          zipPostalCode: value
+                                              .existingShippingAddresses[index]
+                                              .zipPostalCode,
+                                          phoneEnabled: value
+                                              .existingShippingAddresses[index]
+                                              .phoneEnabled,
+                                          phoneRequired: value
+                                              .existingShippingAddresses[index]
+                                              .phoneRequired,
+                                          phoneNumber: value
+                                                  .existingShippingAddresses[
+                                                      index]
+                                                  .phoneNumber ??
+                                              '',
+                                          faxEnabled: value
+                                              .existingShippingAddresses[index]
+                                              .faxEnabled,
+                                          faxRequired: value
+                                              .existingShippingAddresses[index]
+                                              .faxRequired,
+                                          faxNumber: value
+                                              .existingShippingAddresses[index]
+                                              .faxNumber,
+                                          id: value
+                                              .existingShippingAddresses[index]
+                                              .id,
+                                          callback: (String value) {},
+                                          guestId: _id,
+                                        ),
                                       ),
                                     ),
                                   ),

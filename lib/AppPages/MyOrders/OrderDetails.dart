@@ -307,6 +307,7 @@ class _OrderDetailsState extends State<OrderDetails>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: true,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ConstantsVar.appColor,

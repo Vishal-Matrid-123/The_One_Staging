@@ -11,13 +11,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled2/new_apis_func/data_layer/constant_data/constant_data.dart';
 
 import 'Constants/ConstantVariables.dart';
 import 'main.dart';
+import 'main_dev.dart';
 import 'new_apis_func/cofig/app_config.dart';
 import 'new_apis_func/services/background_fcm_services.dart';
 
@@ -40,70 +40,57 @@ Future<void> setFireStoreData(
   RemoteMessage message,
 ) async {
   final reference = FirebaseFirestore.instance.collection('UserNotifications');
-  DateTime _now = DateTime.now();
-  DateTime _current = DateTime(_now.year, _now.month, _now.day);
-  DateTime _notificationTime = message.sentTime!;
+  String _imageUrlIOS = Platform.isIOS
+      ? await message.notification!.apple!.imageUrl ?? ''
+      : await message.notification!.android!.imageUrl ?? '';
+
   String _notificationDesc = message.notification?.body ?? '';
   String _notificationTitle = message.notification?.title ?? '';
-  final DateFormat formatter = DateFormat('yyyy-MM-dd');
-  // bool isExistedAlready = await reference.snapshots().any((element) {
-  //
-  //   });
-  String fDate = formatter.format(_notificationTime);
-  Map<String, dynamic> data = {
-    'Title': message.notification!.title,
-    'Desc': message.notification!.body,
-    'Time': Timestamp.fromDate(message.sentTime!),
-    'Image': Platform.isAndroid
-        ? message.notification!.android!.imageUrl
-        : message.notification!.apple!.imageUrl
-  };
-  bool isAlreadyExisted = false;
 
-  late StreamSubscription sub;
-  sub = await reference.snapshots().listen((event) {
-    QuerySnapshot<Map<String, dynamic>> dataSnapshot = event;
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> list = dataSnapshot.docs;
-    String id = '';
+  bool isAlreadyExisted = false;
+  QuerySnapshot _query = await reference
+      .where('Title', isEqualTo: message.notification!.title)
+      .get();
+  if (_query.docs.length > 0) {
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> list =
+        _query.docs as List<QueryDocumentSnapshot<Map<String, dynamic>>>;
+
     for (QueryDocumentSnapshot<Map<String, dynamic>> element in list) {
       String _title = element['Title'];
       String _desc = element['Desc'];
-      id = element.id;
-      print(element.id);
+      Timestamp time = element['Time'];
+      print('Element Id>>>>' + element.id);
+      print('Time Difference Id>>>>' +
+          DateTime.now().difference(time.toDate()).inHours.toString());
 
-      print('Title>>>>>>>>' +
-          _title +
-          'Notification Title >>>>>>' +
-          _notificationTitle +
-          'Notification Date>>>>>>>' +
-          fDate +
-          'Current Date>>>>>>>>>>>' +
-          _current.toString() +
-          'difference>>>' +
-          formatter.format(element['Time'].toDate()));
       if (_title.toLowerCase().contains(_notificationTitle.toLowerCase()) &&
-          _desc.toLowerCase().contains(_notificationDesc.toLowerCase()) &&
-          formatter.format(element['Time'].toDate()).contains(fDate)) {
+          DateTime.now().difference(time.toDate()).inHours < 6 &&
+          _desc.toLowerCase().contains(_notificationDesc.toLowerCase())) {
         isAlreadyExisted = true;
+
         print('Existed');
         break;
+      } else {
+        print('Not Existed');
       }
     }
-    if (isAlreadyExisted == true) {
-      reference.doc(id).delete();
-      // reference.snapshots()
-      reference.doc().set(data);
-      sub.cancel();
-    } else {
-      reference.doc().set(data);
-      sub.cancel();
-    }
 
-    // list.any((element){
-    //     });
-    // print(isAlreadyExisted == true ? 'Title Existed' : 'Not Existed');
-// isAlreadyExisted == true?break:null;
-  });
+    // the ID exists
+
+  }
+
+  Map<String, dynamic> data = {
+    'Title': message.notification!.title,
+    'Desc': message.notification!.body,
+    'Time': Timestamp.fromMillisecondsSinceEpoch(
+        DateTime.now().millisecondsSinceEpoch),
+    'Image': _imageUrlIOS
+  };
+
+  if (isAlreadyExisted == true) {
+  } else {
+    reference.doc().set(data);
+  }
   // reference.doc().set(data);
 }
 
@@ -148,7 +135,7 @@ Future<void> main() async {
       if (await secureStorage.read(key: 'isFirstTime') == null) {
         secureStorage.deleteAll();
         ConstantsVar.prefs.clear();
-      await  secureStorage.write(key: 'isFirstTime', value: 'value');
+        await secureStorage.write(key: 'isFirstTime', value: 'value');
         print('Value reset');
       }
 
@@ -182,7 +169,12 @@ Future<void> main() async {
           FirebaseAnalytics analytics = FirebaseAnalytics.instance;
           FirebaseAnalyticsObserver observer =
               FirebaseAnalyticsObserver(analytics: analytics);
-
+          SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+              statusBarColor: fromHex('#948a7e'), //or set color with: Color(0xFF0000FF)
+              systemNavigationBarColor:fromHex('#948a7e')
+          ));
+          changeStatusColor(fromHex('#948a7e'));
+          changeNavigationColor(fromHex('#948a7e'));
           var configuredApp = AppConfig(
             child: MainApp(
                 requiredBanner: false,

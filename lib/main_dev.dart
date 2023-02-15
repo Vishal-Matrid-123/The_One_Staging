@@ -33,57 +33,54 @@ Future<void> setFireStoreData(
   String _imageUrlIOS = Platform.isIOS
       ? await message.notification!.apple!.imageUrl ?? ''
       : await message.notification!.android!.imageUrl ?? '';
-  DateTime _now = DateTime.now();
-  DateTime _current = DateTime(_now.year, _now.month, _now.day);
-  DateTime _notificationTime = message.sentTime!;
+
+
   String _notificationDesc = message.notification?.body ?? '';
   String _notificationTitle = message.notification?.title ?? '';
-  final DateFormat formatter = DateFormat('yyyy-MM-dd');
-  // bool isExistedAlready = await reference.snapshots().any((element) {
-  //
-  //   });
-  String fDate = formatter.format(_notificationTime);
-  Map<String, dynamic> data = {
-    'Title': message.notification!.title,
-    'Desc': message.notification!.body,
-    'Time': Timestamp.fromDate(_now),
-    'Image': _imageUrlIOS
-  };
-  bool isAlreadyExisted = false;
 
-  late StreamSubscription sub;
-  sub = await reference.snapshots().listen((event) {
-    QuerySnapshot<Map<String, dynamic>> dataSnapshot = event;
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> list = dataSnapshot.docs;
-    String id = '';
+  bool isAlreadyExisted = false;
+  QuerySnapshot _query = await reference
+      .where('Title', isEqualTo: message.notification!.title).get();
+  if (_query.docs.length > 0 ) {
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> list = _query.docs as List<QueryDocumentSnapshot<Map<String, dynamic>>>;
+
     for (QueryDocumentSnapshot<Map<String, dynamic>> element in list) {
       String _title = element['Title'];
       String _desc = element['Desc'];
-      id = element.id;
       Timestamp time = element['Time'];
-      print('Element Id>>>>' + element.id);
       print('Time Difference Id>>>>' +
           DateTime.now().difference(time.toDate()).inHours.toString());
 
       if (_title.toLowerCase().contains(_notificationTitle.toLowerCase()) &&
-          DateTime.now().difference(time.toDate()).inHours < 24 &&
+          DateTime.now().difference(time.toDate()).inHours < 6 &&
           _desc.toLowerCase().contains(_notificationDesc.toLowerCase())) {
         isAlreadyExisted = true;
 
         print('Existed');
         break;
+      }else{
+        print('Not Existed');
       }
     }
-    if (isAlreadyExisted == true) {
-    } else {
-      reference.doc().set(data);
-    }
 
-    // list.any((element){
-    //     });
-    // print(isAlreadyExisted == true ? 'Title Existed' : 'Not Existed');
-// isAlreadyExisted == true?break:null;
-  });
+    // the ID exists
+
+  }
+
+  Map<String, dynamic> data = {
+    'Title': message.notification!.title,
+    'Desc': message.notification!.body,
+       'Time': Timestamp.fromMillisecondsSinceEpoch(
+  DateTime.now().millisecondsSinceEpoch),
+    'Image': _imageUrlIOS
+  };
+
+
+
+  if (isAlreadyExisted == true) {
+  } else {
+    reference.doc().set(data);
+  }
   // reference.doc().set(data);
 }
 
@@ -92,15 +89,7 @@ Future<void> _messageHandler(RemoteMessage message) async {
   setFireStoreData(message);
 }
 
-Future<String?> _downloadAndSavePicture(String? url, String fileName) async {
-  if (url == null) return null;
-  final Directory directory = await getApplicationDocumentsDirectory();
-  final String filePath = '${directory.path}/$fileName';
-  final http.Response response = await http.get(Uri.parse(url));
-  final File file = File(filePath);
-  await file.writeAsBytes(response.bodyBytes);
-  return filePath;
-}
+
 
 Future<void> main() async {
   await runZonedGuarded(
@@ -163,7 +152,12 @@ Future<void> main() async {
           FirebaseAnalytics analytics = FirebaseAnalytics.instance;
           FirebaseAnalyticsObserver observer =
               FirebaseAnalyticsObserver(analytics: analytics);
-
+          SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: fromHex('#948a7e'), //or set color with: Color(0xFF0000FF)
+              systemNavigationBarColor:fromHex('#948a7e')
+          ));
+          changeStatusColor(fromHex('#948a7e'));
+          changeNavigationColor(fromHex('#948a7e'));
           var configuredApp = AppConfig(
             child: MainApp(
                 requiredBanner: true, analytics: analytics, observer: observer),
@@ -181,4 +175,10 @@ Future<void> main() async {
       FirebaseCrashlytics.instance.recordError(error, stack);
     },
   );
+}
+ Color fromHex(String hexString) {
+final buffer = StringBuffer();
+if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+buffer.write('#D8CDBE'.replaceFirst('#', ''));
+return Color(int.parse(buffer.toString(), radix: 16));
 }

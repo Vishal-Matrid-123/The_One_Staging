@@ -13,6 +13,7 @@ import 'package:untitled2/AppPages/HomeScreen/HomeScreen.dart';
 import 'package:untitled2/AppPages/NewSubCategoryPage/NewSCategoryPage.dart';
 import 'package:untitled2/AppPages/SearchPage/SearchPage.dart';
 import 'package:untitled2/Constants/ConstantVariables.dart';
+import 'package:untitled2/main_dev.dart';
 import 'package:untitled2/new_apis_func/data_layer/constant_data/constant_data.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/provider_class/provider_contracter.dart';
 
@@ -329,7 +330,7 @@ class _HomeCategoryState extends State<HomeCategory> {
                                   children: [
                                     Container(
                                       width: 100.w,
-                                      color: Colors.grey.shade200,
+                                      color: fromHex('#948a7e'),
                                       padding: EdgeInsets.all(2.h),
                                       child: Center(
                                         child: AutoSizeText(
@@ -381,78 +382,75 @@ class _HomeCategoryState extends State<HomeCategory> {
                                                     onTap: () {
                                                       //TopLevel Category Details
                                                     },
-                                                    child: Container(
-                                                      margin:
-                                                          const EdgeInsets.only(
-                                                              bottom: 8),
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              199,
-                                                              198,
-                                                              198),
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 2.0,
-                                                              bottom: 2.0),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                                                       child: Container(
+                                                        margin:
+                                                            const EdgeInsets.only(
+                                                                bottom: 8),
+                                                        color:
+                                                        fromHex('#948a7e'),
+                                                        width:
+                                                            MediaQuery.of(context)
+                                                                .size
+                                                                .width,
                                                         padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                top: 8.0,
-                                                                bottom: 8.0),
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                                border: Border(
-                                                          top: BorderSide(
-                                                              width: .3,
-                                                              color:
-                                                                  Colors.white),
-                                                          bottom: BorderSide(
-                                                              width: .3,
-                                                              color:
-                                                                  Colors.white),
-                                                        )),
-                                                        child: Center(
-                                                          child: AutoSizeText(
-                                                            value
-                                                                .categoryList[
-                                                                    index]
-                                                                .name
-                                                                .toUpperCase(),
-                                                            style: TextStyle(
-                                                              shadows: <Shadow>[
-                                                                Shadow(
-                                                                  offset:
-                                                                      const Offset(
-                                                                          1.0,
-                                                                          1.2),
-                                                                  blurRadius:
-                                                                      3.0,
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade300,
-                                                                ),
-                                                                Shadow(
-                                                                  offset:
-                                                                      const Offset(
-                                                                          1.0,
-                                                                          1.2),
-                                                                  blurRadius:
-                                                                      8.0,
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade300,
-                                                                ),
-                                                              ],
-                                                              fontSize: 5.w,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
+                                                            const EdgeInsets.only(
+                                                                top: 2.0,
+                                                                bottom: 2.0),
+                                                        child: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 8.0,
+                                                                  bottom: 8.0),
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                                  border: Border(
+                                                            top: BorderSide(
+                                                                width: .3,
+                                                                color:
+                                                                    Colors.white),
+                                                            bottom: BorderSide(
+                                                                width: .3,
+                                                                color:
+                                                                    Colors.white),
+                                                          )),
+                                                          child: Center(
+                                                            child: AutoSizeText(
+                                                              value
+                                                                  .categoryList[
+                                                                      index]
+                                                                  .name
+                                                                  .toUpperCase(),
+                                                              style: TextStyle(
+                                                                shadows: <Shadow>[
+                                                                  Shadow(
+                                                                    offset:
+                                                                        const Offset(
+                                                                            1.0,
+                                                                            1.2),
+                                                                    blurRadius:
+                                                                        3.0,
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .shade300,
+                                                                  ),
+                                                                  Shadow(
+                                                                    offset:
+                                                                        const Offset(
+                                                                            1.0,
+                                                                            1.2),
+                                                                    blurRadius:
+                                                                        8.0,
+                                                                    color:fromHex('#948a7e'),
+                                                                  ),
+                                                                ],
+                                                                fontSize: 5.w,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
@@ -479,6 +477,7 @@ class _HomeCategoryState extends State<HomeCategory> {
                                                           horizontal: 12.0,
                                                         ),
                                                         child: OpenContainer(
+                                                          openColor: Colors.transparent,
                                                           useRootNavigator:
                                                               false,
                                                           closedElevation: 2,

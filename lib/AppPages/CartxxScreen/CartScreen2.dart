@@ -182,7 +182,7 @@ taxVisible = _provider.cartModel.orderTotalsModel.displayTaxRates??false;
   Widget build(BuildContext context) {
     return SafeArea(
       top:true,
-      bottom:true,
+      bottom:false,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(

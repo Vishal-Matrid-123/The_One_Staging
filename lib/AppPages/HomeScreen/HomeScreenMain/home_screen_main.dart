@@ -17,7 +17,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -31,6 +30,7 @@ import 'package:untitled2/AppPages/THEOneAds/AdsResponse.dart';
 import 'package:untitled2/AppPages/THEOneAds/TheOneAdd.dart';
 import 'package:untitled2/AppPages/WebxxViewxx/TopicPagexx.dart';
 import 'package:untitled2/Constants/ConstantVariables.dart';
+import 'package:untitled2/main_dev.dart';
 import 'package:untitled2/new_apis_func/data_layer/constant_data/constant_data.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/events_handlers/facebook_events.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/events_handlers/firebase_events.dart';
@@ -181,6 +181,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
     _provider.readJson();
     _provider.returnInitialPrefix();
     _provider.getBookingStatus();
+    ApiCalls.readCounter(context: context);
     getTopicPage();
     getSocialMediaLink();
     // _globalKey.currentState?.show(ProgressHudType.loading, "loading...");
@@ -192,9 +193,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
           ConstantsVar.prefs.getBool('isFirstTime').toString());
       initSharedPrefs();
       WidgetsBinding.instance.addObserver(this);
-      if (mounted) {
-
-      }
+      if (mounted) {}
 
       getApiToken().whenComplete(() async {
         setState(() {});
@@ -203,12 +202,12 @@ class _HomeScreenMainState extends State<HomeScreenMain>
           // await FirebaseAnalytics.instance.logEvent(
           //     name: 'screen_view_', parameters: {'screen_name': 'Home Screen'});
           initSharedPrefs().whenComplete(
-                () => getRecentlyViewedProduct(),
+            () => getRecentlyViewedProduct(),
           );
         });
       }).then((v) => setState(() {
-        isLoading = false;
-      }));
+            isLoading = false;
+          }));
       // overlayState!.deactivate();
 
       // _globalKey.currentState?.dismiss();
@@ -220,20 +219,20 @@ class _HomeScreenMainState extends State<HomeScreenMain>
       _provider.getSearchSuggestions();
       _fbEvents
           .sendScreenViewData(
-        type: "Home Screen",
-        id: "Home",
-      )
+            type: "Home Screen",
+            id: "Home",
+          )
           .whenComplete(
             () => log("Screen event complete"),
-      );
+          );
       /*Firebase Events*/
       _fireEvents
           .sendScreenViewData(
-        screenName: "Home Screen",
-      )
+            screenName: "Home Screen",
+          )
           .whenComplete(
             () => log("Firebase Screen Event Complete"),
-      );
+          );
 
       ;
     }
@@ -241,7 +240,6 @@ class _HomeScreenMainState extends State<HomeScreenMain>
 
     super.initState();
   }
-
 
   Future showAdDialog() async {
     String baseUrl = await ApiCalls.getSelectedStore();
@@ -389,7 +387,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
   Widget build(BuildContext context) {
     // _showOverlay(context);
     return SafeArea(
-      top: true,
+      top: false,
       bottom: true,
       maintainBottomViewPadding: true,
       child: Scaffold(
@@ -404,8 +402,8 @@ class _HomeScreenMainState extends State<HomeScreenMain>
     for (var i = 0; i < list.length; i++) {
       if (i % 2 == 0) {
         _viewsList.add(
-          categroryLeftView(list[i].name, list[i].imageUrl,
-              list[i].id, list[i].isSubCategory),
+          categroryLeftView(list[i].name, list[i].imageUrl, list[i].id,
+              list[i].isSubCategory),
         );
       } else {
         _viewsList.add(
@@ -416,6 +414,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
     }
     return _viewsList;
   }
+
   Widget buildSafeArea(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
     ThemeData theme = Theme.of(context);
@@ -456,7 +455,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                     height: 100.h,
                     child: ListView(
                       keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
+                          ScrollViewKeyboardDismissBehavior.onDrag,
                       // physics: NeverScrollableScrollPhysics(),
                       //   physics: ScrollPhysics(),
                       children: [
@@ -494,16 +493,19 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                   child: Consumer<NewApisProvider>(
                                     builder: (_, value, c) {
                                       return RawAutocomplete<String>(
-                                        optionsBuilder:
-                                            (TextEditingValue textEditingValue) {
+                                        optionsBuilder: (TextEditingValue
+                                            textEditingValue) {
                                           if (textEditingValue.text == '' ||
-                                              textEditingValue.text.length < 3) {
-                                            return const Iterable<String>.empty();
+                                              textEditingValue.text.length <
+                                                  3) {
+                                            return const Iterable<
+                                                String>.empty();
                                           }
                                           return value.searchSuggestions
                                               .where((String option) {
-                                            return option.toLowerCase().contains(
-                                                RegExp(
+                                            return option
+                                                .toLowerCase()
+                                                .contains(RegExp(
                                                     textEditingValue.text
                                                         .toLowerCase(),
                                                     caseSensitive: false));
@@ -517,7 +519,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                         },
                                         fieldViewBuilder: (BuildContext context,
                                             TextEditingController
-                                            textEditingController,
+                                                textEditingController,
                                             FocusNode focusNode,
                                             VoidCallback onFieldSubmitted) {
                                           _searchController =
@@ -529,7 +531,8 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                             enableSuggestions: true,
                                             onFieldSubmitted: (val) {
                                               focusNode.unfocus();
-                                              if (currentFocus.hasPrimaryFocus) {
+                                              if (currentFocus
+                                                  .hasPrimaryFocus) {
                                                 currentFocus.unfocus();
                                               }
                                               if (mounted) {
@@ -538,21 +541,23 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                       _searchController.text;
                                                   Navigator.of(context)
                                                       .push(
-                                                    CupertinoPageRoute(
-                                                      builder: (context) =>
-                                                          SearchPage(
+                                                        CupertinoPageRoute(
+                                                          builder: (context) =>
+                                                              SearchPage(
                                                             isScreen: true,
                                                             keyword: value,
-                                                            enableCategory: false,
-                                                            cartIconVisible: true,
+                                                            enableCategory:
+                                                                false,
+                                                            cartIconVisible:
+                                                                true,
                                                           ),
-                                                    ),
-                                                  )
-                                                      .then(
-                                                          (value) => setState(() {
-                                                        _searchController
-                                                            .clear();
-                                                      }));
+                                                        ),
+                                                      )
+                                                      .then((value) =>
+                                                          setState(() {
+                                                            _searchController
+                                                                .clear();
+                                                          }));
                                                 });
                                               }
 
@@ -562,7 +567,8 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                 ? TextInputAction.done
                                                 : TextInputAction.search,
                                             // keyboardType: TextInputType.,
-                                            keyboardAppearance: Brightness.light,
+                                            keyboardAppearance:
+                                                Brightness.light,
                                             // autofocus: true,
                                             onChanged: (_) => setState(() {
                                               btnColor = ConstantsVar.appColor;
@@ -574,7 +580,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
                                               contentPadding:
-                                              const EdgeInsets.symmetric(
+                                                  const EdgeInsets.symmetric(
                                                 vertical: 13,
                                               ),
                                               hintText: 'Search here',
@@ -592,16 +598,20 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                   if (mounted) {
                                                     setState(() {
                                                       var _value =
-                                                          _searchController.text;
-                                                      Navigator.of(context).push(
+                                                          _searchController
+                                                              .text;
+                                                      Navigator.of(context)
+                                                          .push(
                                                         CupertinoPageRoute(
                                                           builder: (context) =>
                                                               SearchPage(
-                                                                isScreen: true,
-                                                                keyword: _value,
-                                                                enableCategory: false,
-                                                                cartIconVisible: true,
-                                                              ),
+                                                            isScreen: true,
+                                                            keyword: _value,
+                                                            enableCategory:
+                                                                false,
+                                                            cartIconVisible:
+                                                                true,
+                                                          ),
                                                         ),
                                                       );
                                                     });
@@ -614,10 +624,11 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                             focusNode: _focusNode,
                                           );
                                         },
-                                        optionsViewBuilder: (BuildContext context,
-                                            AutocompleteOnSelected<String>
-                                            onSelected,
-                                            Iterable<String> options) {
+                                        optionsViewBuilder:
+                                            (BuildContext context,
+                                                AutocompleteOnSelected<String>
+                                                    onSelected,
+                                                Iterable<String> options) {
                                           return Padding(
                                             padding: const EdgeInsets.only(
                                               top: 8.0,
@@ -631,36 +642,39 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                     height: 178,
                                                     child: Scrollbar(
                                                       controller:
-                                                      _suggestController,
+                                                          _suggestController,
                                                       thickness: 5,
                                                       isAlwaysShown: true,
                                                       child: ListView.builder(
                                                         controller:
-                                                        _suggestController,
+                                                            _suggestController,
                                                         physics:
-                                                        const ScrollPhysics(),
+                                                            const ScrollPhysics(),
                                                         // padding: EdgeInsets.all(8.0),
                                                         itemCount:
-                                                        options.length + 1,
+                                                            options.length + 1,
                                                         itemBuilder:
-                                                            (BuildContext context,
-                                                            int index) {
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
                                                           if (index >=
                                                               options.length) {
                                                             return Align(
                                                               alignment: Alignment
                                                                   .bottomCenter,
                                                               child: TextButton(
-                                                                child: const Text(
+                                                                child:
+                                                                    const Text(
                                                                   'Clear',
                                                                   style:
-                                                                  TextStyle(
+                                                                      TextStyle(
                                                                     color: ConstantsVar
                                                                         .appColor,
                                                                     fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                    fontSize: 16,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        16,
                                                                   ),
                                                                 ),
                                                                 onPressed: () {
@@ -671,8 +685,8 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                             );
                                                           }
                                                           final String option =
-                                                          options.elementAt(
-                                                              index);
+                                                              options.elementAt(
+                                                                  index);
                                                           return InkWell(
                                                               onTap: () {
                                                                 if (!currentFocus
@@ -687,19 +701,20 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                                   CupertinoPageRoute(
                                                                     builder:
                                                                         (context) =>
-                                                                        SearchPage(
-                                                                          keyword:
+                                                                            SearchPage(
+                                                                      keyword:
                                                                           option,
-                                                                          isScreen:
+                                                                      isScreen:
                                                                           true,
-                                                                          enableCategory:
+                                                                      enableCategory:
                                                                           false,
-                                                                          cartIconVisible:
+                                                                      cartIconVisible:
                                                                           true,
-                                                                        ),
+                                                                    ),
                                                                   ),
                                                                 ).then((value) =>
-                                                                    setState(() {
+                                                                    setState(
+                                                                        () {
                                                                       _searchController
                                                                           .clear();
                                                                     }));
@@ -709,39 +724,39 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                                 width: 95.w,
                                                                 child: Column(
                                                                   mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
+                                                                      MainAxisSize
+                                                                          .min,
                                                                   crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
+                                                                      CrossAxisAlignment
+                                                                          .start,
                                                                   children: [
                                                                     SizedBox(
                                                                       width:
-                                                                      100.w,
+                                                                          100.w,
                                                                       child:
-                                                                      AutoSizeText(
+                                                                          AutoSizeText(
                                                                         '  ' +
                                                                             option,
                                                                         style:
-                                                                        const TextStyle(
+                                                                            const TextStyle(
                                                                           fontSize:
-                                                                          16,
+                                                                              16,
                                                                           wordSpacing:
-                                                                          2,
+                                                                              2,
                                                                           letterSpacing:
-                                                                          1,
+                                                                              1,
                                                                           fontWeight:
-                                                                          FontWeight.bold,
+                                                                              FontWeight.bold,
                                                                         ),
                                                                       ),
                                                                     ),
                                                                     SizedBox(
                                                                       width:
-                                                                      100.w,
+                                                                          100.w,
                                                                       child:
-                                                                      Divider(
+                                                                          Divider(
                                                                         thickness:
-                                                                        1,
+                                                                            1,
                                                                         color: Colors
                                                                             .grey
                                                                             .shade400,
@@ -773,373 +788,173 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                               ),
                               child: Consumer<NewApisProvider>(
                                 builder: (context, value, _) => value
-                                    .homeBannerLoading
+                                        .homeBannerLoading
                                     ? Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Card(
-                                    child: Shimmer.fromColors(
-                                      direction: ShimmerDirection.btt,
-                                      baseColor: Colors.grey[300]!,
-                                      highlightColor: Colors.white,
-                                      enabled: true,
-                                      child: Container(
-                                        color: Colors.grey,
-                                        width: 100.w,
-                                        height: 45.w,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                    : value.homeBannerError
-                                    ? Container(
-                                  color: Colors.grey,
-                                  width: 100.w,
-                                  height: 40.w,
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 5.w,
-                                        ),
-                                        Text(kerrorString),
-                                        ElevatedButton(
-                                          onPressed: () async {
-                                            _provider
-                                                .getHomeScreenBanners();
-                                          },
-                                          child: Text(
-                                            'Retry',
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Card(
+                                          child: Shimmer.fromColors(
+                                            direction: ShimmerDirection.btt,
+                                            baseColor: Colors.grey[300]!,
+                                            highlightColor: Colors.white,
+                                            enabled: true,
+                                            child: Container(
+                                              color: Colors.grey,
+                                              width: 100.w,
+                                              height: 45.w,
+                                            ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 5.w,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                                    : CarouselSlider(
-                                  options: CarouselOptions(
-                                    // enlargeStrategy: CenterPageEnlargeStrategy.height,
-                                      disableCenter: true,
-                                      pageSnapping: true,
-                                      // height: 24.h,
-                                      viewportFraction: 1,
-                                      aspectRatio: 4.5 / 2,
-                                      autoPlay: true,
-                                      enlargeCenterPage: false),
-                                  items: value.banners.map((banner) {
-                                    return Builder(
-                                      builder:
-                                          (BuildContext context) {
-                                        return InkWell(
-                                          onTap: () {
-                                            String type = banner.type;
+                                      )
+                                    : value.homeBannerError
+                                        ? Container(
+                                            color: Colors.grey,
+                                            width: 100.w,
+                                            height: 40.w,
+                                            child: Center(
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 5.w,
+                                                  ),
+                                                  Text(kerrorString),
+                                                  ElevatedButton(
+                                                    onPressed: () async {
+                                                      _provider
+                                                          .getHomeScreenBanners();
+                                                    },
+                                                    child: Text(
+                                                      'Retry',
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5.w,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : CarouselSlider(
+                                            options: CarouselOptions(
+                                                // enlargeStrategy: CenterPageEnlargeStrategy.height,
+                                                disableCenter: true,
+                                                pageSnapping: true,
+                                                // height: 24.h,
+                                                viewportFraction: 1,
+                                                aspectRatio: 4.5 / 2,
+                                                autoPlay: true,
+                                                enlargeCenterPage: false),
+                                            items: value.banners.map((banner) {
+                                              return Builder(
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return InkWell(
+                                                    onTap: () {
+                                                      String type = banner.type;
 
-                                            if (type.contains(
-                                                'Category')) {
-                                              Navigator.push(
-                                                context,
-                                                CupertinoPageRoute(
-                                                  builder: (context) =>
-                                                      ProductList(
-                                                          categoryId:
-                                                          banner
-                                                              .id,
-                                                          title: ''),
-                                                ),
+                                                      if (type.contains(
+                                                          'Category')) {
+                                                        Navigator.push(
+                                                          context,
+                                                          CupertinoPageRoute(
+                                                            builder: (context) =>
+                                                                ProductList(
+                                                                    categoryId:
+                                                                        banner
+                                                                            .id,
+                                                                    title: ''),
+                                                          ),
+                                                        );
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        margin: const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 2.0),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          errorWidget: (context,
+                                                                  error, _) =>
+                                                              Center(
+                                                            child: AutoSizeText(
+                                                              kerrorString,
+                                                              style: TextStyle(
+                                                                fontSize: 4.w,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          imageUrl:
+                                                              banner.imageUrl,
+                                                          fit: BoxFit.fill,
+                                                          placeholder: (context,
+                                                                  reason) =>
+                                                              Shimmer
+                                                                  .fromColors(
+                                                            baseColor: Colors
+                                                                .grey[300]!,
+                                                            highlightColor:
+                                                                Colors.white,
+                                                            child: Container(
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ),
+                                                        )),
+                                                  );
+                                                },
                                               );
-                                            }
-                                          },
-                                          child: Container(
-                                              width: MediaQuery.of(
-                                                  context)
-                                                  .size
-                                                  .width,
-                                              margin: const EdgeInsets
-                                                  .symmetric(
-                                                  horizontal: 2.0),
-                                              child:
-                                              CachedNetworkImage(
-                                                errorWidget: (context,
-                                                    error, _) =>
-                                                    Center(
-                                                      child: AutoSizeText(
-                                                        kerrorString,
-                                                        style: TextStyle(
-                                                          fontSize: 4.w,
-                                                          fontWeight:
-                                                          FontWeight
-                                                              .w300,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                imageUrl:
-                                                banner.imageUrl,
-                                                fit: BoxFit.fill,
-                                                placeholder: (context,
-                                                    reason) =>
-                                                    Shimmer
-                                                        .fromColors(
-                                                      baseColor: Colors
-                                                          .grey[300]!,
-                                                      highlightColor:
-                                                      Colors.white,
-                                                      child: Container(
-                                                        color:
-                                                        Colors.grey,
-                                                      ),
-                                                    ),
-                                              )),
-                                        );
-                                      },
-                                    );
-                                  }).toList(),
-                                ),
+                                            }).toList(),
+                                          ),
                               ),
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.symmetric(vertical: 7.0),
+                                  const EdgeInsets.symmetric(vertical: 7.0),
                               color: Colors.white,
                               height: 60.w,
                               child: Consumer<NewApisProvider>(
                                   builder: (context, value, _c) {
-                                    if (value.homeProductLoading == true) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: SizedBox(
-                                          width: 100.w,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              crossAxisAlignment:
+                                if (value.homeProductLoading == true) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: SizedBox(
+                                      width: 100.w,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          crossAxisAlignment:
                                               CrossAxisAlignment.center,
-                                              mainAxisAlignment:
+                                          mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
-                                              children: List.generate(
-                                                3,
-                                                    (index) => Card(
-                                                  child: Shimmer.fromColors(
-                                                    direction: ShimmerDirection.btt,
-                                                    baseColor: Colors.grey[300]!,
-                                                    highlightColor: Colors.white,
-                                                    enabled: true,
-                                                    child: Container(
-                                                      color: Colors.grey,
-                                                      width: 35.w,
-                                                      height: 45.w,
-                                                    ),
-                                                  ),
+                                          children: List.generate(
+                                            3,
+                                            (index) => Card(
+                                              child: Shimmer.fromColors(
+                                                direction: ShimmerDirection.btt,
+                                                baseColor: Colors.grey[300]!,
+                                                highlightColor: Colors.white,
+                                                enabled: true,
+                                                child: Container(
+                                                  color: Colors.grey,
+                                                  width: 35.w,
+                                                  height: 45.w,
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      );
-                                    } else {
-                                      return value.homeProductError == true
-                                          ? Container(
-                                        color: Colors.grey,
-                                        width: 100.w,
-                                        height: 40.w,
-                                        child: Center(
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 5.w,
-                                              ),
-                                              Text(kerrorString),
-                                              ElevatedButton(
-                                                onPressed: () async {
-                                                  await _provider
-                                                      .getHomeScreenProducts();
-                                                },
-                                                child: Text(
-                                                  'Retry',
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 5.w,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                          : Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              children: [
-                                                AutoSizeText(
-                                                  value.titleHome
-                                                      .toUpperCase(),
-                                                  style: TextStyle(
-                                                    shadows: <Shadow>[
-                                                      Shadow(
-                                                        offset: const Offset(
-                                                            1.0, 1.2),
-                                                        blurRadius: 3.0,
-                                                        color: Colors
-                                                            .grey.shade300,
-                                                      ),
-                                                      Shadow(
-                                                        offset: const Offset(
-                                                            1.0, 1.2),
-                                                        blurRadius: 8.0,
-                                                        color: Colors
-                                                            .grey.shade300,
-                                                      ),
-                                                    ],
-                                                    fontSize: 5.w,
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: VsScrollbar(
-                                              style: const VsScrollbarStyle(
-                                                  thickness: 3.5),
-                                              controller: _productController,
-                                              isAlwaysShown: true,
-                                              child: ListView.builder(
-                                                  controller:
-                                                  _productController,
-                                                  clipBehavior: Clip
-                                                      .antiAliasWithSaveLayer,
-                                                  physics:
-                                                  const ScrollPhysics(),
-                                                  // padding: EdgeInsets.symmetric(vertical:6),
-                                                  scrollDirection:
-                                                  Axis.horizontal,
-                                                  itemCount:
-                                                  value.productListHome.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                      int index) {
-                                                    return listContainer(
-                                                        value.productListHome[
-                                                        index]);
-                                                  }),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                  }),
-                            ),
-                            Container(
-                              padding:
-                              const EdgeInsets.symmetric(vertical: 7.0),
-                              color: Colors.white,
-                              child: Consumer<NewApisProvider>(
-                                  builder: (context, value, _c) {
-                                    if (value.homeCategoryLoading == true &&
-                                        value.homeScreenCategories.isEmpty) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: SizedBox(
-                                          width: 100.w,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: List.generate(
-                                                    2,
-                                                        (index) => Card(
-                                                      child: Shimmer.fromColors(
-                                                        direction:
-                                                        ShimmerDirection.btt,
-                                                        baseColor:
-                                                        Colors.grey[300]!,
-                                                        highlightColor:
-                                                        Colors.white,
-                                                        enabled: true,
-                                                        child: Container(
-                                                          color: Colors.grey,
-                                                          width: 48.w,
-                                                          height: 48.w,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: List.generate(
-                                                    2,
-                                                        (index) => Card(
-                                                      child: Shimmer.fromColors(
-                                                        direction:
-                                                        ShimmerDirection.btt,
-                                                        baseColor:
-                                                        Colors.grey[300]!,
-                                                        highlightColor:
-                                                        Colors.white,
-                                                        enabled: true,
-                                                        child: Container(
-                                                          color: Colors.grey,
-                                                          width: 48.w,
-                                                          height: 48.w,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: List.generate(
-                                                    2,
-                                                        (index) => Card(
-                                                      child: Shimmer.fromColors(
-                                                        direction:
-                                                        ShimmerDirection.btt,
-                                                        baseColor:
-                                                        Colors.grey[300]!,
-                                                        highlightColor:
-                                                        Colors.white,
-                                                        enabled: true,
-                                                        child: Container(
-                                                          color: Colors.grey,
-                                                          width: 48.w,
-                                                          height: 48.w,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      if (value.homeCategoryError == true) {
-                                        return Container(
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return value.homeProductError == true
+                                      ? Container(
                                           color: Colors.grey,
                                           width: 100.w,
                                           height: 40.w,
@@ -1153,7 +968,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                                 ElevatedButton(
                                                   onPressed: () async {
                                                     await _provider
-                                                        .getHomeScreenCategories();
+                                                        .getHomeScreenProducts();
                                                   },
                                                   child: Text(
                                                     'Retry',
@@ -1165,37 +980,237 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                               ],
                                             ),
                                           ),
-                                        );
-                                      } else {
-                                        return Container(
-                                          color: Colors.white,
-                                          padding: const EdgeInsets.all(4),
-                                          // margin: EdgeInsets.all(10),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                            mainAxisSize: MainAxisSize.max,
-                                            // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            children: categoriesView(
-                                              list: value.homeScreenCategories,
+                                        )
+                                      : Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: [
+                                                  AutoSizeText(
+                                                    value.titleHome
+                                                        .toUpperCase(),
+                                                    style: TextStyle(
+                                                      shadows: <Shadow>[
+                                                        Shadow(
+                                                          offset: const Offset(
+                                                              1.0, 1.2),
+                                                          blurRadius: 3.0,
+                                                          color: Colors
+                                                              .grey.shade300,
+                                                        ),
+                                                        Shadow(
+                                                          offset: const Offset(
+                                                              1.0, 1.2),
+                                                          blurRadius: 8.0,
+                                                          color: Colors
+                                                              .grey.shade300,
+                                                        ),
+                                                      ],
+                                                      fontSize: 5.w,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
+                                            Expanded(
+                                              child: VsScrollbar(
+                                                style: const VsScrollbarStyle(
+                                                    thickness: 3.5),
+                                                controller: _productController,
+                                                isAlwaysShown: true,
+                                                child: ListView.builder(
+                                                    controller:
+                                                        _productController,
+                                                    clipBehavior: Clip
+                                                        .antiAliasWithSaveLayer,
+                                                    physics:
+                                                        const ScrollPhysics(),
+                                                    // padding: EdgeInsets.symmetric(vertical:6),
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    itemCount: value
+                                                        .productListHome.length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return listContainer(
+                                                          value.productListHome[
+                                                              index]);
+                                                    }),
+                                              ),
+                                            ),
+                                          ],
                                         );
-                                      }
-                                    }
-                                  }),
+                                }
+                              }),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 7.0),
+                              color: Colors.white,
+                              child: Consumer<NewApisProvider>(
+                                  builder: (context, value, _c) {
+                                if (value.homeCategoryLoading == true &&
+                                    value.homeScreenCategories.isEmpty) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: 100.w,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: List.generate(
+                                                2,
+                                                (index) => Card(
+                                                  child: Shimmer.fromColors(
+                                                    direction:
+                                                        ShimmerDirection.btt,
+                                                    baseColor:
+                                                        Colors.grey[300]!,
+                                                    highlightColor:
+                                                        Colors.white,
+                                                    enabled: true,
+                                                    child: Container(
+                                                      color: Colors.grey,
+                                                      width: 48.w,
+                                                      height: 48.w,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: List.generate(
+                                                2,
+                                                (index) => Card(
+                                                  child: Shimmer.fromColors(
+                                                    direction:
+                                                        ShimmerDirection.btt,
+                                                    baseColor:
+                                                        Colors.grey[300]!,
+                                                    highlightColor:
+                                                        Colors.white,
+                                                    enabled: true,
+                                                    child: Container(
+                                                      color: Colors.grey,
+                                                      width: 48.w,
+                                                      height: 48.w,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: List.generate(
+                                                2,
+                                                (index) => Card(
+                                                  child: Shimmer.fromColors(
+                                                    direction:
+                                                        ShimmerDirection.btt,
+                                                    baseColor:
+                                                        Colors.grey[300]!,
+                                                    highlightColor:
+                                                        Colors.white,
+                                                    enabled: true,
+                                                    child: Container(
+                                                      color: Colors.grey,
+                                                      width: 48.w,
+                                                      height: 48.w,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  if (value.homeCategoryError == true) {
+                                    return Container(
+                                      color: Colors.grey,
+                                      width: 100.w,
+                                      height: 40.w,
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 5.w,
+                                            ),
+                                            Text(kerrorString),
+                                            ElevatedButton(
+                                              onPressed: () async {
+                                                await _provider
+                                                    .getHomeScreenCategories();
+                                              },
+                                              child: Text(
+                                                'Retry',
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5.w,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return Container(
+                                      color: Colors.white,
+                                      padding: const EdgeInsets.all(4),
+                                      // margin: EdgeInsets.all(10),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        mainAxisSize: MainAxisSize.max,
+                                        // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: categoriesView(
+                                          list: value.homeScreenCategories,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }
+                              }),
                             ),
                             Visibility(
-                              visible:products.isEmpty?false:true,
+                              visible: products.isEmpty ? false : true,
                               child: Container(
                                 padding:
-                                const EdgeInsets.symmetric(vertical: 7.0),
+                                    const EdgeInsets.symmetric(vertical: 7.0),
                                 color: Colors.white,
                                 height: 60.w,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Padding(
@@ -1208,13 +1223,13 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                               shadows: <Shadow>[
                                                 Shadow(
                                                   offset:
-                                                  const Offset(1.0, 1.2),
+                                                      const Offset(1.0, 1.2),
                                                   blurRadius: 3.0,
                                                   color: Colors.grey.shade300,
                                                 ),
                                                 Shadow(
                                                   offset:
-                                                  const Offset(1.0, 1.2),
+                                                      const Offset(1.0, 1.2),
                                                   blurRadius: 8.0,
                                                   color: Colors.grey.shade300,
                                                 ),
@@ -1234,9 +1249,9 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                         isAlwaysShown: true,
                                         child: ListView.builder(
                                             controller:
-                                            _recentlyProductController,
+                                                _recentlyProductController,
                                             clipBehavior:
-                                            Clip.antiAliasWithSaveLayer,
+                                                Clip.antiAliasWithSaveLayer,
                                             // padding: EdgeInsets.symmetric(vertical:6),
                                             scrollDirection: Axis.horizontal,
                                             itemCount: products.length,
@@ -1286,8 +1301,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                 visible: modelList.isEmpty ? false : true,
                                 child: VsScrollbar(
                                   controller: _serviceController,
-                                  style:
-                                  const VsScrollbarStyle(thickness: 3.5),
+                                  style: const VsScrollbarStyle(thickness: 3.5),
                                   isAlwaysShown: true,
                                   child: SingleChildScrollView(
                                     controller: _serviceController,
@@ -1298,93 +1312,88 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                           horizontal: 6.0),
                                       child: Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                            MainAxisAlignment.spaceEvenly,
                                         children: modelList
                                             .map((e) => Padding(
-                                          padding:
-                                          const EdgeInsets.all(
-                                              5.0),
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              await Navigator.push(
-                                                  context,
-                                                  CupertinoPageRoute(
-                                                      builder:
-                                                          (context) {
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
+                                                  child: GestureDetector(
+                                                    onTap: () async {
+                                                      await Navigator.push(
+                                                          context,
+                                                          CupertinoPageRoute(
+                                                              builder:
+                                                                  (context) {
                                                         return TopicPage(
                                                           paymentUrl: e.url,
                                                           screenName: ConstantsVar
-                                                              .prefs
-                                                              .getString(
-                                                              'guestGUID') ??
+                                                                  .prefs
+                                                                  .getString(
+                                                                      'guestGUID') ??
                                                               '',
                                                         );
                                                       }));
-                                            },
-                                            onLongPress: () {},
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment
-                                                  .start,
-                                              mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .center,
-                                              children: [
-                                                Container(
-                                                  decoration:
-                                                  BoxDecoration(
-                                                    image:
-                                                    DecorationImage(
-                                                      image:
-                                                      CachedNetworkImageProvider(
-                                                        e.imagePath,
-
-                                                        errorListener:
-                                                            () => log(
-                                                            'Something went wrong'),
-                                                      ),
-                                                      fit:
-                                                      BoxFit.fill,
-
+                                                    },
+                                                    onLongPress: () {},
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            image:
+                                                                DecorationImage(
+                                                              image:
+                                                                  CachedNetworkImageProvider(
+                                                                e.imagePath,
+                                                                errorListener:
+                                                                    () => log(
+                                                                        'Something went wrong'),
+                                                              ),
+                                                              fit: BoxFit.fill,
+                                                            ),
+                                                          ),
+                                                          width:
+                                                              Adaptive.w(43.6),
+                                                          height:
+                                                              Adaptive.w(45),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            horizontal: 2.0,
+                                                            vertical: 11,
+                                                          ),
+                                                          child: SizedBox(
+                                                            width: 45.w,
+                                                            child: AutoSizeText(
+                                                              e.textToDisplay,
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color:
+                                                                    Colors.grey,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                  width: Adaptive.w(
-                                                      43.6),
-                                                  height:
-                                                  Adaptive.w(45),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 2.0,
-                                                    vertical: 11,
-                                                  ),
-                                                  child: SizedBox(
-                                                    width: 45.w,
-                                                    child:
-                                                    AutoSizeText(
-                                                      e.textToDisplay,
-                                                      maxLines: 1,
-                                                      textAlign:
-                                                      TextAlign
-                                                          .center,
-                                                      style:
-                                                      const TextStyle(
-                                                        color: Colors
-                                                            .grey,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ))
+                                                ))
                                             .toList(),
                                       ),
                                     ),
@@ -1430,19 +1439,18 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                               SizedBox(
                                 width: 100.w,
                                 child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: socialLinks
                                         .map((e) => InkWell(
-                                        onTap: () async =>
-                                            _launchURL(e.url),
-                                        child: Padding(
-                                          padding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 6.0,
-                                          ),
-                                          child: e.icon,
-                                        )))
+                                            onTap: () async =>
+                                                _launchURL(e.url),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 6.0,
+                                              ),
+                                              child: e.icon,
+                                            )))
                                         .toList()),
                               ),
                               const SizedBox(
@@ -2045,7 +2053,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                         child: Container(
                           width: Adaptive.w(48),
                           height: Adaptive.w(45),
-                          color: Colors.black,
+                          color: fromHex('#948a7e'),
                           // height: 12.h,
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -2075,7 +2083,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                     padding:
                                         EdgeInsets.symmetric(vertical: 8.0),
                                     child: AutoSizeText('Shop Now',
-                                        style: TextStyle(color: Colors.grey),
+                                        style: TextStyle(color: Colors.white),
                                         textAlign: TextAlign.center),
                                   ),
                                 ],
@@ -2087,9 +2095,13 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                       Align(
                         alignment: Alignment.centerLeft,
                         child: SizedBox(
-                            width: 5.w,
-                            height: 5.w,
-                            child: Image.asset('MyAssets/icon.png')),
+                          width: 5.w,
+                          height: 5.w,
+                          child: Image.asset(
+                            'MyAssets/icon.png',
+                            color: fromHex('#948a7e'),
+                          ),
+                        ),
                       )
                     ],
                   ),
@@ -2148,7 +2160,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                         child: Container(
                           width: Adaptive.w(48),
                           height: Adaptive.w(45),
-                          color: Colors.black,
+                          color: fromHex('#948a7e'),
                           // height: 12.h,
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -2178,7 +2190,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                                     padding:
                                         EdgeInsets.symmetric(vertical: 8.0),
                                     child: AutoSizeText('Shop Now',
-                                        style: TextStyle(color: Colors.grey),
+                                        style: TextStyle(color: Colors.white),
                                         textAlign: TextAlign.center),
                                   ),
                                 ],
@@ -2195,6 +2207,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
                             child: Image.asset(
                               'MyAssets/icon1.png',
                               fit: BoxFit.fill,
+                              color: fromHex('#948a7e'),
                             )),
                       )
                     ],

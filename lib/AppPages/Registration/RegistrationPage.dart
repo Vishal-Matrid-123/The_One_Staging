@@ -196,626 +196,621 @@ class _RegstrationPageState extends State<RegstrationPage>
               currentFocus.unfocus();
             }
           },
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Column(
               children: [
-                Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      AppBarLogo('REGISTRATION', context),
-                      Opacity(
-                        opacity: _opacity,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: Form(
-                              key: formGlobalKey,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                    elevation: 8.0,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 3),
-                                      child: TextFormField(
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
-                                        maxLength: 100,
-                                        textInputAction: TextInputAction.next,
-                                        controller: fController,
-                                        validator: (firstName) {
-                                          if (isFirstName(firstName!)) {
-                                            return null;
-                                          } else {
-                                            return 'Enter a valid First Name';
-                                          }
-                                        },
-                                        cursorColor: Colors.black,
-                                        style: const TextStyle(
-                                            color: Colors.black, fontSize: 14),
-                                        decoration: editBoxDecoration(
-                                            'First Name'.toUpperCase(),
-                                            const Icon(
-                                              Icons.account_circle_outlined,
-                                              color:
-                                                  AppColor.PrimaryAccentColor,
-                                            ),
-                                            ''),
+                AppBarLogo('REGISTRATION', context),
+                Opacity(
+                  opacity: _opacity,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Form(
+                        key: formGlobalKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(12.0)),
+                              elevation: 8.0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 3),
+                                child: TextFormField(
+                                  autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                                  maxLength: 100,
+                                  textInputAction: TextInputAction.next,
+                                  controller: fController,
+                                  validator: (firstName) {
+                                    if (isFirstName(firstName!)) {
+                                      return null;
+                                    } else {
+                                      return 'Enter a valid First Name';
+                                    }
+                                  },
+                                  cursorColor: Colors.black,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14),
+                                  decoration: editBoxDecoration(
+                                      'First Name'.toUpperCase(),
+                                      const Icon(
+                                        Icons.account_circle_outlined,
+                                        color:
+                                        AppColor.PrimaryAccentColor,
+                                      ),
+                                      ''),
+                                ),
+                              ),
+                            ),
+                            addVerticalSpace(14),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(12.0)),
+                              elevation: 8.0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 3),
+                                child: TextFormField(
+                                  maxLength: 100,
+                                  validator: (lastName) {
+                                    if (isLastName(lastName!)) {
+                                      return null;
+                                    } else {
+                                      return 'Enter your Last Name';
+                                    }
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                  controller: lController,
+                                  autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                                  cursorColor: Colors.black,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14),
+                                  decoration: editBoxDecoration(
+                                      'Last Name'.toUpperCase(),
+                                      const Icon(
+                                        Icons.account_circle_outlined,
+                                        color:
+                                        AppColor.PrimaryAccentColor,
+                                      ),
+                                      ''),
+                                ),
+                              ),
+                            ),
+                            addVerticalSpace(14),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(12.0)),
+                              elevation: 8.0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 3),
+                                child: TextFormField(
+                                  validator: (email) {
+                                    if (isEmailValid(email!)) {
+                                      return null;
+                                    } else {
+                                      return 'Enter a valid email address';
+                                    }
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                  keyboardType:
+                                  TextInputType.emailAddress,
+                                  controller: eController,
+                                  autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                                  cursorColor: Colors.black,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14),
+                                  decoration: editBoxDecoration(
+                                      'Email Address'.toUpperCase(),
+                                      const Icon(
+                                        Icons.email_outlined,
+                                        color:
+                                        AppColor.PrimaryAccentColor,
+                                      ),
+                                      ''),
+                                ),
+                              ),
+                            ),
+                            addVerticalSpace(14),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(12.0)),
+                              elevation: 8.0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 3),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 7.w),
+                                      child: Text(
+                                        'Phone Number'.toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 3.w,
+                                            color: myFocusNode.hasFocus
+                                                ? AppColor
+                                                .PrimaryAccentColor
+                                                : Colors.grey),
                                       ),
                                     ),
-                                  ),
-                                  addVerticalSpace(14),
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                    elevation: 8.0,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 3),
-                                      child: TextFormField(
-                                        maxLength: 100,
-                                        validator: (lastName) {
-                                          if (isLastName(lastName!)) {
-                                            return null;
-                                          } else {
-                                            return 'Enter your Last Name';
-                                          }
-                                        },
-                                        textInputAction: TextInputAction.next,
-                                        controller: lController,
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
-                                        cursorColor: Colors.black,
-                                        style: const TextStyle(
-                                            color: Colors.black, fontSize: 14),
-                                        decoration: editBoxDecoration(
-                                            'Last Name'.toUpperCase(),
-                                            const Icon(
-                                              Icons.account_circle_outlined,
-                                              color:
-                                                  AppColor.PrimaryAccentColor,
-                                            ),
-                                            ''),
-                                      ),
-                                    ),
-                                  ),
-                                  addVerticalSpace(14),
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                    elevation: 8.0,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 3),
-                                      child: TextFormField(
-                                        validator: (email) {
-                                          if (isEmailValid(email!)) {
-                                            return null;
-                                          } else {
-                                            return 'Enter a valid email address';
-                                          }
-                                        },
-                                        textInputAction: TextInputAction.next,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        controller: eController,
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
-                                        cursorColor: Colors.black,
-                                        style: const TextStyle(
-                                            color: Colors.black, fontSize: 14),
-                                        decoration: editBoxDecoration(
-                                            'Email Address'.toUpperCase(),
-                                            const Icon(
-                                              Icons.email_outlined,
-                                              color:
-                                                  AppColor.PrimaryAccentColor,
-                                            ),
-                                            ''),
-                                      ),
-                                    ),
-                                  ),
-                                  addVerticalSpace(14),
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                    elevation: 8.0,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 3),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 7.w),
-                                            child: Text(
-                                              'Phone Number'.toUpperCase(),
-                                              style: TextStyle(
-                                                  fontSize: 3.w,
-                                                  color: myFocusNode.hasFocus
-                                                      ? AppColor
-                                                          .PrimaryAccentColor
-                                                      : Colors.grey),
-                                            ),
-                                          ),
-                                          Consumer<NewApisProvider>(
-                                              builder: (context, value, child) {
-                                            return IntlPhoneField(
-                                              controller: mController,
-                                              decoration: InputDecoration(
-                                                  labelText: ''.toUpperCase(),
-                                                  labelStyle: TextStyle(
-                                                      fontSize: 1.w,
-                                                      color: myFocusNode
-                                                              .hasFocus
-                                                          ? AppColor
-                                                              .PrimaryAccentColor
-                                                          : Colors.grey),
-                                                  border: InputBorder.none,
-                                                  counterText: ''),
-                                              initialCountryCode:
-                                                  value.initialPrefix,
-                                              onChanged: (phone) {
-                                                print(phone.completeNumber);
+                                    Consumer<NewApisProvider>(
+                                        builder: (context, value, child) {
+                                          return IntlPhoneField(
+                                            controller: mController,
 
-                                                setState(() {
-                                                  phnDialCode = phone
-                                                      .countryCode
-                                                      .replaceAll('+', '');
-                                                });
-                                              },
-                                              onCountryChanged: (country) {
-                                                print('Country changed to: ' +
-                                                    country.name);
+                                            decoration: InputDecoration(
+                                                labelText: ''.toUpperCase(),
+                                                labelStyle: TextStyle(
+                                                    fontSize: 1.w,
+                                                    color: myFocusNode
+                                                        .hasFocus
+                                                        ? AppColor
+                                                        .PrimaryAccentColor
+                                                        : Colors.grey),
+                                                border: InputBorder.none,
+                                                counterText: ''),
+                                            initialCountryCode:
+                                            value.initialPrefix,
+                                            onChanged: (phone) {
+                                              print(phone.completeNumber);
 
-                                                setState(() {
-                                                  for (Country val
-                                                      in countries) {
-                                                    if (val.code
-                                                            .toLowerCase() ==
-                                                        country.code
-                                                            .toLowerCase()) {
-                                                      _initialVal = val;
-                                                      print(country.code);
-                                                      break;
-                                                    }
+                                              setState(() {
+                                                phnDialCode = phone
+                                                    .countryCode
+                                                    .replaceAll('+', '');
+                                              });
+                                            },
+                                            onCountryChanged: (country) {
+                                              print('Country changed to: ' +
+                                                  country.name);
+
+                                              setState(() {
+                                                for (Country val
+                                                in countries) {
+                                                  if (val.code
+                                                      .toLowerCase() ==
+                                                      country.code
+                                                          .toLowerCase()) {
+                                                    _initialVal = val;
+                                                    print(country.code);
+                                                    break;
                                                   }
-                                                  phnDialCode =
-                                                      country.dialCode;
-                                                });
-                                              },
-                                              autovalidateMode: AutovalidateMode
-                                                  .onUserInteraction,
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14),
-                                            );
-                                          }),
-                                        ],
-                                      ),
+                                                }
+                                                phnDialCode =
+                                                    country.dialCode;
+                                              });
+                                            },
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            textInputAction: TextInputAction.next,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14),
+                                          );
+                                        }),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            addVerticalSpace(14),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(12.0)),
+                              elevation: 8.0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 3),
+                                child: TextFormField(
+                                    validator: (val) {
+                                      if (isAddress(val!.trim())) {
+                                        return null;
+                                      } else {
+                                        return 'Enter your address';
+                                      }
+                                    },
+                                    textInputAction: TextInputAction.next,
+                                    maxLines: 3,
+                                    autovalidateMode: AutovalidateMode
+                                        .onUserInteraction,
+                                    controller: addressController,
+                                    cursorColor: Colors.black,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14),
+                                    decoration: InputDecoration(
+                                        counterText: '',
+                                        prefixIcon: const Icon(Icons.home,
+                                            color: AppColor
+                                                .PrimaryAccentColor),
+                                        labelStyle: TextStyle(
+                                            fontSize: 5.w,
+                                            color: Colors.grey),
+                                        labelText:
+                                        'Address'.toUpperCase(),
+                                        border: InputBorder.none)),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Card(
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              color: Colors.white,
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextFormField(
+                                  textInputAction: TextInputAction.next,
+                                  onChanged: (_) => setState(() {}),
+                                  controller: cityController,
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    prefixIcon: const Icon(
+                                      Icons.location_city_outlined,
+                                      color: AppColor.PrimaryAccentColor,
                                     ),
+                                    labelText: 'CITY'.toUpperCase(),
+                                    labelStyle: TextStyle(
+                                        fontSize: 5.w,
+                                        color: Colors.grey),
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
                                   ),
-                                  addVerticalSpace(14),
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                    elevation: 8.0,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 3),
-                                      child: TextFormField(
-                                          validator: (val) {
-                                            if (isAddress(val!.trim())) {
-                                              return null;
-                                            } else {
-                                              return 'Enter your address';
-                                            }
-                                          },
-                                          textInputAction: TextInputAction.next,
-                                          maxLines: 3,
-                                          autovalidateMode: AutovalidateMode
-                                              .onUserInteraction,
-                                          controller: addressController,
-                                          cursorColor: Colors.black,
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14),
-                                          decoration: InputDecoration(
-                                              counterText: '',
-                                              prefixIcon: const Icon(Icons.home,
-                                                  color: AppColor
-                                                      .PrimaryAccentColor),
-                                              labelStyle: TextStyle(
-                                                  fontSize: 5.w,
-                                                  color: Colors.grey),
-                                              labelText:
-                                                  'Address'.toUpperCase(),
-                                              border: InputBorder.none)),
-                                    ),
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14,
                                   ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Card(
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    color: Colors.white,
-                                    elevation: 4,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        textInputAction: TextInputAction.next,
-                                        onChanged: (_) => setState(() {}),
-                                        controller: cityController,
-                                        obscureText: false,
-                                        decoration: InputDecoration(
-                                          prefixIcon: const Icon(
-                                            Icons.location_city_outlined,
-                                            color: AppColor.PrimaryAccentColor,
-                                          ),
-                                          labelText: 'CITY'.toUpperCase(),
-                                          labelStyle: TextStyle(
-                                              fontSize: 5.w,
-                                              color: Colors.grey),
-                                          enabledBorder: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                        ),
-                                        style: const TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 14,
-                                        ),
-                                        maxLines: 1,
-                                        validator: (val) {
-                                          if (val!.isEmpty) {
-                                            return 'Please Provide Your City';
-                                          }
+                                  maxLines: 1,
+                                  validator: (val) {
+                                    if (val!.isEmpty) {
+                                      return 'Please Provide Your City';
+                                    }
 
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  addVerticalSpace(14),
-                                  GestureDetector(
-                                    onTap: () {
-                                      showDialog(
-                                          barrierDismissible: false,
-                                          context: context,
-                                          builder: (context) {
-                                            return Dialog(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              child: Material(
-                                                color: Colors.transparent,
-                                                child: StatefulBuilder(
-                                                  builder: (BuildContext ctx,
-                                                          StateSetter
-                                                              setStatee) =>
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ),
+                            addVerticalSpace(14),
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        backgroundColor:
+                                        Colors.transparent,
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: StatefulBuilder(
+                                            builder: (BuildContext ctx,
+                                                StateSetter
+                                                setStatee) =>
+                                                Padding(
+                                                  padding:
+                                                  EdgeInsets.all(3.w),
+                                                  child: Stack(
+                                                    children: [
                                                       Padding(
-                                                    padding:
-                                                        EdgeInsets.all(3.w),
-                                                    child: Stack(
-                                                      children: [
-                                                        Padding(
+                                                        padding:
+                                                        EdgeInsets.only(
+                                                            top: 3.w),
+                                                        child: Container(
+                                                          color: Colors.white,
                                                           padding:
-                                                              EdgeInsets.only(
-                                                                  top: 3.w),
+                                                          EdgeInsets.all(
+                                                              3.w),
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 20,
+                                                              ),
+                                                              TextField(
+                                                                onChanged:
+                                                                    (value) {
+                                                                  setStatee(
+                                                                          () {
+                                                                        _searchList =
+                                                                            filterSearchResults(
+                                                                                value);
+                                                                      });
+                                                                },
+                                                                controller:
+                                                                editingController,
+                                                                decoration: InputDecoration(
+                                                                    labelText:
+                                                                    "Search Your Country",
+                                                                    hintText:
+                                                                    "Search Your Country",
+                                                                    prefixIcon:
+                                                                    Icon(Icons
+                                                                        .search),
+                                                                    border: OutlineInputBorder(
+                                                                        borderRadius:
+                                                                        BorderRadius.all(Radius.circular(5.0)))),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 20,
+                                                              ),
+                                                              Expanded(
+                                                                child:
+                                                                ListView(
+                                                                  children: List.generate(
+                                                                      _searchList.length ==
+                                                                          0
+                                                                          ? countries
+                                                                          .length
+                                                                          : _searchList
+                                                                          .length,
+                                                                          (index) => _searchItems(_searchList.length ==
+                                                                          0
+                                                                          ? countries[index]
+                                                                          : _searchList[index])),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        top: 0,
+                                                        right: 0,
+                                                        child: ClipOval(
                                                           child: Container(
-                                                            color: Colors.white,
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    3.w),
-                                                            child: Column(
-                                                              children: [
-                                                                SizedBox(
-                                                                  height: 20,
-                                                                ),
-                                                                TextField(
-                                                                  onChanged:
-                                                                      (value) {
-                                                                    setStatee(
-                                                                        () {
-                                                                      _searchList =
-                                                                          filterSearchResults(
-                                                                              value);
-                                                                    });
-                                                                  },
-                                                                  controller:
-                                                                      editingController,
-                                                                  decoration: InputDecoration(
-                                                                      labelText:
-                                                                          "Search Your Country",
-                                                                      hintText:
-                                                                          "Search Your Country",
-                                                                      prefixIcon:
-                                                                          Icon(Icons
-                                                                              .search),
-                                                                      border: OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.all(Radius.circular(5.0)))),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 20,
-                                                                ),
-                                                                Expanded(
-                                                                  child:
-                                                                      ListView(
-                                                                    children: List.generate(
-                                                                        _searchList.length ==
-                                                                                0
-                                                                            ? countries
-                                                                                .length
-                                                                            : _searchList
-                                                                                .length,
-                                                                        (index) => _searchItems(_searchList.length ==
-                                                                                0
-                                                                            ? countries[index]
-                                                                            : _searchList[index])),
-                                                                  ),
-                                                                )
-                                                              ],
+                                                            color:
+                                                            Colors.black,
+                                                            child: InkWell(
+                                                              child: Icon(
+                                                                Icons.close,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
                                                             ),
                                                           ),
                                                         ),
-                                                        Positioned(
-                                                          top: 0,
-                                                          right: 0,
-                                                          child: ClipOval(
-                                                            child: Container(
-                                                              color:
-                                                                  Colors.black,
-                                                              child: InkWell(
-                                                                child: Icon(
-                                                                  Icons.close,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                                onTap: () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
+                                                      )
+                                                    ],
                                                   ),
                                                 ),
-                                              ),
-                                            );
-                                          });
-                                    },
-                                    child: Card(
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      color: Colors.white,
-                                      elevation: 4,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                      );
+                                    });
+                              },
+                              child: Card(
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                color: Colors.white,
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 5.w,
+                                          vertical: 5.5.w),
+                                      child: SizedBox(
+                                        width: 90.w,
+                                        child: AutoSizeText(
+                                          _initialVal == null
+                                              ? '🏳️' +
+                                              ' Select your country'
+                                                  .toUpperCase()
+                                              : _initialVal!.flag +
+                                              ' ' +
+                                              _initialVal!.name,
+                                          style: TextStyle(
+                                            fontSize: 5.w,
+                                            color: _initialVal == null
+                                                ? Colors.grey
+                                                : Colors.black,
+                                          ),
+                                        ),
                                       ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 5.w,
-                                                vertical: 5.5.w),
-                                            child: SizedBox(
-                                              width: 90.w,
-                                              child: AutoSizeText(
-                                                _initialVal == null
-                                                    ? '🏳️' +
-                                                        ' Select your country'
-                                                            .toUpperCase()
-                                                    : _initialVal!.flag +
-                                                        ' ' +
-                                                        _initialVal!.name,
-                                                style: TextStyle(
-                                                  fontSize: 5.w,
-                                                  color: _initialVal == null
-                                                      ? Colors.grey
-                                                      : Colors.black,
-                                                ),
+                                    ),
+                                    Visibility(
+                                      visible: _initialVal == null
+                                          ? true
+                                          : false,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5.w,
+                                            vertical: 1.w),
+                                        child: Text(
+                                          _initialVal == null
+                                              ? 'Please Select your country'
+                                              : '',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: Colors.red),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            addVerticalSpace(14),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(12.0)),
+                              elevation: 8.0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 3),
+                                child: TextFormField(
+                                  enableInteractiveSelection: false,
+                                  validator: (password) {
+                                    if (isPasswordValid(password!)) {
+                                      return 'Minimum 6 letters required ';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                  obscureText: passError,
+                                  controller: pController,
+                                  autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                                  cursorColor: Colors.black,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14),
+                                  decoration: InputDecoration(
+                                      suffix: ClipOval(
+                                        child: RoundCheckBox(
+                                          uncheckedColor: Colors.white,
+                                          checkedColor: Colors.white,
+                                          size: 20,
+                                          onTap: (selected) {
+                                            setState(() {
+                                              passError
+                                                  ? passError = selected!
+                                                  : passError = selected!;
+                                            });
+                                          },
+                                          isChecked: passError,
+                                          borderColor: Colors.white,
+                                          checkedWidget: const Center(
+                                            child: Icon(
+                                              Icons.visibility,
+                                              size: 20,
+                                            ),
+                                          ),
+                                          uncheckedWidget: const Center(
+                                            child: Icon(
+                                              Icons.visibility_off,
+                                              color:
+                                              ConstantsVar.appColor,
+                                              size: 20,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      prefixIcon: const Icon(
+                                        Icons.password_rounded,
+                                        color:
+                                        AppColor.PrimaryAccentColor,
+                                      ),
+                                      labelStyle: TextStyle(
+                                          fontSize: 5.w,
+                                          color: Colors.grey),
+                                      labelText: 'Password'.toUpperCase(),
+                                      border: InputBorder.none),
+                                ),
+                              ),
+                            ),
+                            addVerticalSpace(14),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(12.0)),
+                              elevation: 8.0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 3),
+                                child: TextFormField(
+                                    enableInteractiveSelection: false,
+                                    validator: (password) {
+                                      if (isPasswordMatch(
+                                        pController.text.toString(),
+                                        cpController.text.toString(),
+                                      )) {
+                                        return null;
+                                      } else {
+                                        return 'Password Mismatch!';
+                                      }
+                                    },
+                                    textInputAction: TextInputAction.done,
+                                    obscureText: cpError,
+                                    controller: cpController,
+                                    autovalidateMode: AutovalidateMode
+                                        .onUserInteraction,
+                                    cursorColor: Colors.black,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14),
+                                    decoration: InputDecoration(
+                                        suffix: ClipOval(
+                                          child: RoundCheckBox(
+                                            borderColor: Colors.white,
+                                            checkedColor: Colors.white,
+                                            uncheckedColor: Colors.white,
+                                            size: 20,
+                                            onTap: (selected) {
+                                              setState(() {
+                                                cpError
+                                                    ? cpError = selected!
+                                                    : cpError = selected!;
+                                              });
+                                            },
+                                            isChecked: cpError,
+                                            checkedWidget: const Center(
+                                              child: Icon(
+                                                Icons.visibility,
+                                                size: 20,
+                                              ),
+                                            ),
+                                            uncheckedWidget: const Center(
+                                              child: Icon(
+                                                Icons.visibility_off,
+                                                color: AppColor
+                                                    .PrimaryAccentColor,
+                                                size: 20,
                                               ),
                                             ),
                                           ),
-                                          Visibility(
-                                            visible: _initialVal == null
-                                                ? true
-                                                : false,
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 5.w,
-                                                  vertical: 1.w),
-                                              child: Text(
-                                                _initialVal == null
-                                                    ? 'Please Select your country'
-                                                    : '',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                    color: Colors.red),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  addVerticalSpace(14),
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                    elevation: 8.0,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 3),
-                                      child: TextFormField(
-                                        enableInteractiveSelection: false,
-                                        validator: (password) {
-                                          if (isPasswordValid(password!)) {
-                                            return 'Minimum 6 letters required ';
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                        textInputAction: TextInputAction.next,
-                                        obscureText: passError,
-                                        controller: pController,
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
-                                        cursorColor: Colors.black,
-                                        style: const TextStyle(
-                                            color: Colors.black, fontSize: 14),
-                                        decoration: InputDecoration(
-                                            suffix: ClipOval(
-                                              child: RoundCheckBox(
-                                                uncheckedColor: Colors.white,
-                                                checkedColor: Colors.white,
-                                                size: 20,
-                                                onTap: (selected) {
-                                                  setState(() {
-                                                    passError
-                                                        ? passError = selected!
-                                                        : passError = selected!;
-                                                  });
-                                                },
-                                                isChecked: passError,
-                                                borderColor: Colors.white,
-                                                checkedWidget: const Center(
-                                                  child: Icon(
-                                                    Icons.visibility,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                                uncheckedWidget: const Center(
-                                                  child: Icon(
-                                                    Icons.visibility_off,
-                                                    color:
-                                                        ConstantsVar.appColor,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            prefixIcon: const Icon(
-                                              Icons.password_rounded,
-                                              color:
-                                                  AppColor.PrimaryAccentColor,
-                                            ),
-                                            labelStyle: TextStyle(
-                                                fontSize: 5.w,
-                                                color: Colors.grey),
-                                            labelText: 'Password'.toUpperCase(),
-                                            border: InputBorder.none),
-                                      ),
-                                    ),
-                                  ),
-                                  addVerticalSpace(14),
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                    elevation: 8.0,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 3),
-                                      child: TextFormField(
-                                          enableInteractiveSelection: false,
-                                          validator: (password) {
-                                            if (isPasswordMatch(
-                                              pController.text.toString(),
-                                              cpController.text.toString(),
-                                            )) {
-                                              return null;
-                                            } else {
-                                              return 'Password Mismatch!';
-                                            }
-                                          },
-                                          textInputAction: TextInputAction.done,
-                                          obscureText: cpError,
-                                          controller: cpController,
-                                          autovalidateMode: AutovalidateMode
-                                              .onUserInteraction,
-                                          cursorColor: Colors.black,
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14),
-                                          decoration: InputDecoration(
-                                              suffix: ClipOval(
-                                                child: RoundCheckBox(
-                                                  borderColor: Colors.white,
-                                                  checkedColor: Colors.white,
-                                                  uncheckedColor: Colors.white,
-                                                  size: 20,
-                                                  onTap: (selected) {
-                                                    setState(() {
-                                                      cpError
-                                                          ? cpError = selected!
-                                                          : cpError = selected!;
-                                                    });
-                                                  },
-                                                  isChecked: cpError,
-                                                  checkedWidget: const Center(
-                                                    child: Icon(
-                                                      Icons.visibility,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-                                                  uncheckedWidget: const Center(
-                                                    child: Icon(
-                                                      Icons.visibility_off,
-                                                      color: AppColor
-                                                          .PrimaryAccentColor,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              prefixIcon: const Icon(
-                                                Icons.password_rounded,
-                                                color:
-                                                    AppColor.PrimaryAccentColor,
-                                              ),
-                                              labelStyle: TextStyle(
-                                                  fontSize: 5.w,
-                                                  color: Colors.grey),
-                                              labelText: 'Confirm Password'
-                                                  .toUpperCase(),
-                                              border: InputBorder.none)),
-                                    ),
-                                  ),
-                                ],
+                                        ),
+                                        prefixIcon: const Icon(
+                                          Icons.password_rounded,
+                                          color:
+                                          AppColor.PrimaryAccentColor,
+                                        ),
+                                        labelStyle: TextStyle(
+                                            fontSize: 5.w,
+                                            color: Colors.grey),
+                                        labelText: 'Confirm Password'
+                                            .toUpperCase(),
+                                        border: InputBorder.none)),
                               ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: buildText(context),
-                      )
-                    ],
+                    ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: buildText(context),
+                )
+               ,
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox(

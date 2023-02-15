@@ -70,7 +70,8 @@ class _ReturnScreenState extends State<ReturnScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: true,
-      bottom: true,
+      bottom: true
+      ,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ConstantsVar.appColor,

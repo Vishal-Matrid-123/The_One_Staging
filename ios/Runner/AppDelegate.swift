@@ -4,6 +4,7 @@ import Flutter
 import Firebase
 import FBSDKCoreKit
 import Foundation
+import Security
 import FBAudienceNetwork
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -32,6 +33,8 @@ import FBAudienceNetwork
           UserDefaults.standard.removeObject(forKey: "guestGUID");
           UserDefaults.standard.removeObject(forKey: "sepGuid");
           UserDefaults.standard.removeObject(forKey: "apiTokken");
+          Keychain.logout();
+
           UserDefaults.standard.set("Val", forKey: "isFirstTime")
           print("Values reset");
       }else{
@@ -63,3 +66,19 @@ import FBAudienceNetwork
                   try fileOrDirectoryURL.setResourceValues(values)
               }
 
+public class Keychain: NSObject {
+  public class func logout()  {
+    let secItemClasses =  [
+      kSecClassGenericPassword,
+      kSecClassInternetPassword,
+      kSecClassCertificate,
+      kSecClassKey,
+      kSecClassIdentity,
+    ]
+    for itemClass in secItemClasses {
+      let spec: NSDictionary = [kSecClass: itemClass]
+      SecItemDelete(spec)
+        print("Spec is being deleted")
+    }
+  }
+}

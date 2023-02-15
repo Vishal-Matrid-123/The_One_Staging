@@ -22,6 +22,7 @@ import 'package:untitled2/Constants/ConstantVariables.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/provider_class/provider_contracter.dart';
 import 'package:untitled2/utils/HeartIcon.dart';
 
+import '../../../../main_dev.dart';
 import '../../../../new_apis_func/data_layer/new_model/new_product_list_response/new_product_list_response.dart';
 import '../SubCatProducts.dart';
 
@@ -372,25 +373,28 @@ class _ProdListWidgetState extends State<ProdListWidget> {
               ),
             ),
           ),
-          ListTile(
-            title: Center(
-              child: AutoSizeText(
-                widget.title,
-                style: TextStyle(shadows: <Shadow>[
-                  Shadow(
-                    offset: const Offset(1.0, 1.2),
-                    blurRadius: 3.0,
-                    color: Colors.grey.shade300,
-                  ),
-                  Shadow(
-                    offset: const Offset(1.0, 1.2),
-                    blurRadius: 8.0,
-                    color: Colors.grey.shade300,
-                  ),
-                ], fontSize: 5.w, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
+       widget.title.length == 0?SizedBox():   Container(
+         color: fromHex('#948a7e'),
+         child: Center(
+         child: Padding(
+           padding: const EdgeInsets.all(20.0),
+           child: AutoSizeText(
+             widget.title,
+             style: TextStyle(shadows: <Shadow>[
+               Shadow(
+                 offset: const Offset(1.0, 1.2),
+                 blurRadius: 3.0,
+                 color: Colors.grey.shade300,
+               ),
+               Shadow(
+                 offset: const Offset(1.0, 1.2),
+                 blurRadius: 8.0,
+                 color: Colors.grey.shade300,
+               ),
+             ], fontSize: 5.w, fontWeight: FontWeight.bold),
+           ),
+         ),
+       ),),
           Expanded(
             child: SizedBox(
               width: 100.w,
