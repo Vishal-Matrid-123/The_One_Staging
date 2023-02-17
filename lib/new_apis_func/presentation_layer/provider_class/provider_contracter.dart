@@ -1092,7 +1092,7 @@ class NewApisProvider extends ChangeNotifier {
         permission == LocationPermission.always) {
       _isLocationAllow = true;
       _isPermanentDenied = false;
-      setLocationFunction(context: context);
+      await setLocationFunction(context: context);
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       // Phoenix.rebirth(context);
     }
@@ -1139,7 +1139,7 @@ class NewApisProvider extends ChangeNotifier {
   }
 
   /*Set Store According to lcoation*/
-  void setLocationFunction({required BuildContext context}) async {
+  Future setLocationFunction({required BuildContext context}) async {
     log('jegsjhfgjsegfjgse');
     showSnackbar(
         duration: const Duration(
@@ -1619,9 +1619,11 @@ class NewApisProvider extends ChangeNotifier {
 
   /*Booking Status*/
   Future<void> getBookingStatus() async {
+    _isBooking = false;
 
-     await ApiCalls.getBookingStatus().then((value) => _isBooking = value)
-       ;
+    _isBooking = ConstantsVar.prefs.getString('userID') != null
+        ? await ApiCalls.getBookingStatus()
+        : false;
 
     print('isBooking done>>>>>>>' + _isBooking.toString());
 

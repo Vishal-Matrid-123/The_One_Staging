@@ -97,7 +97,7 @@ class _SplashScreenState extends State<SplashScreen>
         Future.delayed(Duration(seconds: 3));
 
         isDeviceSecure == true
-            ? getLocation().whenComplete(
+            ? await getLocation().whenComplete(
                 () async {
                   {
                     // await x.checkAppUpdate(ctx: context).then((v) async {
@@ -148,7 +148,7 @@ class _SplashScreenState extends State<SplashScreen>
                           }
                         } else {
                           if (mounted)
-                            _provider.setLocationFunction(context: context);
+                            await _provider.setLocationFunction(context: context);
                         }
                       } else if (_guestCustomerID.toString().isNotEmpty &&
                           await ConstantsVar.prefs.getString(kExpireDateKey) ==
@@ -182,7 +182,7 @@ class _SplashScreenState extends State<SplashScreen>
                                     builder: (context) => MyApp()));
                           }
                         } else {
-                          _provider.setLocationFunction(context: context);
+                         await  _provider.setLocationFunction(context: context);
                         }
                       } else {
                         /*Last Condition*/
@@ -240,7 +240,7 @@ class _SplashScreenState extends State<SplashScreen>
                               }
                             } else {
                               if (mounted)
-                                _provider.setLocationFunction(context: context);
+                          await      _provider.setLocationFunction(context: context);
                             }
                           });
                         }
@@ -268,7 +268,7 @@ class _SplashScreenState extends State<SplashScreen>
                             }
                           } else {
                             if (mounted)
-                              _provider.setLocationFunction(context: context);
+                          await    _provider.setLocationFunction(context: context);
                           }
                         }
                         log(
@@ -443,10 +443,10 @@ class _SplashScreenState extends State<SplashScreen>
 
   bool isDeviceSecure = true;
 
-  getLocation() async {
+  Future getLocation() async {
     _provider = Provider.of<NewApisProvider>(context, listen: false);
     // _provider.checkLocationPermission();
-    _provider.getLocation(context: context);
+   await  _provider.getLocation(context: context);
   }
 
 // and lack of delete
