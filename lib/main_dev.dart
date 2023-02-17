@@ -1,19 +1,20 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Constants/ConstantVariables.dart';
@@ -22,8 +23,37 @@ import 'new_apis_func/cofig/app_config.dart';
 import 'new_apis_func/services/background_fcm_services.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+final remoteConfig = FirebaseRemoteConfig.instance;
+Color systemColor = Colors.black;
 const kFCMVApiKey =
     'BEk4Ih_PMitirti5swgq1MBKTb9kbcSr5SJl9n-92EncoKLi4Pl3ds2bopIBou7JRkkKMDDX4uSsgld4tN7cb9g';
+FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+Future<void> initDynamicLinks() async {
+  dynamicLinks.onLink.listen((dynamicLinkData) async {
+    await _handleDeepLink(dynamicLinkData);
+    Fluttertoast.showToast(msg: 'sdfsdf');
+  }).onError((error) {
+    print('onLink error');
+    print(error.message);
+  });
+}
+// void handleDynamicLinks() async {
+//   ///To bring INTO FOREGROUND FROM DYNAMIC LINK.
+//   // dynamicLinks.onLink.;
+//
+//   final PendingDynamicLinkData? data =
+//   await dynamicLinks.getInitialLink();
+//   _handleDeepLink(data);
+// }
+
+// bool _deeplink = true;
+_handleDeepLink(PendingDynamicLinkData? data) async {
+  final Uri? deeplink = data!.link;
+  if (deeplink != null) {
+    print('Handling Deep Link | deepLink: $deeplink');
+  }
+}
 
 Future<void> setFireStoreData(
   RemoteMessage message,
@@ -34,15 +64,16 @@ Future<void> setFireStoreData(
       ? await message.notification!.apple!.imageUrl ?? ''
       : await message.notification!.android!.imageUrl ?? '';
 
-
   String _notificationDesc = message.notification?.body ?? '';
   String _notificationTitle = message.notification?.title ?? '';
 
   bool isAlreadyExisted = false;
   QuerySnapshot _query = await reference
-      .where('Title', isEqualTo: message.notification!.title).get();
-  if (_query.docs.length > 0 ) {
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> list = _query.docs as List<QueryDocumentSnapshot<Map<String, dynamic>>>;
+      .where('Title', isEqualTo: message.notification!.title)
+      .get();
+  if (_query.docs.length > 0) {
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> list =
+        _query.docs as List<QueryDocumentSnapshot<Map<String, dynamic>>>;
 
     for (QueryDocumentSnapshot<Map<String, dynamic>> element in list) {
       String _title = element['Title'];
@@ -58,7 +89,7 @@ Future<void> setFireStoreData(
 
         print('Existed');
         break;
-      }else{
+      } else {
         print('Not Existed');
       }
     }
@@ -70,12 +101,10 @@ Future<void> setFireStoreData(
   Map<String, dynamic> data = {
     'Title': message.notification!.title,
     'Desc': message.notification!.body,
-       'Time': Timestamp.fromMillisecondsSinceEpoch(
-  DateTime.now().millisecondsSinceEpoch),
+    'Time': Timestamp.fromMillisecondsSinceEpoch(
+        DateTime.now().millisecondsSinceEpoch),
     'Image': _imageUrlIOS
   };
-
-
 
   if (isAlreadyExisted == true) {
   } else {
@@ -88,8 +117,6 @@ Future<void> setFireStoreData(
 Future<void> _messageHandler(RemoteMessage message) async {
   setFireStoreData(message);
 }
-
-
 
 Future<void> main() async {
   await runZonedGuarded(
@@ -109,14 +136,24 @@ Future<void> main() async {
           : await Firebase.initializeApp();
 
       FirebaseMessaging.instance.requestPermission();
+      await remoteConfig.setConfigSettings(RemoteConfigSettings(
+        fetchTimeout: const Duration(minutes: 1),
+        minimumFetchInterval: const Duration(seconds: 10),
+      ));
 
+      await remoteConfig.fetchAndActivate();
+      Map<String, RemoteConfigValue> val = await remoteConfig.getAll();
+      print('Remote config val>>' + val['default_color_set']!.asString());
+      systemColor = fromHex(jsonDecode(
+          val['default_color_set']!.asString())['default_color_for_system']);
+      initDynamicLinks();
       FirebaseMessaging.onBackgroundMessage(
           (message) => _messageHandler(message));
       FCMBackgroundService.initializeService();
 
       FirebaseMessaging _message = FirebaseMessaging.instance;
       var token = await _message.getToken(vapidKey: kFCMVApiKey);
-                              _message.subscribeToTopic("topic");
+      _message.subscribeToTopic("topic");
       print('FCM Token>>' + token!);
 
       ConstantsVar.prefs = await SharedPreferences.getInstance();
@@ -153,14 +190,17 @@ Future<void> main() async {
           FirebaseAnalyticsObserver observer =
               FirebaseAnalyticsObserver(analytics: analytics);
           SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-            statusBarColor: fromHex('#948a7e'), //or set color with: Color(0xFF0000FF)
-              systemNavigationBarColor:fromHex('#948a7e')
-          ));
-          changeStatusColor(fromHex('#948a7e'));
-          changeNavigationColor(fromHex('#948a7e'));
+              statusBarColor: systemColor,
+              //or set color with: Color(0xFF0000FF)
+              systemNavigationBarColor: systemColor));
+          changeStatusColor(systemColor);
+          changeNavigationColor(systemColor);
           var configuredApp = AppConfig(
             child: MainApp(
-                requiredBanner: true, analytics: analytics, observer: observer),
+              requiredBanner: true,
+              analytics: analytics,
+              observer: observer,
+            ),
             appTitle: 'THE One Development',
             buildFlavor: 'Development',
             databaseTableName: 'THE_One_Staging_Notifications',
@@ -176,9 +216,10 @@ Future<void> main() async {
     },
   );
 }
- Color fromHex(String hexString) {
-final buffer = StringBuffer();
-if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-buffer.write('#D8CDBE'.replaceFirst('#', ''));
-return Color(int.parse(buffer.toString(), radix: 16));
+
+Color fromHex(String hexString) {
+  final buffer = StringBuffer();
+  if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+  buffer.write(hexString.replaceFirst('#', ''));
+  return Color(int.parse(buffer.toString(), radix: 16));
 }

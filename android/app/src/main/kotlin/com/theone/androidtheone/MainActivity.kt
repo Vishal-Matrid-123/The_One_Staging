@@ -19,6 +19,7 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 class MainActivity : FlutterActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
 //        Added line
 
