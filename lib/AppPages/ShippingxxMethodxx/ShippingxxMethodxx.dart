@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:progress_loading_button/progress_loading_button.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled2/AppPages/HomeScreen/HomeScreen.dart';
@@ -258,15 +257,11 @@ class _ShippingMethodState extends State<ShippingMethod> {
                   color: ConstantsVar.appColor,
                   child: LoadingButton(
                     onPressed: () async {
-                      context.loaderOverlay.show(
-                          widget: const SpinKitRipple(
-                        color: Colors.red,
-                        size: 90,
-                      ));
+
                       if (isSelected == false) {
                         Fluttertoast.showToast(
                             msg: 'Please select a Shipping Method first');
-                        context.loaderOverlay.hide();
+
                       } else {
                         await ApiCalls.selectShippingMethod(
                             selectionValue: selectedVal, context: context);

@@ -4,7 +4,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:progress_loading_button/progress_loading_button.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:untitled2/AppPages/CustomLoader/CustomDialog/CustomDialog.dart';
@@ -187,7 +186,7 @@ class _ForgotPassScreenState extends State<ForgotPassScreen>
                                   await ApiCalls.forgotPassword(
                                           context, emailController.text)
                                       .then((val) {
-                                    context.loaderOverlay.hide();
+
                                     return showDialog(
                                       context: context,
                                       builder: (_) => CustomDialogBox(

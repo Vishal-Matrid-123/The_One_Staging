@@ -7,7 +7,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:intl/intl.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:rolling_nav_bar/rolling_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,12 +47,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return LoaderOverlay(
-      child: FlutterSizer(
+    return FlutterSizer(
         builder: (context, ori, deviceType) => MyHomePage(
           pageIndex: 0,
         ),
-      ),
+
     );
   }
 }

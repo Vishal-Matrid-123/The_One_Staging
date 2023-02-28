@@ -6,7 +6,6 @@ import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
-import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:untitled2/AppPages/CustomLoader/CustomDialog/CustomDialog.dart';
@@ -378,7 +377,6 @@ class _VerificationScreen2State extends State<VerificationScreen2>
                                   gravity: ToastGravity.SNACKBAR);
                             } else {
                               await verifyOTP(otpString).then((otp) {
-                                context.loaderOverlay.hide();
                                 // register();
                               });
                             }

@@ -6,13 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:logger/logger.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,33 +28,33 @@ final remoteConfig = FirebaseRemoteConfig.instance;
 Color systemColor = Colors.black;
 const kFCMVApiKey =
     'BEk4Ih_PMitirti5swgq1MBKTb9kbcSr5SJl9n-92EncoKLi4Pl3ds2bopIBou7JRkkKMDDX4uSsgld4tN7cb9g';
-FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
-
-Future<void> initDynamicLinks() async {
-  dynamicLinks.onLink.listen((dynamicLinkData) async {
-    await _handleDeepLink(dynamicLinkData);
-    Fluttertoast.showToast(msg: 'sdfsdf');
-  }).onError((error) {
-    print('onLink error');
-    print(error.message);
-  });
-}
-// void handleDynamicLinks() async {
-//   ///To bring INTO FOREGROUND FROM DYNAMIC LINK.
-//   // dynamicLinks.onLink.;
+// FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 //
-//   final PendingDynamicLinkData? data =
-//   await dynamicLinks.getInitialLink();
-//   _handleDeepLink(data);
+// Future<void> initDynamicLinks() async {
+//   dynamicLinks.onLink.listen((dynamicLinkData) async {
+//     await _handleDeepLink(dynamicLinkData);
+//     Fluttertoast.showToast(msg: 'sdfsdf');
+//   }).onError((error) {
+//     print('onLink error');
+//     print(error.message);
+//   });
 // }
-
-// bool _deeplink = true;
-_handleDeepLink(PendingDynamicLinkData? data) async {
-  final Uri? deeplink = data!.link;
-  if (deeplink != null) {
-    print('Handling Deep Link | deepLink: $deeplink');
-  }
-}
+// // void handleDynamicLinks() async {
+// //   ///To bring INTO FOREGROUND FROM DYNAMIC LINK.
+// //   // dynamicLinks.onLink.;
+// //
+// //   final PendingDynamicLinkData? data =
+// //   await dynamicLinks.getInitialLink();
+// //   _handleDeepLink(data);
+// // }
+//
+// // bool _deeplink = true;
+// // _handleDeepLink(PendingDynamicLinkData? data) async {
+// //   final Uri? deeplink = data!.link;
+// //   if (deeplink != null) {
+// //     print('Handling Deep Link | deepLink: $deeplink');
+// //   }
+// // }
 
 Future<void> setFireStoreData(
   RemoteMessage message,
@@ -125,6 +126,7 @@ Future<void> main() async {
       HttpOverrides.global = MyHttpOverrides();
       // NotificationService().initializePlatformNotifications();
       // FirebaseApp firebaseApp = Fireb
+      FlutterNativeSplash.remove();
       Platform.isIOS
           ? await Firebase.initializeApp(
               options: FirebaseOptions(
@@ -146,7 +148,7 @@ Future<void> main() async {
       print('Remote config val>>' + val['default_color_set']!.asString());
       systemColor = fromHex(jsonDecode(
           val['default_color_set']!.asString())['default_color_for_system']);
-      initDynamicLinks();
+      // initDynamicLinks();
       FirebaseMessaging.onBackgroundMessage(
           (message) => _messageHandler(message));
       FCMBackgroundService.initializeService();

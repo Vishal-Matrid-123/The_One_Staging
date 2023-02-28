@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:loader_overlay/loader_overlay.dart';
+
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -672,7 +672,7 @@ class ApiCalls {
     } on Exception catch (e) {
       ConstantsVar.excecptionMessage(e);
 
-      ctx.loaderOverlay.hide();
+
     }
   }
 
@@ -2373,9 +2373,8 @@ class ApiCalls {
   }
 
   static Future<String> checkForUpdates() async {
-    Fluttertoast.showToast(
-        msg: "Checking for updates.....", toastLength: Toast.LENGTH_LONG);
-    log("111");
+
+
     String _baseUrl = await ApiCalls.getSelectedStore();
     final uri = Uri.parse(_baseUrl + "GetLatestVersion");
     log(uri.toString());

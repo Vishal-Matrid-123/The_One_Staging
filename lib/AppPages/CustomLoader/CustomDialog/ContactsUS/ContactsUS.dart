@@ -9,7 +9,6 @@ import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:progress_loading_button/progress_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -369,7 +368,7 @@ class _ContactUSState extends State<ContactUS> with InputValidationMixin {
     } on Exception catch (e) {
       log(e.toString());
       ConstantsVar.excecptionMessage(e);
-      context.loaderOverlay.hide();
+
     }
   }
 

@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 
 // import 'package:untitled2/AppPages/CartxxScreen/ConstantVariables.dart';
@@ -155,7 +154,6 @@ class _TopicPageState extends State<TopicPage> {
               ],
               title: GestureDetector(
                 onTap: () {
-                  context.loaderOverlay.hide();
                   Navigator.pushAndRemoveUntil(context,
                       CupertinoPageRoute(builder: (context) {
                     return MyApp();
@@ -405,7 +403,6 @@ class _TopicPageState extends State<TopicPage> {
                                           //     ..httpOnly = true
                                           // ]);
                                           setState(() {
-                                            context.loaderOverlay.hide();
                                             _willGo = true;
                                             isLoading = false;
                                             _controller.future
@@ -815,7 +812,6 @@ class _TopicPageState extends State<TopicPage> {
                                           //     ..httpOnly = true
                                           // ]);
                                           setState(() {
-                                            context.loaderOverlay.hide();
                                             _willGo = true;
                                             isLoading = false;
                                             _controller.future

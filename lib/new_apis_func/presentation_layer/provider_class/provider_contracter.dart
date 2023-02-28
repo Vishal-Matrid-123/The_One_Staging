@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:untitled2/AppPages/MyAccount/MyAccount.dart';
 import 'package:untitled2/AppPages/MyAddresses/AddressResponse.dart';
 import 'package:untitled2/AppPages/StreamClass/NewPeoductPage/ProductResponse.dart';
@@ -26,17 +27,14 @@ import 'package:untitled2/new_apis_func/data_layer/new_model/main_category_respo
 import 'package:untitled2/new_apis_func/data_layer/new_model/store_model/store_model.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/events_handlers/facebook_events.dart';
 import 'package:untitled2/new_apis_func/presentation_layer/events_handlers/firebase_events.dart';
-import 'package:untitled2/new_apis_func/presentation_layer/screens/store_selection_screen/store_selection_screen.dart';
 import 'package:untitled2/utils/ApiCalls/ApiCalls.dart';
 import 'package:untitled2/utils/models/homeresponse.dart';
 
-import '../../../AppPages/HomeScreen/HomeScreen.dart';
 import '../../../AppPages/HomeScreen/HomeScreenMain/SearchSuggestions/SearchSuggestion.dart';
 import '../../../AppPages/MyAddresses/MyAddresses.dart';
 import '../../../AppPages/MyOrders/Response/OrderResponse.dart';
 import '../../../AppPages/SearchPage/SearchCategoryResponse/SearchCategoryResponse.dart';
 import '../../../AppPages/ShippingxxMethodxx/Responsexx/ShippingxxMethodxxResponse.dart';
-import '../../../AppPages/SplashScreen/TokenResponse/TokenxxResponsexx.dart';
 import '../../../AppPages/models/ShippingResponse.dart';
 import '../../../Constants/ConstantVariables.dart';
 import '../../../PojoClass/NetworkModelClass/CartModelClass/CartModel.dart';
@@ -131,6 +129,8 @@ class NewApisProvider extends ChangeNotifier {
 
   List<HomePageCategoriesImage> _categoryListHome = [];
 
+  bool _isUpdateBannerVisible = true;
+
   double get checkoutAmount => _checkoutAmount;
 
   String get currency => _currency;
@@ -140,6 +140,8 @@ class NewApisProvider extends ChangeNotifier {
   /*Getter Methods*/
 
   int get productCount => _productCount;
+
+  bool get updateBannerHide => _isUpdateBannerVisible;
 
   bool get isLocationAllow => _isLocationAllow;
 
@@ -404,7 +406,6 @@ class NewApisProvider extends ChangeNotifier {
               _isProductListScreenError = false;
               _loading = false;
             } catch (e) {
-
               _isProductListScreenError = true;
               _loading = false;
             }
@@ -1029,38 +1030,41 @@ class NewApisProvider extends ChangeNotifier {
 
   /*Snackbar Here*/
 
-  Future<void> getLocation({required BuildContext context}) async {
+  Future<String> getLocation({required BuildContext context}) async {
     log("Hi");
     LocationPermission permission;
-    // await Geolocator.requestPermission().whenComplete(() async {
+    await Geolocator.requestPermission();
     permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
       //nothing
-      await Geolocator.requestPermission().then((val) async {
-        await Geolocator.checkPermission().then((value) {
-          permission = value;
-          if (permission == LocationPermission.whileInUse) {
-            getLocation(context: context);
-          } else {
-            if (permission == LocationPermission.unableToDetermine) {
-              showSnackbar(
-                message:
-                    "Unable to determine action. Please click on Allow Permission",
-                lableName: "",
-                context: context,
-                method: () {},
-                duration: const Duration(
-                  seconds: 3,
-                ),
-              );
-              _isLocationAllow = false;
-              _isPermanentDenied = false;
-            }
-          }
-        });
-      });
-    } else if (permission == LocationPermission.deniedForever) {
+      // await Geolocator.requestPermission().then((val) async {
+      //   await Geolocator.checkPermission().then((value) {
+      //     permission = value;
+      //     if (permission == LocationPermission.whileInUse) {
+      //       getLocation(context: context);
+      //     } else {
+      //       if (permission == LocationPermission.unableToDetermine) {
+      //         showSnackbar(
+      //           message:
+      //               "Unable to determine action. Please click on Allow Permission",
+      //           lableName: "",
+      //           context: context,
+      //           method: () {},
+      //           duration: const Duration(
+      //             seconds: 3,
+      //           ),
+      //         );
+      //         _isLocationAllow = false;
+      //         _isPermanentDenied = false;
+      //       }
+      //     }
+      //   });
+      // });
+
+      return 'other';
+    }
+    else if (permission == LocationPermission.deniedForever) {
       showSnackbar(
           duration: const Duration(
             seconds: 3,
@@ -1072,8 +1076,10 @@ class NewApisProvider extends ChangeNotifier {
           context: context);
       _isLocationAllow = false;
       _isPermanentDenied = true;
+      return'other';
       // _openStoreSelectionScreen(context: context);
-    } else if (permission == LocationPermission.unableToDetermine) {
+    }
+    else if (permission == LocationPermission.unableToDetermine) {
       showSnackbar(
         duration: const Duration(
           seconds: 3,
@@ -1088,17 +1094,20 @@ class NewApisProvider extends ChangeNotifier {
 
       _isPermanentDenied = false;
       _isLocationAllow = false;
-    } else if (permission == LocationPermission.whileInUse ||
+      return'other';
+    }
+    else if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
       _isLocationAllow = true;
       _isPermanentDenied = false;
-      await setLocationFunction(context: context);
-      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      // Phoenix.rebirth(context);
-    }
-    // });
+ return  await setLocationFunction(context: context);
 
-    notifyListeners();
+    }else{
+      return 'other';
+    }
+
+
+
   }
 
   Future<void> showSnackbar(
@@ -1121,25 +1130,25 @@ class NewApisProvider extends ChangeNotifier {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  /*Location Check*/
-  Future<void> checkLocationPermission() async {
-    LocationPermission permission;
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.whileInUse) {
-      _isLocationAllow = true;
-      _isPermanentDenied = false;
-    } else if (permission == LocationPermission.deniedForever) {
-      _isLocationAllow = false;
-      _isPermanentDenied = true;
-    } else {
-      _isLocationAllow = false;
-      _isPermanentDenied = false;
-    }
-    notifyListeners();
-  }
+  // /*Location Check*/
+  // Future<void> checkLocationPermission() async {
+  //   LocationPermission permission;
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.whileInUse) {
+  //     _isLocationAllow = true;
+  //     _isPermanentDenied = false;
+  //   } else if (permission == LocationPermission.deniedForever) {
+  //     _isLocationAllow = false;
+  //     _isPermanentDenied = true;
+  //   } else {
+  //     _isLocationAllow = false;
+  //     _isPermanentDenied = false;
+  //   }
+  //   notifyListeners();
+  // }
 
   /*Set Store According to lcoation*/
-  Future setLocationFunction({required BuildContext context}) async {
+  Future<String> setLocationFunction({required BuildContext context}) async {
     log('jegsjhfgjsegfjgse');
     showSnackbar(
         duration: const Duration(
@@ -1165,109 +1174,35 @@ class NewApisProvider extends ChangeNotifier {
     }
 
     try {
+      /*Getting Position Here*/
       Position position = await Geolocator.getCurrentPosition(
         // desiredAccuracy: LocationAccuracy.bestForNavigation,
         forceAndroidLocationManager: false,
         timeLimit: null,
       );
-      log(position.longitude.toString());
 
+      /*Converting Postition into Place Markers*/
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
-      log("Country>>>" + placemarks[0].country!);
+
       String _country = placemarks[0].country ?? "";
       if (_country.toLowerCase().contains("united arab emirates")) {
         await secureStorage.write(key: kselectedStoreIdKey, value: kuStoreId);
-        await secureStorage.write(key: kcountryNameKey, value: "THE One UAE");
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          Future.delayed(Duration.zero).whenComplete(() {
-            Navigator.pushReplacement(
-              context,
-              CupertinoPageRoute(
-                builder: (_) => MyApp(),
-              ),
-            );
-          });
-        });
-      } else if (_country.toLowerCase().contains("bahrain")) {
+       return 'uae';
+      }
+      else if (_country.toLowerCase().contains("bahrain")) {
         await secureStorage.write(key: kselectedStoreIdKey, value: kbStoreId);
-        await secureStorage.write(
-            key: kcountryNameKey, value: "THE One Bahrain");
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          Future.delayed(Duration.zero).whenComplete(() {
-            Navigator.pushReplacement(
-              context,
-              CupertinoPageRoute(
-                builder: (_) => MyApp(),
-              ),
-            );
-          });
-        });
-      } else if (_country.toLowerCase().contains("kuwait")) {
+
+        return 'bahrain';
+      }
+      else if (_country.toLowerCase().contains("kuwait")) {
         await secureStorage.write(key: kselectedStoreIdKey, value: kkStoreId);
-        await secureStorage.write(
-            key: kcountryNameKey, value: "THE One Kuwait");
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          Future.delayed(Duration.zero).whenComplete(() {
-            Navigator.pushReplacement(
-              context,
-              CupertinoPageRoute(
-                builder: (_) => MyApp(),
-              ),
-            );
-          });
-        });
-      } else {
-        await secureStorage.write(
-            key: kcountryNameKey,
-            value: "THE One\nThis app is only available for Developers");
 
-        // ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        SchedulerBinding.instance.addPostFrameCallback((_) async {
-          var _guestCustomerID = '';
-          // if()
-          _guestCustomerID =
-              ConstantsVar.prefs.getString('guestCustomerID') ?? "";
+   return 'kuwait';
+      }
+      else {
 
-          if ((_guestCustomerID == '' || _guestCustomerID.toString().isEmpty) &&
-              await ConstantsVar.prefs.getString(kExpireDateKey) == null) {
-            await ApiCalls.getApiTokken(context).then(
-              (value) async {
-                TokenResponse myResponse =
-                    TokenResponse.fromJson(jsonDecode(value));
-                _guestCustomerID = myResponse.cutomer.customerId.toString();
-                var _guestGUID = myResponse.cutomer.customerGuid;
-                ConstantsVar.prefs
-                    .setString('guestCustomerID', _guestCustomerID);
-                ConstantsVar.prefs.setString('guestGUID', _guestGUID);
-                ConstantsVar.prefs.setString('sepGuid', _guestGUID);
-                ConstantsVar.prefs.setString(
-                    kExpireDateKey, myResponse.expiryTime.toIso8601String());
-              },
-            );
-            Future.delayed(Duration.zero).whenComplete(() {
-              Navigator.pushReplacement(
-                context,
-                CupertinoPageRoute(
-                  builder: (_) => StoreSelectionScreen(
-                    screenName: 'Splash Screen',
-                  ),
-                ),
-              );
-            });
-          } else {
-            Future.delayed(Duration.zero).whenComplete(() async {
-              await Navigator.pushReplacement(
-                context,
-                CupertinoPageRoute(
-                  builder: (_) => StoreSelectionScreen(
-                    screenName: 'Splash Screen',
-                  ),
-                ),
-              );
-            });
-          }
-        });
+return 'other';
       }
     } on Exception catch (e) {
       Fluttertoast.showToast(
@@ -1277,300 +1212,15 @@ class NewApisProvider extends ChangeNotifier {
           gravity: ToastGravity.CENTER,
           toastLength: Toast.LENGTH_LONG);
 
-      // await secureStorage.write(key: kselectedStoreIdKey, value: kuStoreId);
-      // ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Future.delayed(Duration.zero).whenComplete(() {
-          Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(
-              builder: (_) => const StoreSelectionScreen(
-                screenName: 'Splash Screen',
-              ),
-            ),
-          );
-        });
-      });
 
-      // Future.delayed(Duration(seconds: 5)).then((value) => exit(0));
+      return 'other';
+
+
     }
   }
 
-  // Future<void> checkAppUpdate({required BuildContext ctx}) async {
-  //   String version = '';
-  //   try {
-  //     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-  //       version = packageInfo.version;
-  //       log("1");
-  //     });
-  //   } on Exception catch (e) {
-  //     log(e.toString());
-  //   }
-  //   log("11");
-  //   await ApiCalls.checkForUpdates().then(
-  //     (value) async {
-  //       switch (value) {
-  //         case kerrorString:
-  //           _isupdated = true;
-  //           break;
-  //         default:
-  //           try {
-  //             final response = jsonDecode(value);
-  //             String _latestBuildNumber = response['ResponseData'];
-  //             log(_latestBuildNumber);
-  //
-  //             String dlVersion = _latestBuildNumber.split('.')[0];
-  //
-  //             print("Latest Version " + dlVersion);
-  //
-  //             if (_latestBuildNumber != version) {
-  //               _isupdated = false;
-  //
-  //               _appVersion = _latestBuildNumber;
-  //               // if (Platform.isIOS) {
-  //               //   showCupertinoAlertaDialog(
-  //               //       context: ctx,
-  //               //       version: _latestBuildNumber,
-  //               //       currentVersion: version);
-  //               // } else if (Platform.isAndroid) {
-  //               //   showMaterialDialogBox(
-  //               //       context: ctx,
-  //               //       version: _latestBuildNumber,
-  //               //       currentVersion: version);
-  //               // }
-  //               notifyListeners();
-  //             } else {
-  //               Fluttertoast.showToast(
-  //                   msg: "No update available.....",
-  //                   toastLength: Toast.LENGTH_LONG);
-  //               _isupdated = true;
-  //             }
-  //           } on Exception catch (e) {
-  //             ConstantsVar.excecptionMessage(e);
-  //             // log(e.toString());
-  //             _isupdated = true;
-  //           }
-  //           break;
-  //       }
-  //       notifyListeners();
-  //     },
-  //   );
-  //   log(_isupdated.toString());
-  //   notifyListeners();
-  // }
 
-  showCupertinoAlertaDialog(
-      {required BuildContext context,
-      required String version,
-      required String currentVersion}) {
-    showCupertinoDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => CupertinoAlertDialog(
-              title: const Text("THE One Mobile App"),
-              content: Text(
-                  "Update is available\(Current Version#$currentVersion \nAvailable Version #$version\).\nIf this link does not work, kindly go to App Store to update the app."),
-              actions: <Widget>[
-                CupertinoDialogAction(
-                  child: const Text("Update"),
-                  onPressed: () {
-                    ApiCalls.launchUrl(
-                        "https://apps.apple.com/in/app/the-one-home-fashion-app/");
-                    // Navigator.of(context).pop();
-                  },
-                ),
-                CupertinoDialogAction(
-                  child: const Text("CANCEL"),
-                  onPressed: () {
-                    _isupdated = false;
-                    Navigator.maybePop(context);
-                    // checkLocationPermission();
-                    notifyListeners();
-                    // Navigator.pushAndRemoveUntil(
-                    //   context,
-                    //   CupertinoPageRoute(
-                    //     builder: (context) {
-                    //       final size = MediaQuery.of(context).size;
-                    //       return Scaffold(
-                    //         appBar: AppBar(
-                    //           backgroundColor: ConstantsVar.appColor,
-                    //           toolbarHeight: size.width * 0.18,
-                    //           centerTitle: true,
-                    //           title: Image.asset(
-                    //             'MyAssets/logo.png',
-                    //             width: size.width * 0.15,
-                    //             height: size.width * 0.15,
-                    //           ),
-                    //         ),
-                    //         body: SizedBox(
-                    //           height: size.height,
-                    //           width: size.width,
-                    //           child: Column(
-                    //             crossAxisAlignment: CrossAxisAlignment.center,
-                    //             mainAxisAlignment: MainAxisAlignment.center,
-                    //             children: [
-                    //               Text(
-                    //                 "Please update the app",
-                    //                 style: TextStyle(
-                    //                   shadows: <Shadow>[
-                    //                     Shadow(
-                    //                       offset: const Offset(1.0, 1.2),
-                    //                       blurRadius: 3.0,
-                    //                       color: Colors.grey.shade300,
-                    //                     ),
-                    //                     Shadow(
-                    //                       offset: const Offset(1.0, 1.2),
-                    //                       blurRadius: 8.0,
-                    //                       color: Colors.grey.shade300,
-                    //                     ),
-                    //                   ],
-                    //                   fontSize: size.width * 0.05,
-                    //                   fontWeight: FontWeight.bold,
-                    //                 ),
-                    //               ),
-                    //               ElevatedButton(
-                    //                 onPressed: () {
-                    //                   ApiCalls.launchUrl(
-                    //                       "https://apps.apple.com/in/app/the-one-home-fashion-app/");
-                    //                 },
-                    //                 child: Text(
-                    //                   'Update',
-                    //                   style: TextStyle(
-                    //                     fontSize:
-                    //                         MediaQuery.of(context).size.width *
-                    //                             0.05,
-                    //                     fontWeight: FontWeight.bold,
-                    //                   ),
-                    //                 ),
-                    //               )
-                    //             ],
-                    //           ),
-                    //         ),
-                    //       );
-                    //     },
-                    //   ),
-                    //   (Route<dynamic> route) => false,
-                    // );
-                  },
-                ),
-              ],
-            ));
-  }
 
-  showMaterialDialogBox(
-      {required BuildContext context,
-      required String version,
-      required String currentVersion}) {
-    Widget cancelButton = TextButton(
-      child: const Text("Cancel"),
-      onPressed: () {
-        _isupdated = false;
-        Navigator.maybePop(context);
-        //        checkLocationPermission();
-        // getLocation(context: context);
-        notifyListeners();
-        // Navigator.pushAndRemoveUntil(
-        //   context,
-        //   CupertinoPageRoute(
-        //     builder: (context) {
-        //       final size = MediaQuery.of(context).size;
-        //       return Scaffold(
-        //         appBar: AppBar(
-        //           backgroundColor: ConstantsVar.appColor,
-        //           toolbarHeight: size.width * 0.18,
-        //           centerTitle: true,
-        //           title: Image.asset(
-        //             'MyAssets/logo.png',
-        //             width: size.width * 0.15,
-        //             height: size.width * 0.15,
-        //           ),
-        //         ),
-        //         body: SizedBox(
-        //           height: size.height,
-        //           width: size.width,
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.center,
-        //             mainAxisAlignment: MainAxisAlignment.center,
-        //             children: [
-        //               Text(
-        //                 "Please update the app",
-        //                 style: TextStyle(
-        //                   shadows: <Shadow>[
-        //                     Shadow(
-        //                       offset: const Offset(1.0, 1.2),
-        //                       blurRadius: 3.0,
-        //                       color: Colors.grey.shade300,
-        //                     ),
-        //                     Shadow(
-        //                       offset: const Offset(1.0, 1.2),
-        //                       blurRadius: 8.0,
-        //                       color: Colors.grey.shade300,
-        //                     ),
-        //                   ],
-        //                   fontSize: size.width * 0.05,
-        //                   fontWeight: FontWeight.bold,
-        //                 ),
-        //               ),
-        //               ElevatedButton(
-        //                 onPressed: () {
-        //                   ApiCalls.launchUrl(
-        //                       "https://play.google.com/store/apps/details?id=com.theone.androidtheone");
-        //                 },
-        //                 child: Text(
-        //                   'Update',
-        //                   style: TextStyle(
-        //                     fontSize: MediaQuery.of(context).size.width * 0.05,
-        //                     fontWeight: FontWeight.bold,
-        //                   ),
-        //                 ),
-        //               )
-        //             ],
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        //   (Route<dynamic> route) => false,
-        // );
-      },
-    );
-    Widget continueButton = TextButton(
-      child: const Text("Update"),
-      onPressed: () {
-        ApiCalls.launchUrl(
-            "https://play.google.com/store/apps/details?id=com.theone.androidtheone");
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: const Text("THE One Mobile App"),
-      content: Text(
-          "Update is available\(Current Version#$currentVersion\nAvailable Version #$version\).\nIf this link does not work, kindly go to Play Store to update the app."),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  void _openStoreSelectionScreen({required BuildContext context}) {
-    showSnackbar(
-        duration: const Duration(
-          seconds: 3,
-        ),
-        message: "Location Permission revoked. Opening Store Selection Screen.",
-        lableName: "",
-        method: () {
-          // AppSettings.openLocationSettings();
-        },
-        context: context);
-  }
 
   void setBogoCategoryValue() async {
     await ApiCalls.bogoCategoryData().then(
@@ -1738,4 +1388,16 @@ class NewApisProvider extends ChangeNotifier {
     _isHomeScreenCategoryLoading = false;
     notifyListeners();
   }
+
+  void hideBanner() {
+    _isUpdateBannerVisible = false;
+    notifyListeners();
+  }
+
+
+
+
+
 }
+
+

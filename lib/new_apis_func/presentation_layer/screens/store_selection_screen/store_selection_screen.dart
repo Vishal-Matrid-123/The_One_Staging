@@ -254,11 +254,11 @@ class _StoreSelectionScreenState extends State<StoreSelectionScreen> {
   }
 
   void _checkingStoreSelection() async {
-    final _provider = Provider.of<NewApisProvider>(context, listen: false);
+  
     _id = await secureStorage.read(key: kselectedStoreIdKey) ?? '';
     log('store id' + _id);
     setState(() {});
-    if (await secureStorage.read(key: kselectedStoreIdKey) == null) {
+    if (await secureStorage.read(key: kselectedStoreIdKey) == null || _id.isEmpty) {
     } else {
       Navigator.pushReplacement(
         context,

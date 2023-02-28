@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:math' as math;
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
@@ -94,27 +95,21 @@ class _SplashScreenState extends State<SplashScreen>
         .whenComplete(
       () async {
 
-        Future.delayed(Duration(seconds: 3));
+
 
         isDeviceSecure == true
-            ? await getLocation().whenComplete(
-                () async {
+            ? await getLocation().then(
+                (val) async {
                   {
-                    // await x.checkAppUpdate(ctx: context).then((v) async {
-                      _guestCustomerID =
+                     _guestCustomerID =
                           ConstantsVar.prefs.getString('guestCustomerID') ?? "";
-
+                       /*Checking if a customer id is available or not*/
                       if ((_guestCustomerID == '' ||
-                              _guestCustomerID.toString().isEmpty) &&
-                          await ConstantsVar.prefs.getString(kExpireDateKey) ==
-                              null) {
-                        // Fluttertoast.showToast(
-                        //     msg:
-                        //         'Expire Date and Customer ID  is not available ');
-                        await ApiCalls.getApiTokken(context).then(
-                          (value) async {
+                              _guestCustomerID.toString().isEmpty) ) {
+                           await ApiCalls.getApiTokken(context).then(
+                              (value) async {
                             TokenResponse myResponse =
-                                TokenResponse.fromJson(jsonDecode(value));
+                            TokenResponse.fromJson(jsonDecode(value));
                             _guestCustomerID =
                                 myResponse.cutomer.customerId.toString();
                             _guestGUID = myResponse.cutomer.customerGuid;
@@ -125,33 +120,13 @@ class _SplashScreenState extends State<SplashScreen>
                             ConstantsVar.prefs.setString('sepGuid', _guestGUID);
                             ConstantsVar.prefs.setString(kExpireDateKey,
                                 myResponse.expiryTime.toIso8601String());
-                          },
-                        );
-                        if (_provider.isLocationAllow == false ||
-                            _provider.isPermanentDenied == true ||
-                            (_provider.isPermanentDenied == false &&
-                                _provider.isLocationAllow == false)) {
-                          if (await secureStorage.read(
-                                  key: kselectedStoreIdKey) ==
-                              null) {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) =>
-                                        const StoreSelectionScreen(screenName: 'Splash Screen',)),
-                                (route) => false);
-                          } else {
-                            Navigator.pushReplacement(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) => MyApp()));
-                          }
-                        } else {
-                          if (mounted)
-                            await _provider.setLocationFunction(context: context);
+                          },);
+
+
+
                         }
-                      } else if (_guestCustomerID.toString().isNotEmpty &&
-                          await ConstantsVar.prefs.getString(kExpireDateKey) ==
+                      /*Checking if the token  expire time available  or not*/
+                   else  if (await ConstantsVar.prefs.getString(kExpireDateKey) ==
                               null) {
                         await ApiCalls.getApiTokken(context).then(
                           (value) async {
@@ -162,29 +137,10 @@ class _SplashScreenState extends State<SplashScreen>
                                 myResponse.expiryTime.toIso8601String());
                           },
                         );
-                        if (_provider.isLocationAllow == false ||
-                            _provider.isPermanentDenied == true ||
-                            (_provider.isPermanentDenied == false &&
-                                _provider.isLocationAllow == false)) {
-                          if (await secureStorage.read(
-                                  key: kselectedStoreIdKey) ==
-                              null) {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) =>
-                                        const StoreSelectionScreen(screenName: 'SplashScreen',)),
-                                (route) => false);
-                          } else {
-                            Navigator.pushReplacement(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) => MyApp()));
-                          }
-                        } else {
-                         await  _provider.setLocationFunction(context: context);
-                        }
-                      } else {
+
+                      }
+                   /* Checking if Token expired*/
+                      else {
                         /*Last Condition*/
 
                         String expDate = await ConstantsVar.prefs
@@ -219,65 +175,45 @@ class _SplashScreenState extends State<SplashScreen>
                             ConstantsVar.prefs.setString(kExpireDateKey,
                                 myResponse.expiryTime.toIso8601String());
 
-                            if (_provider.isLocationAllow == false ||
-                                _provider.isPermanentDenied == true ||
-                                (_provider.isPermanentDenied == false &&
-                                    _provider.isLocationAllow == false)) {
-                              if (await secureStorage.read(
-                                      key: kselectedStoreIdKey) ==
-                                  null) {
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (context) =>
-                                            const StoreSelectionScreen(screenName: 'Splash Screen',)),
-                                    (route) => false);
-                              } else {
-                                Navigator.pushReplacement(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (context) => MyApp()));
-                              }
-                            } else {
-                              if (mounted)
-                          await      _provider.setLocationFunction(context: context);
-                            }
+
                           });
                         }
 
-                        if (date1.compareTo(date2) > 0) {
-                          log("Birthday  is after Current Date");
-                          if (_provider.isLocationAllow == false ||
-                              _provider.isPermanentDenied == true ||
-                              (_provider.isPermanentDenied == false &&
-                                  _provider.isLocationAllow == false)) {
-                            if (await secureStorage.read(
-                                    key: kselectedStoreIdKey) ==
-                                null) {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (context) =>
-                                          const StoreSelectionScreen(screenName: 'Splash Screen',)),
-                                  (route) => false);
-                            } else {
-                              Navigator.pushReplacement(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (context) => MyApp()));
-                            }
-                          } else {
-                            if (mounted)
-                          await    _provider.setLocationFunction(context: context);
-                          }
-                        }
+
                         log(
                           'Exp Date Time>>>>${date1.toIso8601String()}>>>}',
                         );
 
                         printDate();
+
+
+
                       }
-                    // });
+ /*Setting Location Flow Here*/
+                     switch(val){
+                       case 'other':
+                       await  checkingStoreSelection().then((value) {
+                         print(value.toString());
+                           value == true? Navigator.pushReplacement(
+                               context,
+                               CupertinoPageRoute(
+                                   builder: (context) => MyApp())):      Navigator.pushAndRemoveUntil(
+                               context,
+                               CupertinoPageRoute(
+                                   builder: (context) =>
+                                   const StoreSelectionScreen(screenName: 'Splash Screen',)),
+                                   (route) => false);
+
+                         });
+                         break;
+                       default:
+                         Navigator.pushReplacement(
+                             context,
+                             CupertinoPageRoute(
+                                 builder: (context) => MyApp(),),);
+                         break;
+                     }
+
                   }
                 },
               )
@@ -285,6 +221,10 @@ class _SplashScreenState extends State<SplashScreen>
       },
     );
     super.initState();
+  }
+
+  Future<bool>checkingStoreSelection() async{
+    return await secureStorage.read(key: kselectedStoreIdKey)!= null?true:false;
   }
 
   @override
@@ -443,10 +383,10 @@ class _SplashScreenState extends State<SplashScreen>
 
   bool isDeviceSecure = true;
 
-  Future getLocation() async {
+  Future<String> getLocation() async {
     _provider = Provider.of<NewApisProvider>(context, listen: false);
     // _provider.checkLocationPermission();
-   await  _provider.getLocation(context: context);
+   return await  _provider.getLocation(context: context);
   }
 
 // and lack of delete
