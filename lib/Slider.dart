@@ -91,7 +91,7 @@ class _SliderClassState extends State<SliderClass> {
     _isLiked = widget.isWishlisted;
     setState(() {});
     final provider = Provider.of<NewApisProvider>(context,listen:false);
-    provider.setBogoCategoryValue();
+
     setState(() {
       bogoCatId = provider.bogoValue;
     });

@@ -137,26 +137,26 @@ Future<void> main() async {
             ))
           : await Firebase.initializeApp();
 
-      FirebaseMessaging.instance.requestPermission();
-      await remoteConfig.setConfigSettings(RemoteConfigSettings(
-        fetchTimeout: const Duration(minutes: 1),
-        minimumFetchInterval: const Duration(seconds: 10),
-      ));
 
-      await remoteConfig.fetchAndActivate();
-      Map<String, RemoteConfigValue> val = await remoteConfig.getAll();
-      print('Remote config val>>' + val['default_color_set']!.asString());
-      systemColor = fromHex(jsonDecode(
-          val['default_color_set']!.asString())['default_color_for_system']);
+      // await remoteConfig.setConfigSettings(RemoteConfigSettings(
+      //   fetchTimeout: const Duration(minutes: 1),
+      //   minimumFetchInterval: const Duration(seconds: 10),
+      // ));
+      //
+      // await remoteConfig.fetchAndActivate();
+      // Map<String, RemoteConfigValue> val = await remoteConfig.getAll();
+      // print('Remote config val>>' + val['default_color_set']!.asString());
+      // systemColor = fromHex(jsonDecode(
+      //     val['default_color_set']!.asString())['default_color_for_system']);
       // initDynamicLinks();
       FirebaseMessaging.onBackgroundMessage(
           (message) => _messageHandler(message));
       FCMBackgroundService.initializeService();
 
       FirebaseMessaging _message = FirebaseMessaging.instance;
-      var token = await _message.getToken(vapidKey: kFCMVApiKey);
-      _message.subscribeToTopic("topic");
-      print('FCM Token>>' + token!);
+      // var token = await _message.getToken(vapidKey: kFCMVApiKey);
+      // _message.subscribeToTopic("topic");
+      // print('FCM Token>>' + token!);
 
       ConstantsVar.prefs = await SharedPreferences.getInstance();
       ConstantsVar.prefs.setBool('isFirstTime', true);
@@ -183,20 +183,20 @@ Future<void> main() async {
             _messageHandler(event);
           });
 
-          ErrorWidget.builder = (error) => ErrorWidget.withDetails(
-                message: error.exception.toString(),
-              );
-          // ErrorClass(data: error.exception.toString());
+          // ErrorWidget.builder = (error) => ErrorWidget.withDetails(
+          //       message: error.exception.toString(),
+          //     );
+          // // ErrorClass(data: error.exception.toString());
 
           FirebaseAnalytics analytics = FirebaseAnalytics.instance;
           FirebaseAnalyticsObserver observer =
               FirebaseAnalyticsObserver(analytics: analytics);
           SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-              statusBarColor: systemColor,
+              statusBarColor: fromHex('#948a7e'),
               //or set color with: Color(0xFF0000FF)
-              systemNavigationBarColor: systemColor));
-          changeStatusColor(systemColor);
-          changeNavigationColor(systemColor);
+              systemNavigationBarColor: fromHex('#948a7e')));
+          changeStatusColor(fromHex('#948a7e'));
+          changeNavigationColor(fromHex('#948a7e'));
           var configuredApp = AppConfig(
             child: MainApp(
               requiredBanner: true,

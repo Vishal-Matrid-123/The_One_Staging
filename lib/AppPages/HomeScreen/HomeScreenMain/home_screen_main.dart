@@ -9,6 +9,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bmprogresshud/bmprogresshud.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -303,6 +304,7 @@ class _HomeScreenMainState extends State<HomeScreenMain>
     _provider.readJson();
     _provider.returnInitialPrefix();
     _provider.getBookingStatus();
+    FirebaseMessaging.instance.requestPermission();
     ApiCalls.readCounter(context: context);
     getTopicPage();
     getSocialMediaLink();

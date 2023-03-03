@@ -360,10 +360,11 @@ class _AddCartBtnState extends State<AddCartBtn> {
     super.initState();
     stateId = AddToCartButtonStateId.idle;
     final provider = Provider.of<NewApisProvider>(context, listen: false);
-    provider.setBogoCategoryValue();
+    
     setState(() {
       bogoCatId = provider.bogoValue;
     });
+    log("bogo val: $bogoCatId");
     getGuid();
   }
 

@@ -1037,30 +1037,7 @@ class NewApisProvider extends ChangeNotifier {
     permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
-      //nothing
-      // await Geolocator.requestPermission().then((val) async {
-      //   await Geolocator.checkPermission().then((value) {
-      //     permission = value;
-      //     if (permission == LocationPermission.whileInUse) {
-      //       getLocation(context: context);
-      //     } else {
-      //       if (permission == LocationPermission.unableToDetermine) {
-      //         showSnackbar(
-      //           message:
-      //               "Unable to determine action. Please click on Allow Permission",
-      //           lableName: "",
-      //           context: context,
-      //           method: () {},
-      //           duration: const Duration(
-      //             seconds: 3,
-      //           ),
-      //         );
-      //         _isLocationAllow = false;
-      //         _isPermanentDenied = false;
-      //       }
-      //     }
-      //   });
-      // });
+
 
       return 'other';
     }
@@ -1225,6 +1202,8 @@ return 'other';
   void setBogoCategoryValue() async {
     await ApiCalls.bogoCategoryData().then(
       (value) {
+        print(value);
+
         switch (value) {
           case kerrorString:
             _bogoCategoryValue = "";
@@ -1234,6 +1213,7 @@ return 'other';
           default:
             try {
               _bogoCategoryValue = jsonDecode(value);
+              print('Category Val'+_bogoCategoryValue);
               notifyListeners();
             } on Exception catch (e) {
               ConstantsVar.excecptionMessage(e);

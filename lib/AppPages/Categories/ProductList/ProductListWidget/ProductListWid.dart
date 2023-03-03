@@ -114,7 +114,7 @@ class _ProdListWidgetState extends State<ProdListWidget> {
     // TODO: implement initState
     pageIndex1 = widget.pageIndex;
     initSharedPrefs();
-                                          print(jsonEncode(widget.products));
+
     final provider = Provider.of<NewApisProvider>(context, listen: false);
     provider.setBogoCategoryValue();
 
@@ -373,28 +373,31 @@ class _ProdListWidgetState extends State<ProdListWidget> {
               ),
             ),
           ),
-       widget.title.length == 0?SizedBox():   Container(
-         color: fromHex('#948a7e'),
-         child: Center(
-         child: Padding(
-           padding: const EdgeInsets.all(20.0),
-           child: AutoSizeText(
-             widget.title,
-             style: TextStyle(shadows: <Shadow>[
-               Shadow(
-                 offset: const Offset(1.0, 1.2),
-                 blurRadius: 3.0,
-                 color: Colors.grey.shade300,
-               ),
-               Shadow(
-                 offset: const Offset(1.0, 1.2),
-                 blurRadius: 8.0,
-                 color: Colors.grey.shade300,
-               ),
-             ], fontSize: 5.w, fontWeight: FontWeight.bold),
-           ),
-         ),
-       ),),
+          widget.title.length == 0
+              ? SizedBox()
+              : Container(
+                  color: fromHex('#948a7e'),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: AutoSizeText(
+                        widget.title,
+                        style: TextStyle(shadows: <Shadow>[
+                          Shadow(
+                            offset: const Offset(1.0, 1.2),
+                            blurRadius: 3.0,
+                            color: Colors.grey.shade300,
+                          ),
+                          Shadow(
+                            offset: const Offset(1.0, 1.2),
+                            blurRadius: 8.0,
+                            color: Colors.grey.shade300,
+                          ),
+                        ], fontSize: 5.w, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
           Expanded(
             child: SizedBox(
               width: 100.w,
@@ -413,8 +416,6 @@ class _ProdListWidgetState extends State<ProdListWidget> {
                             color: Colors.red,
                             size: 90,
                           );
-                        } else if (mode == LoadStatus.loading) {
-                          body = const CupertinoActivityIndicator();
                         } else if (mode == LoadStatus.failed) {
                           body = const AutoSizeText("Load Failed!Click retry!");
                         } else if (mode == LoadStatus.canLoading) {
@@ -450,7 +451,7 @@ class _ProdListWidgetState extends State<ProdListWidget> {
                                 // elevation: 2,
                                 child: OpenContainer(
                                   closedElevation: 2,
-                                  openColor:Colors.transparent,
+                                  openColor: Colors.transparent,
                                   openBuilder: (BuildContext context,
                                       void Function({Object? returnValue})
                                           action) {
@@ -558,7 +559,7 @@ class _ProdListWidgetState extends State<ProdListWidget> {
                                         Consumer<NewApisProvider>(
                                           builder: (ctx, val, _) => AddCartBtn(
                                             categoryId: widget.products[index]
-                                                    .parentCategoryId,
+                                                .parentCategoryId,
                                             productId: widget.products[index].id
                                                 .toString(),
                                             // width: 2.w,
@@ -594,7 +595,9 @@ class _ProdListWidgetState extends State<ProdListWidget> {
                                                 widget.products[index].name,
                                             productPrice: widget
                                                 .products[index].priceValue,
-                                              minQuantity: widget.products[index].minimumQuantity.toString(),
+                                            minQuantity: widget
+                                                .products[index].minimumQuantity
+                                                .toString(),
                                             // fontSize: 12,
                                           ),
                                         )
@@ -605,8 +608,9 @@ class _ProdListWidgetState extends State<ProdListWidget> {
                               ),
                               Consumer<NewApisProvider>(
                                 builder: (ctx, val, _) => !widget
-                                        .products[index].parentCategoryId
-                                        .contains(val.bogoValue) || val.bogoValue.isEmpty
+                                            .products[index].parentCategoryId
+                                            .contains(val.bogoValue) ||
+                                        val.bogoValue.isEmpty
                                     ? Visibility(
                                         visible: widget.products[index]
                                                     .discountPercent !=

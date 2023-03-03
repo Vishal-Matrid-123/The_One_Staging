@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -48,15 +47,21 @@ class ApiCalls {
     required String baseUrl,
   }) async {
     log('Testing Api');
-
+    var stopWatch = Stopwatch();
+    stopWatch.start();
     final _url = Uri.parse(baseUrl +
         'GetSortedProductsByCategoryId?categoryid=$catId&pageindex=$pageIndex&pagesize=6&$kcustomerIdVar${ConstantsVar.prefs.getString('guestCustomerID')}$kstoreIdVar$storeId');
 
-    log('Product List Api>>>>' + _url.toString());
+    log('Product List Api>>>>' + customerGuid);
 
     try {
-      var response = await http.get(_url,
-          headers: {'Cookie': '.Nop.Customer=$customerGuid'}).timeout(
+      var response = await http.get(_url, headers: {
+        'Cookie': '.Nop.Customer=$customerGuid',
+        'User-Agent':'PostmanRuntime/7.31.1',
+        'Accept':"*/*",
+        "Accept-Encoding":"gzip,deflate,br",
+        "Connection":"keep-alive"
+      }).timeout(
         const Duration(seconds: 60),
         onTimeout: () {
           Fluttertoast.showToast(msg: "Connection Timeout.\nPlease try again.");
@@ -66,6 +71,8 @@ class ApiCalls {
         },
       );
 
+      stopWatch.stop();
+      print('Time Taken by API>>>>>${stopWatch.elapsed.inSeconds}');
       if (response.statusCode == 200) {
         if (jsonDecode(response.body)['Status']
             .toString()
@@ -76,7 +83,7 @@ class ApiCalls {
 
           return kerrorString + jsonDecode(response.body)['Message'].toString();
         } else {
-          log(response.body);
+          log(jsonEncode(response.request!.headers));
           return response.body;
         }
       } else {
@@ -671,8 +678,6 @@ class ApiCalls {
       }
     } on Exception catch (e) {
       ConstantsVar.excecptionMessage(e);
-
-
     }
   }
 
@@ -839,7 +844,7 @@ class ApiCalls {
     try {
       var response = await http.get(uri, headers: {
         'Cookie':
-            '.Nop.Customer=${ConstantsVar.prefs.getString(kguidKey) ?? ''}'
+            '.Nop.Customer=${await ConstantsVar.prefs.getString(kguidKey) ?? ''}'
       }).timeout(
         const Duration(seconds: 60),
         onTimeout: () {
@@ -1993,7 +1998,7 @@ class ApiCalls {
   static Future<String> getShippingZones() async {
     String _baseUrl = await ApiCalls.getSelectedStore();
     final uri = Uri.parse(_baseUrl.replaceAll(
-        "apisSecondVer", "ApisSecondVer") +
+            "apisSecondVer", "ApisSecondVer") +
         kget_shipping_zones_url +
         "apiToken=${ConstantsVar.prefs.getString(kapiTokenKey)}&CustomerId=${ConstantsVar.prefs.getString(kcustomerIdKey)}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? "1"}");
     log("getShippingZone Url :- ${uri.toString()}");
@@ -2032,7 +2037,7 @@ class ApiCalls {
   static Future<String> getPaymentMethod() async {
     String _baseUrl = await ApiCalls.getSelectedStore();
     final uri = Uri.parse(_baseUrl.replaceAll(
-        "apisSecondVer", "ApisSecondVer") +
+            "apisSecondVer", "ApisSecondVer") +
         kget_payment_method_url +
         "apiToken=${ConstantsVar.prefs.getString(kapiTokenKey)}&CustomerId=${ConstantsVar.prefs.getString(kcustomerIdKey)}&$kStoreIdVar=${await secureStorage.read(key: kselectedStoreIdKey) ?? "1"}");
     log("getPaymentMethod Url :- ${uri.toString()}");
@@ -2067,7 +2072,6 @@ class ApiCalls {
       return kerrorString;
     }
   }
-
 
   static Future addAndSelectShippingAddress(String id2) async {
     final uri = Uri.parse(
@@ -2373,8 +2377,6 @@ class ApiCalls {
   }
 
   static Future<String> checkForUpdates() async {
-
-
     String _baseUrl = await ApiCalls.getSelectedStore();
     final uri = Uri.parse(_baseUrl + "GetLatestVersion");
     log(uri.toString());
@@ -2613,9 +2615,8 @@ class ApiCalls {
       ConstantsVar.excecptionMessage(e);
       return kerrorString;
     }
-
-
   }
+
   static Future<String> getHomeCategories() async {
     String _baseUrl = await getSelectedStore();
     String url = _baseUrl +
@@ -2660,9 +2661,8 @@ class ApiCalls {
       ConstantsVar.excecptionMessage(e);
       return kerrorString;
     }
-
-
   }
+
   static Future<String> getHomeProducts() async {
     String _baseUrl = await getSelectedStore();
     String url = _baseUrl +
@@ -2707,7 +2707,5 @@ class ApiCalls {
       ConstantsVar.excecptionMessage(e);
       return kerrorString;
     }
-
-
   }
 }
